@@ -1,0 +1,46 @@
+user : 
+
+add daily sales ( food ,liquer , etc)
+Hotel : food ,liquer , rooms , party ,others
+Wineshop header : (Retail , wholesale ,total,others )
+Trade : BEER , WINES (port 5000), whisky : nashik 
+Edit : yes 
+Date range : sales  dashbaord 
+
+
+1) login 
+2) add sales page
+3) dashboard for sales 
+
+TIP: adding sales add one button of today and yesterday if sales is not added for if some one add sale ad 12:50 am 
+
+----------------------------------
+
+
+admin 
+
+CITY WISE 
+ADMIN APP LOCK PIN 
+view daily sales 
+view single hotels sales 
+view all hotel sales 
+view combine sales like ( hotel 1 +hotel2 )
+compare hotel sales
+
+SUPER ADMIN 
+roles 
+
+add admin 
+roles : wise 
+user password , PIN 
+add category roles like hotels permission 
+
+
+sales : add arrow as increase
+TOTAL SALES 
+CITY wise sales 
+Date range 
+add user , assign hotel
+
+hotels city add 
+hotel category : hotels ,liquor , trade 
