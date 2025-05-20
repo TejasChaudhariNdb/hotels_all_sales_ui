@@ -1,9 +1,17 @@
-'use client'
+'use client';
 
-import withRoleProtection from '@/hoc/withRoleProtection'
+import { useState } from 'react';
+import withRoleProtection from '@/hoc/withRoleProtection';
+import PinCheck from '@/components/PinCheck';
 
 function AdminPage() {
-  return <div>Welcome Admin!</div>
+  const [pinVerified, setPinVerified] = useState(false);
+
+  if (!pinVerified) {
+    return <PinCheck onSuccess={() => setPinVerified(true)} />;
+  }
+
+  return <div>Welcome Admin! Secure content here.</div>;
 }
 
-export default withRoleProtection(AdminPage, ['admin'])
+export default withRoleProtection(AdminPage, ['admin']);
