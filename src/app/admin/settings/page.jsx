@@ -1,17 +1,24 @@
-'use client';
+"use client";
 
-import { Bell, Globe, ShieldCheck, Settings, UserPlus, Users, LogOut, ArrowRight } from 'lucide-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation'
+import {
+  Bell,
+  Globe,
+  ShieldCheck,
+  Settings,
+  UserPlus,
+  Users,
+  LogOut,
+  ArrowRight,
+} from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 export default function SettingsPage() {
-
-      const router = useRouter()
-
+  const router = useRouter();
 
   const logout = () => {
     localStorage.clear();
     sessionStorage.clear();
-    router.push('/super')
+    router.push("/super");
   };
 
   return (
@@ -34,8 +41,7 @@ export default function SettingsPage() {
 
       <button
         onClick={logout}
-        className="w-full mt-10 py-3 text-center bg-red-50 text-red-600 font-medium rounded-xl shadow hover:bg-red-100"
-      >
+        className="w-full mt-10 py-3 text-center bg-red-50 text-red-600 font-medium rounded-xl shadow hover:bg-red-100">
         <LogOut className="inline-block mr-2" size={18} />
         Logout
       </button>
