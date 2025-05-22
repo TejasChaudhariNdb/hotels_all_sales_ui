@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
           setToken(savedToken)
         } catch (err) {
           console.error('Auth error:', err)
-          // logout() // Clear everything if token invalid
+          logout() // Clear everything if token invalid
         } finally {
           setLoading(false)
         }
@@ -41,6 +41,7 @@ export const AuthProvider = ({ children }) => {
     setUser(user)
     setToken(token)
     localStorage.setItem('token', token)
+    localStorage.setItem('who', user.role)
   }
 
   const logout = () => {

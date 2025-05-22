@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-
-export default function PinCheck() {
+import { makePost } from '@/lib/api'
+export default function PinCheck({onSuccess}) {
   const [pin, setPin] = useState('');
   const [error, setError] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
@@ -55,29 +55,34 @@ export default function PinCheck() {
     setIsVerifying(true);
     setError('');
 
-    // Simulate API verification with delay
-    await new Promise(resolve => setTimeout(resolve, 800));
+    try {
+      // Simulate delay for API verification
+      await new Promise(resolve => setTimeout(resolve, 100));
 
-    if (pinToCheck === correctPin) {
-      setIsSuccess(true);
-      // Simulate redirection after successful verification
-      setTimeout(() => {
-        // In a real app you would:
-        // - Store authentication state
-        // - Redirect to protected content
-        // Here we just reset for demo purposes
-        setIsSuccess(false);
-        setPin('');
-        setIsVerifying(false);
-      }, 1500);
-    } else {
-      setError('Incorrect PIN');
+      const res = await makePost('/admin/pin', { pin: pinToCheck });
+      if (res.status) {
+        setIsSuccess(true);
+
+        // Simulate redirection after successful verification
+        setTimeout(() => {
+          setIsSuccess(false);
+          setPin('');
+          setIsVerifying(false);
+          onSuccess();
+        }, 1500);
+      } else {
+        throw new Error('Incorrect PIN');
+      }
+
+    } catch (err) {
+      setError(err.message || 'Invalid credentials. Try again.');
       setShakingError(true);
       setPin('');
-      setTimeout(() => setShakingError(false), 600);
+      setTimeout(() => setShakingError(false), 10600);
       setIsVerifying(false);
     }
   };
+
 
   // Create numpad buttons
   const renderNumpad = () => {
