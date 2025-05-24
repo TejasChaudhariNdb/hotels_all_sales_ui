@@ -28,7 +28,6 @@ export default function SettingsPage() {
       <SettingItem icon={<Globe />} title="Language" link="/admin/settings/users" />
       <SettingItem icon={<ShieldCheck />} title="Privacy & Security" link="/admin/settings/users" />
       <SettingItem icon={<Settings />} title="App Preferences" link="/admin/settings/users" />
-      <SettingItem icon={<UserPlus />} title="Invite a Friend" link="/admin/settings/users" />
       <SettingItem icon={<Settings2 />} title="Manage Categories" link="/admin/settings/categorys" />
 
       <Link href="/admin/settings/users">

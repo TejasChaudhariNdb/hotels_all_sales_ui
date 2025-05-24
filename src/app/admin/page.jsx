@@ -37,12 +37,23 @@ import {
   Cell,
 } from "recharts";
 import { makeGet } from "@/lib/api";
+import SalesFilter from "@/components/SalesFilter";
+const formatDate = (input) => {
+  const date = new Date(input);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
 const AdminPage = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("Today");
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
-  const [toDate, setToDate] = useState(new Date().toISOString().split("T")[0]);
+  const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
+
+  const [toDate, setToDate] = useState(formatDate(new Date()));
+  const [isDateFilterOpen, setIsDateFilterOpen] = useState(false);
+
+
   const [showAllHotels, setShowAllHotels] = useState(false);
   const [serviceCategories, setServiceCategories] = useState([]);
   const [hotelCategories, setHotelCategories] = useState([]);
@@ -51,29 +62,84 @@ const AdminPage = () => {
   const [cityData, setCityData] = useState([]);
   const [totalSalesAmount, setTotalSalesAmount] = useState([]);
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await makeGet("/admin/dashboard", {
-          fromDate: selectedDate,
-          toDate: toDate,
-        });
-        setServiceCategories(data.sales_by_categories)
-        setHotelCategories(data.sales_by_hotel)
-        setTotalSalesData(data.sales_trend)
-        setCategoryData(data.salesByCategoryType)
-        setCityData(data.salesByCity)
-        setTotalSalesAmount(data.total_sales_amount)
-
-      } catch (error) {
-        console.error("Dashboard fetch error", error);
-      }
-    };
-
+    
     fetchData();
   }, [selectedPeriod, selectedDate, toDate]);
 
 
+  const fetchData = async () => {
+    try {
+      const data = await makeGet("/admin/dashboard", {
+        start_date: selectedDate,
+        end_date: toDate,
+      });
+      setServiceCategories(data.sales_by_categories)
+      setHotelCategories(data.sales_by_hotel)
+      setTotalSalesData(data.sales_trend)
+      setCategoryData(data.salesByCategoryType)
+      setCityData(data.salesByCity)
+      setTotalSalesAmount(data.total_sales_amount)
 
+    } catch (error) {
+      console.error("Dashboard fetch error", error);
+    }
+  };
+
+
+
+
+  const getStartOfWeek = (date) => {
+    const day = date.getDay(); // 0 (Sun) to 6 (Sat)
+    const diff = (day === 0 ? -6 : 1) - day; // make Monday the first day
+    const start = new Date(date);
+    start.setDate(date.getDate() + diff);
+    return start;
+  };
+
+  const getEndOfWeek = (date) => {
+    const start = getStartOfWeek(date);
+    const end = new Date(start);
+    end.setDate(start.getDate() + 6);
+    return end;
+  };
+
+  const getStartOfMonth = (date) => new Date(date.getFullYear(), date.getMonth(), 1);
+  const getEndOfMonth = (date) => new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+
+  const handlePeriodChange = (period) => {
+    setSelectedPeriod(period);
+
+    let from = new Date();
+    let to = new Date();
+
+    switch (period) {
+      case "Today":
+        from = to = new Date();
+        break;
+      case "Yesterday":
+        from = to = new Date();
+        from.setDate(from.getDate() - 1);
+        to.setDate(to.getDate() - 1);
+        break;
+      case "Week":
+        from = getStartOfWeek(new Date());
+        to = getEndOfWeek(new Date());
+        break;
+      case "Month":
+        from = getStartOfMonth(new Date());
+        to = getEndOfMonth(new Date());
+        break;
+    }
+
+    const formattedFrom = formatDate(from);
+    const formattedTo = formatDate(to);
+
+    setSelectedDate(formattedFrom);
+    setToDate(formattedTo);
+
+    fetchData(formattedFrom, formattedTo);
+  };
 
   const formatINRCurrency = (amount) =>
     new Intl.NumberFormat("en-IN", {
@@ -82,7 +148,13 @@ const AdminPage = () => {
       maximumFractionDigits: 2,
     }).format(amount);
 
+    const applyDateFilter = () => {
+      setIsDateFilterOpen(false);
+      // Add your apply logic here
+      fetchData()
+    };
 
+  
 
   const COLORS = [
     "#FF6B6B",
@@ -134,58 +206,101 @@ const AdminPage = () => {
     ? hotelCategories
     : hotelCategories.slice(0, 10);
 
+
+    const handleFilter = ({ cities, categories, hotels,salesCategory }) => {
+
+    }
+
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 text-white">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-bold">Admin Dashboard</h1>
-            <p className="text-blue-100 text-sm">Sales Analytics & Overview</p>
-          </div>
-          <div className="p-2 bg-white/20 rounded-lg">
-            <Users className="w-6 h-6" />
-          </div>
-        </div>
 
-        {/* Period Selector */}
-        <div className="flex space-x-2 mt-4">
-          {["Today", "Week", "Month"].map((period) => (
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mx-4 my-4">
+      {/* Mobile-first vertical layout */}
+      <div className="space-y-4">
+        {/* Period Selector - Full width on mobile */}
+        <div className="grid grid-cols-4 gap-3">
+          {["Today", "Yesterday","Week" ,"Month"].map((period) => (
             <button
               key={period}
-              onClick={() => setSelectedPeriod(period)}
-              className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+              onClick={() => handlePeriodChange(period)}
+              className={`py-2 px-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                 selectedPeriod === period
-                  ? "bg-white text-blue-600"
-                  : "bg-white/20 text-white hover:bg-white/30"
-              }`}>
+                  ? "bg-slate-900 text-white shadow-sm"
+                  : "bg-slate-50 text-slate-600 active:bg-slate-100 border border-slate-200"
+              }`}
+            >
               {period}
             </button>
           ))}
+         
+       
         </div>
 
-        {/* Date Range Picker */}
-        <div className="mt-3">
-          <div className="flex items-center space-x-2 bg-white/20 rounded-lg p-2">
-            <Calendar className="w-4 h-4 text-white" />
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="bg-transparent text-white placeholder-white/70 text-sm outline-none"
-              placeholder="From"
-            />
-            <span className="text-white text-sm">to</span>
-            <input
-              type="date"
-              value={toDate}
-              onChange={(e) => setToDate(e.target.value)}
-              className="bg-transparent text-white placeholder-white/70 text-sm outline-none"
-              placeholder="To"
-            />
+        {/* Date Range Selector with Dropdown */}
+        <div className="space-y-2">
+          <button
+            onClick={() => setIsDateFilterOpen(!isDateFilterOpen)}
+            className="w-full flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-lg text-left hover:bg-slate-100 transition-colors"
+          >
+            <div className="flex items-center space-x-2">
+              <Calendar className="w-4 h-4 text-slate-500" />
+              <span className="text-slate-700 font-medium">
+                {selectedDate === toDate
+                  ? formatDate(selectedDate)
+                  : `${formatDate(selectedDate)} - ${formatDate(toDate)}`}
+              </span>
+            </div>
+            {isDateFilterOpen ? (
+              <ChevronUp className="w-4 h-4 text-slate-500" />
+            ) : (
+              <ChevronDown className="w-4 h-4 text-slate-500" />
+            )}
+          </button>
+
+          {/* Animated Dropdown */}
+          <div
+            className={`transition-all duration-300 overflow-hidden ${
+              isDateFilterOpen ? "max-h-[500px]" : "max-h-0"
+            }`}
+          >
+            <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
+              <div className="space-y-3 mb-4">
+                <div className="space-y-1">
+                  <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide">
+                    From
+                  </label>
+                  <input
+                    type="date"
+                    value={selectedDate}
+                    onChange={(e) => setSelectedDate(e.target.value)}
+                    className="w-full py-3 px-4 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide">
+                    To
+                  </label>
+                  <input
+                    type="date"
+                    value={toDate}
+                    onChange={(e) => setToDate(e.target.value)}
+                    className="w-full py-3 px-4 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all"
+                  />
+                </div>
+              </div>
+              <button
+                onClick={applyDateFilter}
+                className="bg-slate-900 text-white px-4 py-3 rounded-lg hover:bg-slate-800 transition-colors w-full font-medium"
+              >
+                Apply
+              </button>
+            </div>
           </div>
         </div>
       </div>
+    </div>
+ 
 
       <div className="p-4 space-y-6">
         {/* Today's Summary */}
