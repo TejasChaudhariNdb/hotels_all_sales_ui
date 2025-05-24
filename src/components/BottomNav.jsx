@@ -11,7 +11,7 @@ export default function BottomNav() {
     // Initialize based on the current pathname
     if (pathname === "/user") return "entry"
     if (pathname === "/user/sales") return "history"
-    if (pathname === "/user/setting") return "settings"
+    if (pathname === "/user/settings") return "settings"
     return "entry" // Default
   })
 
@@ -19,7 +19,7 @@ export default function BottomNav() {
   useEffect(() => {
     if (pathname === "/user") setActiveTab("entry")
     else if (pathname === "/user/sales") setActiveTab("history")
-    else if (pathname === "/user/setting") setActiveTab("settings")
+    else if (pathname === "/user/settings") setActiveTab("settings")
   }, [pathname])
 
   const handleNavigation = (path, tab) => {
@@ -48,7 +48,7 @@ export default function BottomNav() {
             label="Settings"
             icon={<Settings className="w-5 h-5" />}
             active={activeTab === "settings"}
-            onClick={() => handleNavigation("/user/setting", "settings")}
+            onClick={() => handleNavigation("/user/settings", "settings")}
           />
         </div>
       </div>

@@ -9,7 +9,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import SalesFilter from "@/components/SalesFilter";
-export default function SalesPage() {
+export default function SalesPage({role}) {
   const [sales, setSales] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -197,7 +197,7 @@ export default function SalesPage() {
           Sales
         </h1>
         <div className="flex items-center gap-2">
-        <SalesFilter onApplyFilter={handleFilter} />
+        {role === "admin" && <SalesFilter onApplyFilter={handleFilter} />}
         <button
           onClick={exportToCSV}
           className="bg-indigo-600 text-white px-3 py-1 rounded-md hover:bg-indigo-700 flex items-center text-sm">

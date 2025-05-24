@@ -1,0 +1,21 @@
+{
+    "name": "User App",
+    "short_name": "User",
+    "start_url": "/user",
+    "display": "standalone",
+    "theme_color": "#317EFB",
+    "background_color": "#ffffff",
+    "icons": [
+      {
+        "src": "/icons/user-icon.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "/icons/user-icon.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }
+  

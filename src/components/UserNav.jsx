@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react"
 import { Menu, X, Home, ChartBar, Settings, LogOut, User, Store, ChevronRight ,CircleUserRound} from "lucide-react"
-
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 export default function UserNav({user}) {
   const [isOpen, setIsOpen] = useState(false)
   const [activeMenu, setActiveMenu] = useState("sales")
-
+const router = useRouter()
 
 
   const userName = user?.name || "Loading..."
@@ -30,6 +31,18 @@ export default function UserNav({user}) {
       document.removeEventListener("mousedown", handleClickOutside)
     }
   }, [isOpen])
+
+  const selectMenu = (menu) => {
+  setActiveMenu(menu)
+  setIsOpen(false)
+  }
+
+
+  const logout = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    router.push("/login");
+  };
 
   return (
     <>
@@ -98,46 +111,60 @@ export default function UserNav({user}) {
           <div className="flex-grow py-4 overflow-y-auto">
             <ul className="space-y-1 px-2">
               <li>
-                <a
+                <Link
                   href="/user"
                   className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
                     activeMenu === "sales"
                       ? "bg-green-600 text-white"
                       : "text-gray-300 hover:bg-gray-800 hover:text-white"
                   }`}
-                  onClick={() => setActiveMenu("sales")}
+                  onClick={() => selectMenu("sales")}
                 >
                   <Home className="w-5 h-5 mr-3" />
                   <span>Sales Entry</span>
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/user/sales"
                   className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
                     activeMenu === "history"
                       ? "bg-green-600 text-white"
                       : "text-gray-300 hover:bg-gray-800 hover:text-white"
                   }`}
-                  onClick={() => setActiveMenu("history")}
+                  onClick={() => selectMenu("history")}
                 >
                   <ChartBar className="w-5 h-5 mr-3" />
                   <span>Sales History</span>
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/user/setting"
+                <Link
+                  href="/user/settings"
                   className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
                     activeMenu === "settings"
                       ? "bg-green-600 text-white"
                       : "text-gray-300 hover:bg-gray-800 hover:text-white"
                   }`}
-                  onClick={() => setActiveMenu("settings")}
+                  onClick={() => selectMenu("settings")}
                 >
                   <Settings className="w-5 h-5 mr-3" />
                   <span>Settings</span>
-                </a>
+                </Link>
+              </li>
+              <li>
+                <button
+                  href="/user/settings"
+                  className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
+                    activeMenu === "logout"
+                      ? "bg-green-600 text-white"
+                      : "text-gray-300 hover:bg-gray-800 hover:text-white"
+                  }`}
+                  onClick={() => logout()}
+                >
+                  <LogOut className="w-5 h-5 mr-3" />
+                  <span>Logout</span>
+                </button>
               </li>
             </ul>
           </div>
