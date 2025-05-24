@@ -9,6 +9,7 @@ import {
   Users,
   LogOut,
   ArrowRight,
+  Settings2
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -23,11 +24,12 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-3">
-      <SettingItem icon={<Bell />} title="Notifications" />
-      <SettingItem icon={<Globe />} title="Language" />
-      <SettingItem icon={<ShieldCheck />} title="Privacy & Security" />
-      <SettingItem icon={<Settings />} title="App Preferences" />
-      <SettingItem icon={<UserPlus />} title="Invite a Friend" />
+      <SettingItem icon={<Bell />} title="Notifications" link="/admin/settings/users" />
+      <SettingItem icon={<Globe />} title="Language" link="/admin/settings/users" />
+      <SettingItem icon={<ShieldCheck />} title="Privacy & Security" link="/admin/settings/users" />
+      <SettingItem icon={<Settings />} title="App Preferences" link="/admin/settings/users" />
+      <SettingItem icon={<UserPlus />} title="Invite a Friend" link="/admin/settings/users" />
+      <SettingItem icon={<Settings2 />} title="Manage Categories" link="/admin/settings/categorys" />
 
       <Link href="/admin/settings/users">
         <div className="flex items-center justify-between p-4 bg-white rounded-xl shadow hover:bg-gray-50">
@@ -49,14 +51,16 @@ export default function SettingsPage() {
   );
 }
 
-function SettingItem({ icon, title }) {
+function SettingItem({ icon, title ,link}) {
   return (
-    <div className="flex items-center justify-between p-4 bg-white rounded-xl shadow hover:bg-gray-50">
+    <Link href={link} className="flex items-center justify-between p-4 bg-white rounded-xl shadow hover:bg-gray-50">
+
       <div className="flex items-center">
         <div className="text-gray-600 mr-3">{icon}</div>
         <span className="text-gray-800 font-medium">{title}</span>
       </div>
-      <ArrowRight className="text-gray-400" />
-    </div>
+        <ArrowRight className="text-gray-400" />
+
+    </Link>
   );
 }

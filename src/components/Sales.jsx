@@ -8,7 +8,7 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
-
+import SalesFilter from "@/components/SalesFilter";
 export default function SalesPage() {
   const [sales, setSales] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,10 +18,14 @@ export default function SalesPage() {
   );
   const [toDate, setToDate] = useState(new Date().toISOString().split("T")[0]);
   const [isDateFilterOpen, setIsDateFilterOpen] = useState(false);
+  const [selectedCities, setSelectedCities] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedHotels, setSelectedHotels] = useState([]);
+  const [selectedSalesCategories, setSelectedSalesCategories] = useState([]);
 
   useEffect(() => {
     fetchSales();
-  }, [fromDate, toDate]);
+  }, []);
 
   const fetchSales = async () => {
     try {
@@ -132,20 +136,76 @@ export default function SalesPage() {
       maximumFractionDigits: 2,
     }).format(amount);
 
+
+
+    const handleFilter = ({ cities, categories, hotels,salesCategory }) => {
+      try {
+        setSelectedCities(cities);
+        setSelectedCategories(categories);
+        setSelectedHotels(hotels);
+        setSelectedSalesCategories(salesCategory);
+      setLoading(true);
+      const query = new URLSearchParams();
+
+      cities?.forEach((id) => query.append("city_ids[]", id));
+      categories?.forEach((id) => query.append("category_ids[]", id));
+      hotels?.forEach((id) => query.append("hotel_ids[]", id));
+      salesCategory?.forEach((id) => query.append("sales_catogory_ids[]", id));
+
+      // If you have start_date or end_date, add them here too
+      query.append("start_date", fromDate);
+      query.append("end_date", toDate);
+
+
+      // Make the GET request
+      makeGet(`/daily-sales?${query.toString()}`)
+        .then((res) => {
+          console.log("Filtered sales data:", res);
+          setSales(res.data || []);
+        })
+        .catch((err) => {
+          console.error("Error fetching filtered sales:", err);
+        });
+
+
+      } catch (err) {
+        console.error("Failed to load sales", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const applyDateFilter = ()  => {
+      setIsDateFilterOpen(false)
+      handleFilter({
+        cities: selectedCities,
+        categories: selectedCategories,
+        hotels: selectedHotels,
+        salesCategory:selectedSalesCategories
+      });
+    }
+
   return (
     <div className="max-w-md mx-auto p-4 bg-gray-100">
+
+
       {/* Header */}
+
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-xl font-bold text-gray-800 flex items-center">
           <Calendar className="mr-2 text-indigo-600" size={20} />
           Sales
         </h1>
+        <div className="flex items-center gap-2">
+        <SalesFilter onApplyFilter={handleFilter} />
         <button
           onClick={exportToCSV}
           className="bg-indigo-600 text-white px-3 py-1 rounded-md hover:bg-indigo-700 flex items-center text-sm">
           <Download size={16} className="mr-1" />
           Export
         </button>
+        </div>
+
       </div>
 
 {/* Date Filter */}
@@ -198,7 +258,7 @@ export default function SalesPage() {
         </div>
       </div>
       <button
-        onClick={() => setIsDateFilterOpen(false)}
+        onClick={applyDateFilter}
         className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors w-full"
       >
         Apply
