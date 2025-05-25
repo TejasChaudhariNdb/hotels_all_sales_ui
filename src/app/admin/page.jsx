@@ -62,11 +62,16 @@ const AdminPage = () => {
   const [cityData, setCityData] = useState([]);
   const [totalSalesSummary, setTotalSalesSummary] = useState([]);
   const [loading, setLoading] = useState(true);
+
+
   useEffect(() => {
-
-    fetchData();
+    const debounceTimeout = setTimeout(() => {
+      fetchData();
+    }, 500); // 500ms debounce
+  
+    return () => clearTimeout(debounceTimeout); // cleanup previous timeout
   }, [selectedPeriod, selectedDate, toDate]);
-
+  
 
   const fetchData = async () => {
     setLoading(true);
@@ -111,7 +116,7 @@ const AdminPage = () => {
 
 
   const handlePeriodChange = (period) => {
-    setSelectedPeriod(period);
+  
 
     let from = new Date();
     let to = new Date();
@@ -142,8 +147,7 @@ const AdminPage = () => {
 
     setSelectedDate(formattedFrom);
     setToDate(formattedTo);
-
-    fetchData(formattedFrom, formattedTo);
+    setSelectedPeriod(period);
   };
 
   const formatINRCurrency = (amount) =>
