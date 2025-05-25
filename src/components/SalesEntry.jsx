@@ -195,7 +195,7 @@ export default function DailySalesForm() {
 
       {/* Main Content */}
       <div className="flex-1 px-4 py-6">
-        {currentCategory && (
+        {currentCategory && ( 
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             {/* Amount Input */}
             <div className="mb-8">
