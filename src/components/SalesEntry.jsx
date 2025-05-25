@@ -199,8 +199,8 @@ export default function DailySalesForm() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             {/* Amount Input */}
             <div className="mb-8">
-              <label className="block text-sm font-medium text-gray-700 mb-4">
-                Enter Amount for {currentCategory.name}
+              <label className="block text-base font-medium text-gray-700 mb-4">
+                Enter Amount : <span className="text-lg font-bold">{currentCategory.name}</span>
               </label>
               
               <div className="relative">
@@ -232,40 +232,6 @@ export default function DailySalesForm() {
                   </p>
                 </div>
               )}
-            </div>
-
-            {/* Progress Indicator */}
-            <div className="mb-6">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm text-gray-500">Progress</span>
-                <span className="text-sm font-medium text-gray-700">
-                  {Object.values(amounts).filter(amt => parseFloat(amt) > 0).length} / {categories.length}
-                </span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div 
-                  className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                  style={{
-                    width: `${(Object.values(amounts).filter(amt => parseFloat(amt) > 0).length / categories.length) * 100}%`
-                  }}
-                />
-              </div>
-            </div>
-
-            {/* Navigation Buttons */}
-            <div className="flex gap-3">
-              <button
-                onClick={goToPrevious}
-                disabled={categories.length <= 1}
-                className="flex-1 py-3 px-4 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                Previous
-              </button>
-              <button
-                onClick={goToNext}
-                disabled={categories.length <= 1}
-                className="flex-1 py-3 px-4 bg-blue-500 text-white rounded-xl font-medium hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                Next
-              </button>
             </div>
           </div>
         )}

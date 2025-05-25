@@ -14,7 +14,7 @@ export default function AdminNav() {
           <div className=" ">
           {/* <div className="p-2 rounded-xl transition-colors bg-gradient-to-br from-blue-500 to-indigo-600"> */}
             {/* <Hotel className="w-6 h-6 text-white" /> */}
-            <img className=" h-10 text-white" src="./logo.png" />
+            <img className=" h-10 text-white" src="/logo.png" />
           </div>
           <div>
             <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
