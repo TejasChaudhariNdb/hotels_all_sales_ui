@@ -70,7 +70,7 @@ const AdminPage = () => {
     }, 500); // 500ms debounce
   
     return () => clearTimeout(debounceTimeout); // cleanup previous timeout
-  }, [selectedPeriod, selectedDate, toDate]);
+  }, [selectedPeriod]);
   
 
   const fetchData = async () => {
