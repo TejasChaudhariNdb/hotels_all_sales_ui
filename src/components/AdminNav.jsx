@@ -1,7 +1,7 @@
 'use client';
 
 import useTheme from '@/lib/useTheme';
-import { Moon, Sun, Hotel } from 'lucide-react';
+import { Moon, Sun } from 'lucide-react';
 
 export default function AdminNav() {
   const [theme, toggleTheme] = useTheme();
@@ -11,8 +11,10 @@ export default function AdminNav() {
       <div className="flex justify-between items-center px-6 py-4">
         {/* Logo Section */}
         <div className="flex items-center space-x-3">
-          <div className="p-2 rounded-xl transition-colors bg-gradient-to-br from-blue-500 to-indigo-600">
-            <Hotel className="w-6 h-6 text-white" />
+          <div className=" ">
+          {/* <div className="p-2 rounded-xl transition-colors bg-gradient-to-br from-blue-500 to-indigo-600"> */}
+            {/* <Hotel className="w-6 h-6 text-white" /> */}
+            <img className=" h-10 text-white" src="./logo.png" />
           </div>
           <div>
             <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">

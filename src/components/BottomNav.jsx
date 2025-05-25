@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter, usePathname } from "next/navigation"
-import { Home, Clock, Settings, Plus } from "lucide-react"
+import { Home, LineChart, Settings, Plus } from "lucide-react"
 import { useState, useEffect } from "react"
 
 export default function BottomNav() {
@@ -39,8 +39,8 @@ export default function BottomNav() {
             onClick={() => handleNavigation("/user", "entry")}
           />
           <NavItem
-            label="History"
-            icon={<Clock className="w-5 h-5" />}
+            label="Sales"
+            icon={<LineChart className="w-5 h-5" />}
             active={activeTab === "history"}
             onClick={() => handleNavigation("/user/sales", "history")}
           />

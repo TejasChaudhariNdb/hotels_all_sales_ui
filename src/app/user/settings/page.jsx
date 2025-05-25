@@ -29,7 +29,7 @@ export default function SettingsPage() {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 p-4">
+    <div className=" bg-gradient-to-br from-slate-50 to-blue-50/30 ">
       <div className="max-w-2xl mx-auto space-y-6">
 
         {/* User Profile Section */}

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TrendingUp,
   TrendingDown,
@@ -60,9 +60,9 @@ const AdminPage = () => {
   const [totalSalesData, setTotalSalesData] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
   const [cityData, setCityData] = useState([]);
-  const [totalSalesAmount, setTotalSalesAmount] = useState([]);
+  const [totalSalesSummary, setTotalSalesSummary] = useState([]);
   useEffect(() => {
-    
+
     fetchData();
   }, [selectedPeriod, selectedDate, toDate]);
 
@@ -78,7 +78,7 @@ const AdminPage = () => {
       setTotalSalesData(data.sales_trend)
       setCategoryData(data.salesByCategoryType)
       setCityData(data.salesByCity)
-      setTotalSalesAmount(data.total_sales_amount)
+      setTotalSalesSummary(data.sales_summary)
 
     } catch (error) {
       console.error("Dashboard fetch error", error);
@@ -118,10 +118,12 @@ const AdminPage = () => {
         from = to = new Date();
         break;
       case "Yesterday":
-        from = to = new Date();
+        from = new Date();
+        to = new Date();
         from.setDate(from.getDate() - 1);
         to.setDate(to.getDate() - 1);
         break;
+
       case "Week":
         from = getStartOfWeek(new Date());
         to = getEndOfWeek(new Date());
@@ -148,13 +150,13 @@ const AdminPage = () => {
       maximumFractionDigits: 2,
     }).format(amount);
 
-    const applyDateFilter = () => {
-      setIsDateFilterOpen(false);
-      // Add your apply logic here
-      fetchData()
-    };
+  const applyDateFilter = () => {
+    setIsDateFilterOpen(false);
+    // Add your apply logic here
+    fetchData()
+  };
 
-  
+
 
   const COLORS = [
     "#FF6B6B",
@@ -174,11 +176,10 @@ const AdminPage = () => {
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-md font-medium text-gray-600 mb-1">{title}</h3>
         <div
-          className={`flex items-center space-x-1 px-2 py-1 rounded-full text-sm font-medium ${
-            trend === "up"
+          className={`flex items-center space-x-1 px-2 py-1 rounded-full text-sm font-medium ${trend === "up"
               ? "bg-green-100 text-green-700"
               : "bg-red-100 text-red-700"
-          }`}>
+            }`}>
           {trend === "up" ? (
             <TrendingUp className="w-3 h-3" />
           ) : (
@@ -207,123 +208,162 @@ const AdminPage = () => {
     : hotelCategories.slice(0, 10);
 
 
-    const handleFilter = ({ cities, categories, hotels,salesCategory }) => {
+  const handleFilter = ({ cities, categories, hotels, salesCategory }) => {
 
+  }
+
+  function formatComparedTo(from, to) {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+  
+    // Format date to yyyy-mm-dd string
+    const yyyy = yesterday.getFullYear();
+    const mm = String(yesterday.getMonth() + 1).padStart(2, '0');
+    const dd = String(yesterday.getDate()).padStart(2, '0');
+    const yesterdayStr = `${yyyy}-${mm}-${dd}`;
+  
+    if (from === yesterdayStr && to === yesterdayStr) {
+      return "yesterday";
     }
+    return `${from} - ${to}`;
+  }
+  const today = new Date().toISOString().split('T')[0];
 
+  const isToday =
+   selectedDate === today &&
+toDate === today;
+  
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       {/* Header */}
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mx-4 my-4">
-      {/* Mobile-first vertical layout */}
-      <div className="space-y-4">
-        {/* Period Selector - Full width on mobile */}
-        <div className="grid grid-cols-4 gap-3">
-          {["Today", "Yesterday","Week" ,"Month"].map((period) => (
-            <button
-              key={period}
-              onClick={() => handlePeriodChange(period)}
-              className={`py-2 px-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                selectedPeriod === period
-                  ? "bg-slate-900 text-white shadow-sm"
-                  : "bg-slate-50 text-slate-600 active:bg-slate-100 border border-slate-200"
-              }`}
-            >
-              {period}
-            </button>
-          ))}
-         
-       
-        </div>
-
-        {/* Date Range Selector with Dropdown */}
-        <div className="space-y-2">
-          <button
-            onClick={() => setIsDateFilterOpen(!isDateFilterOpen)}
-            className="w-full flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-lg text-left hover:bg-slate-100 transition-colors"
-          >
-            <div className="flex items-center space-x-2">
-              <Calendar className="w-4 h-4 text-slate-500" />
-              <span className="text-slate-700 font-medium">
-                {selectedDate === toDate
-                  ? formatDate(selectedDate)
-                  : `${formatDate(selectedDate)} - ${formatDate(toDate)}`}
-              </span>
-            </div>
-            {isDateFilterOpen ? (
-              <ChevronUp className="w-4 h-4 text-slate-500" />
-            ) : (
-              <ChevronDown className="w-4 h-4 text-slate-500" />
-            )}
-          </button>
-
-          {/* Animated Dropdown */}
-          <div
-            className={`transition-all duration-300 overflow-hidden ${
-              isDateFilterOpen ? "max-h-[500px]" : "max-h-0"
-            }`}
-          >
-            <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
-              <div className="space-y-3 mb-4">
-                <div className="space-y-1">
-                  <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide">
-                    From
-                  </label>
-                  <input
-                    type="date"
-                    value={selectedDate}
-                    onChange={(e) => setSelectedDate(e.target.value)}
-                    className="w-full py-3 px-4 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide">
-                    To
-                  </label>
-                  <input
-                    type="date"
-                    value={toDate}
-                    onChange={(e) => setToDate(e.target.value)}
-                    className="w-full py-3 px-4 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all"
-                  />
-                </div>
-              </div>
+        {/* Mobile-first vertical layout */}
+        <div className="space-y-4">
+          {/* Period Selector - Full width on mobile */}
+          <div className="grid grid-cols-4 gap-3">
+            {["Today", "Yesterday", "Week", "Month"].map((period) => (
               <button
-                onClick={applyDateFilter}
-                className="bg-slate-900 text-white px-4 py-3 rounded-lg hover:bg-slate-800 transition-colors w-full font-medium"
+                key={period}
+                onClick={() => handlePeriodChange(period)}
+                className={`py-2 px-2 rounded-lg text-sm font-medium transition-all duration-200 ${selectedPeriod === period
+                    ? "bg-slate-900 text-white shadow-sm"
+                    : "bg-slate-50 text-slate-600 active:bg-slate-100 border border-slate-200"
+                  }`}
               >
-                Apply
+                {period}
               </button>
+            ))}
+
+
+          </div>
+
+          {/* Date Range Selector with Dropdown */}
+          <div className="space-y-2">
+            <button
+              onClick={() => setIsDateFilterOpen(!isDateFilterOpen)}
+              className="w-full flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-lg text-left hover:bg-slate-100 transition-colors"
+            >
+              <div className="flex items-center space-x-2">
+                <Calendar className="w-4 h-4 text-slate-500" />
+                <span className="text-slate-700 font-medium">
+                  {selectedDate === toDate
+                    ? formatDate(selectedDate)
+                    : `${formatDate(selectedDate)} - ${formatDate(toDate)}`}
+                </span>
+              </div>
+              {isDateFilterOpen ? (
+                <ChevronUp className="w-4 h-4 text-slate-500" />
+              ) : (
+                <ChevronDown className="w-4 h-4 text-slate-500" />
+              )}
+            </button>
+
+            {/* Animated Dropdown */}
+            <div
+              className={`transition-all duration-300 overflow-hidden ${isDateFilterOpen ? "max-h-[500px]" : "max-h-0"
+                }`}
+            >
+              <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
+                <div className="space-y-3 mb-4 flex justify-between">
+                  <div className="space-y-1">
+                    <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide">
+                      From
+                    </label>
+                    <input
+                      type="date"
+                      value={selectedDate}
+                      onChange={(e) => setSelectedDate(e.target.value)}
+                      className="w-full py-3 px-4 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide">
+                      To
+                    </label>
+                    <input
+                      type="date"
+                      value={toDate}
+                      onChange={(e) => setToDate(e.target.value)}
+                      className="w-full py-3 px-4 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all"
+                    />
+                  </div>
+                </div>
+                <button
+                  onClick={applyDateFilter}
+                  className="bg-slate-900 text-white px-4 py-3 rounded-lg hover:bg-slate-800 transition-colors w-full font-medium"
+                >
+                  Apply
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
- 
+
 
       <div className="p-4 space-y-6">
         {/* Today's Summary */}
         <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-        <div className="flex justify-between">
-        <h3 className="text-lg font-semibold text-gray-800 mb-3">
-            Today's Summary
-          </h3>
-          <div className="flex items-center space-x-1 mb-1">
-                <TrendingUp className="w-4 h-4 text-green-600" />
-                <p className="text-gray-600 text-sm">Growth</p>
+          <div className="flex justify-between">
+            <h3 className="text-lg font-semibold text-gray-800 mb-3">
+            {isToday ? "Today's" : "Date"} Summary
+
+            </h3>
+            <div className="flex items-center space-x-1 mb-1">
+              <div
+                className={`flex items-center space-x-1 px-2 py-1 rounded-full text-sm font-medium ${totalSalesSummary.trend === "up"
+                    ? "bg-green-100 text-green-700"
+                    : "bg-red-100 text-red-700"
+                  }`}>
+                {totalSalesSummary.trend === "up" ? (
+                  <TrendingUp className="w-3 h-3" />
+                ) : (
+                  <TrendingDown className="w-3 h-3" />
+                )}
+                <p className="text-sm">{totalSalesSummary.label}</p>
               </div>
-        </div>
+           
+           
+            </div>
+          </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <p className="text-gray-600 text-sm">Total Revenue</p>
-              <p className="text-2xl font-bold text-gray-900">{formatINRCurrency(totalSalesAmount)}</p>
+              <p className="text-2xl font-bold text-gray-900">{formatINRCurrency(totalSalesSummary.amount)}</p>
             </div>
             <div>
-            <p className="text-gray-500 text-xs">from yesterday</p>
-              <p className="text-2xl font-bold text-green-600">+12.5%</p>
-
+            <p className="text-gray-500 text-xs">
+      from {formatComparedTo(totalSalesSummary?.compared_to?.from, totalSalesSummary?.compared_to?.to)}
+    </p>
+    <p
+      className={`text-2xl font-bold ${
+        totalSalesSummary.trend === "up" ? "text-green-600" : "text-red-600"
+      }`}
+    >
+      {totalSalesSummary.change_percent}%
+    </p>
             </div>
           </div>
         </div>
@@ -339,9 +379,9 @@ const AdminPage = () => {
                 key={city.city}
                 title={city.city}
                 value={city.total}
-                change={12}
+                change={"nan"}
                 trend="up"
-                icon={DollarSign}
+           
               />
             ))}
           </div>
@@ -370,22 +410,22 @@ const AdminPage = () => {
 
         {/* Category Sales Bar Chart */}
         <ChartCard title="Sales by Category">
-  <ResponsiveContainer width="100%" height={200}>
-    <BarChart data={categoryData}>
-      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-      <XAxis dataKey="category_type_name" fontSize={12} />
-      <YAxis fontSize={12} />
-      <Tooltip
-        formatter={(value) => [`${formatINRCurrency(value)}`, "Sales"]}
-      />
-      <Bar dataKey="total" radius={[4, 4, 0, 0]}>
-        {categoryData.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-        ))}
-      </Bar>
-    </BarChart>
-  </ResponsiveContainer>
-</ChartCard>
+          <ResponsiveContainer width="100%" height={200}>
+            <BarChart data={categoryData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <XAxis dataKey="category_type_name" fontSize={12} />
+              <YAxis fontSize={12} />
+              <Tooltip
+                formatter={(value) => [`${formatINRCurrency(value)}`, "Sales"]}
+              />
+              <Bar dataKey="total" radius={[4, 4, 0, 0]}>
+                {categoryData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartCard>
 
 
 
@@ -402,9 +442,9 @@ const AdminPage = () => {
                   key={service.category_name}
                   className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
                   <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-medium text-gray-600 mb-1">
-                    {service.category_name}
-                  </h3>
+                    <h3 className="text-sm font-medium text-gray-600 mb-1">
+                      {service.category_name}
+                    </h3>
                     <ChevronRight className="w-4 h-4 text-gray-400" />
                   </div>
 
@@ -428,7 +468,7 @@ const AdminPage = () => {
             </span>
           </div>
           <div className="grid grid-cols-1 gap-3">
-            {displayedHotels.map((hotel,index) => (
+            {displayedHotels.map((hotel, index) => (
               <div
                 key={index}
                 className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
