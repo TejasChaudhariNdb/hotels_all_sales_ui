@@ -113,7 +113,7 @@ export default function AddCategoryPage() {
                   value={categoryName}
                   onChange={(e) => setCategoryName(e.target.value)}
                   placeholder="Enter category name..."
-                  className={`w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all ${
+                  className={`text-black w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all ${
                     errors.categoryName ? 'border-red-300 bg-red-50' : 'border-gray-200'
                   }`}
                 />
