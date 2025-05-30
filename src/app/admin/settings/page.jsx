@@ -26,7 +26,7 @@ export default function SettingsPage() {
     <div className="space-y-3">
       <SettingItem icon={<Bell />} title="Notifications" link="/admin/settings/users" />
       <SettingItem icon={<Globe />} title="Language" link="/admin/settings/users" />
-      <SettingItem icon={<ShieldCheck />} title="Privacy & Security" link="/admin/settings/users" />
+      <SettingItem icon={<ShieldCheck />} title="Privacy & Security" link="/admin/settings/security" />
       <SettingItem icon={<Settings />} title="App Preferences" link="/admin/settings/users" />
       <SettingItem icon={<Settings2 />} title="Manage Categories" link="/admin/settings/categorys" />
 

@@ -69,7 +69,7 @@ export default function PinCheck({onSuccess}) {
           setPin('');
           setIsVerifying(false);
           onSuccess();
-        }, 1500);
+        }, 10);
       } else {
         throw new Error('Incorrect PIN');
       }

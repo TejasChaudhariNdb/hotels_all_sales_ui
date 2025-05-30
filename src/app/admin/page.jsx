@@ -182,7 +182,7 @@ const AdminPage = () => {
     <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-md font-medium text-gray-600 mb-1">{title}</h3>
-        <div
+        {/* <div
           className={`flex items-center space-x-1 px-2 py-1 rounded-full text-sm font-medium ${trend === "up"
               ? "bg-green-100 text-green-700"
               : "bg-red-100 text-red-700"
@@ -193,7 +193,7 @@ const AdminPage = () => {
             <TrendingDown className="w-3 h-3" />
           )}
           <span>{Math.abs(change)}%</span>
-        </div>
+        </div> */}
       </div>
 
       <p className="text-xl font-bold text-gray-900">
@@ -406,8 +406,7 @@ toDate === today;
                 key={city.city}
                 title={city.city}
                 value={city.total}
-                change={"nan"}
-                trend="up"
+
            
               />
             ))}
