@@ -7,9 +7,11 @@ import {
   Calendar,
   ChevronDown,
   ChevronUp,
+  Box
 } from "lucide-react";
+
 import SalesFilter from "@/components/SalesFilter";
-export default function SalesPage({role}) {
+export default function SalesPage({role,hotel_type}) {
   const [sales, setSales] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -24,17 +26,26 @@ export default function SalesPage({role}) {
   const [selectedSalesCategories, setSelectedSalesCategories] = useState([]);
 
   useEffect(() => {
+
     fetchSales();
   }, []);
 
   const fetchSales = async () => {
+
     try {
       setLoading(true);
-      const res = await makeGet("/daily-sales", {
+      const res = await makeGet(`${hotel_type === 0 ? "/daily-sales" : "/boxes-sales"}`, {
         start_date: fromDate,
         end_date: toDate,
       });
-      setSales(res.data || []);
+
+      let salesData = res.data || [];
+
+      if (hotel_type === 1) {
+        salesData = convertBoxSalesToDailySalesFormat(salesData);
+      }
+
+      setSales(salesData);
     } catch (err) {
       console.error("Failed to load sales", err);
     } finally {
@@ -158,10 +169,21 @@ export default function SalesPage({role}) {
 
 
       // Make the GET request
-      makeGet(`/daily-sales?${query.toString()}`)
+      makeGet(`${hotel_type === 0 ? "/daily-sales" : "/boxes-sales"}?${query.toString()}`)
         .then((res) => {
           console.log("Filtered sales data:", res);
-          setSales(res.data || []);
+  
+      let salesData = res.data || [];
+
+      if (hotel_type === 1) {
+        // Assuming you already have this salesCategories list loaded somewhere in your app
+        // If not, you need to fetch it first from your API and store it (e.g. /sales-categories)
+        salesData = convertBoxSalesToDailySalesFormat(salesData);
+      }
+
+      setSales(salesData);
+
+
         })
         .catch((err) => {
           console.error("Error fetching filtered sales:", err);
@@ -185,6 +207,32 @@ export default function SalesPage({role}) {
       });
     }
 
+    function convertBoxSalesToDailySalesFormat(boxSalesResponse) {
+      return boxSalesResponse.map(boxSale => ({
+        ...boxSale,
+        // Format date same way
+        date: new Date(boxSale.date).toISOString(),
+        items: boxSale.items.map(item => ({
+          id: item.id,
+          daily_sale_id: item.box_sale_id,
+          sales_category_id: item.sales_category_id,
+          amount: item.quantity.toString(), // quantity => amount as string
+          created_at: item.created_at,
+          updated_at: item.updated_at,
+          // If you don't have sales_category object inside item, you can omit or fill with placeholders
+          sales_category: item.sales_category || {
+            id: item.sales_category_id,
+            name: 'Unknown',
+            category_type_id: null,
+            created_at: null,
+            updated_at: null,
+          },
+        })),
+      }));
+    }
+    
+    
+
   return (
     <div className="max-w-md mx-auto p-4 bg-gray-100">
 
@@ -194,10 +242,10 @@ export default function SalesPage({role}) {
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-xl font-bold text-gray-800 flex items-center">
           <Calendar className="mr-2 text-indigo-600" size={20} />
-          Sales
+          {hotel_type === 0 ? "Sales" : "Boxes Sales"}
         </h1>
         <div className="flex items-center gap-2">
-        {role === "admin" && <SalesFilter onApplyFilter={handleFilter} />}
+        {role === "admin" && <SalesFilter onApplyFilter={handleFilter} hotel_type={hotel_type} />}
         <button
           onClick={exportToCSV}
           className="bg-indigo-600 text-white px-3 py-1 rounded-md hover:bg-indigo-700 flex items-center text-sm">
@@ -321,14 +369,14 @@ export default function SalesPage({role}) {
                     {group.hotel.name}
                   </div>
                   <div className="text-sm font-bold text-green-700">
-                    {formatINRCurrency(group.total)}
+                    {hotel_type === 0 ? formatINRCurrency(group.total) : <div className="flex items-center gap-1"> <Box size={16}/> {parseFloat(group.total)}</div>}
                   </div>
                 </div>
                 <div className="flex justify-between items-center mb-1">
                   <div className="text-xs text-gray-600">
                     {group.formattedDate}
                   </div>
-                  <div className="text-xs text-gray-600">Total</div>
+                  <div className="text-xs text-gray-600">Total {hotel_type === 0 ? "Amount" : "Boxes"}</div>
                 </div>
               </div>
 
@@ -342,7 +390,7 @@ export default function SalesPage({role}) {
                       {item.sales_category?.name || "N/A"}
                     </div>
                     <div className="text-sm font-medium text-gray-900">
-                      {formatINRCurrency(item.amount)}
+                      {hotel_type === 0 ? formatINRCurrency(item.amount) : <>{parseFloat(item.amount)}</>}
                     </div>
                   </div>
                 ))}
@@ -352,9 +400,9 @@ export default function SalesPage({role}) {
 
           {/* Grand Total */}
           <div className="bg-green-100 border border-green-300 p-4 rounded-xl shadow flex justify-between items-center mt-6">
-            <div className="font-bold text-green-800 text-sm">Grand Total</div>
+            <div className="font-bold text-green-800 text-sm">Grand Total {hotel_type === 0 ? "Amount" : "Boxes"}</div>
             <div className="font-bold text-green-800 text-sm">
-              {formatINRCurrency(grandTotal)}
+              {hotel_type === 0 ? formatINRCurrency(grandTotal) : parseFloat(grandTotal)}
             </div>
           </div>
         </div>

@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { makeGet, makePost } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext"
 import {
   Calendar,
   Save,
   ArrowLeft,
   ArrowRight,
   X,
+  Box
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -23,8 +25,9 @@ export default function DailySalesForm() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [pendingSubmission, setPendingSubmission] = useState(null);
   const [isClosing, setIsClosing] = useState(false);
-
+  const { user } = useAuth()
   useEffect(() => {
+
     const fetchCategories = async () => {
       try {
         const res = await makeGet("/sales-categories");
@@ -100,16 +103,34 @@ export default function DailySalesForm() {
     handleCloseModal();
 
     try {
-      const payload = {
-        date: pendingSubmission.date,
-        sales: pendingSubmission.sales.map(({ category_id, amount }) => ({ 
-          category_id, 
-          amount: parseFloat(amount) 
-        }))
-      };
-
-      await makePost('/daily-sales/bulk', payload);
-
+      let payload;
+      const isBoxType = user.hotel_type === 1;
+    
+      if (isBoxType) {
+        // For hotel_type = 1 (Box Type)
+        payload = {
+          date: pendingSubmission.date,
+          sales: pendingSubmission.sales.map(({ category_id, amount }) => ({
+            sales_category_id: category_id,
+            quantity: parseFloat(amount),
+            box_type: 'small', // default box type
+          })),
+        };
+      } else {
+        // For hotel_type = 0 (Sales Type)
+        payload = {
+          date: pendingSubmission.date,
+          sales: pendingSubmission.sales.map(({ category_id, amount }) => ({
+            category_id,
+            amount: parseFloat(amount),
+          })),
+        };
+      }
+    
+      const url = isBoxType ? '/boxes-sales/bulk' : '/daily-sales/bulk';
+    
+      await makePost(url, payload);
+    
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 3000);
       router.push('/user/sales');
@@ -119,6 +140,7 @@ export default function DailySalesForm() {
     } finally {
       setLoading(false);
     }
+    
   };
 
   const formatINRCurrency = (amount) =>
@@ -200,12 +222,12 @@ export default function DailySalesForm() {
             {/* Amount Input */}
             <div className="mb-8">
               <label className="block text-base font-medium text-gray-700 mb-4">
-                Enter Amount : <span className="text-lg font-bold">{currentCategory.name}</span>
+                Enter {user.hotel_type === 0 ? "Amount" : "Boxes"} : <span className="text-lg font-bold">{currentCategory.name}</span>
               </label>
               
               <div className="relative">
                 <div className="absolute left-6 top-1/2 transform -translate-y-1/2 text-3xl font-bold text-gray-400">
-                  ₹
+                  {user.hotel_type === 0 ? "₹" : <Box/>}
                 </div>
                 <input
                   type="text"
@@ -228,7 +250,7 @@ export default function DailySalesForm() {
               {amounts[currentCategory.id] && (
                 <div className="mt-4 text-center">
                   <p className="text-lg text-gray-600">
-                    {formatINRCurrency(parseFloat(amounts[currentCategory.id]))}
+                    {user.hotel_type === 0 ? formatINRCurrency(parseFloat(amounts[currentCategory.id])) : parseFloat(amounts[currentCategory.id])}
                   </p>
                 </div>
               )}
@@ -241,13 +263,14 @@ export default function DailySalesForm() {
       <div className="bg-white border-t border-gray-200 p-4 safe-area-bottom">
         <div className="mb-4">
           <div className="flex justify-between items-center mb-2">
-            <span className="text-sm text-gray-500">Total Sales</span>
+            <span className="text-sm text-gray-500">{user.hotel_type === 0 ? "Total Sales" : "Total Boxes "}</span>
             <span className="text-xs text-gray-500">
               {Object.values(amounts).filter(amt => parseFloat(amt) > 0).length} categories
             </span>
           </div>
           <div className="text-2xl font-bold text-green-600 text-center">
-            {formatINRCurrency(total)}
+      
+            {user.hotel_type === 0 ? formatINRCurrency(total) : parseFloat(total)}
           </div>
         </div>
         
@@ -329,7 +352,7 @@ export default function DailySalesForm() {
                   {pendingSubmission.sales.map((item, idx) => (
                     <div key={idx} className="flex items-center justify-between py-3 bg-gray-50 rounded-lg px-4">
                       <span className="font-medium text-gray-700">{item.category_name}</span>
-                      <span className="font-semibold text-gray-900">{formatINRCurrency(item.amount)}</span>
+                      <span className="font-semibold text-gray-900">{user.hotel_type === 0 ? formatINRCurrency(item.amount) : parseFloat(item.amount)}</span>
                     </div>
                   ))}
                 </div>
@@ -337,9 +360,9 @@ export default function DailySalesForm() {
                 {/* Total */}
                 <div className="mt-4 pt-4 border-t border-gray-200">
                   <div className="flex items-center justify-between">
-                    <span className="text-lg font-semibold text-gray-700">Total Amount</span>
+                    <span className="text-lg font-semibold text-gray-700">Total {user.hotel_type === 0 ? "Amount" : "Boxes"} </span>
                     <span className="text-2xl font-bold text-green-600">
-                      {formatINRCurrency(pendingSubmission.sales.reduce((sum, item) => sum + item.amount, 0))}
+                      {user.hotel_type === 0 ? formatINRCurrency(pendingSubmission.sales.reduce((sum, item) => sum + item.amount, 0)) : parseFloat(pendingSubmission.sales.reduce((sum, item) => sum + item.amount, 0))}
                     </span>
                   </div>
                 </div>

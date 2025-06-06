@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Filter, X } from "lucide-react";
 import { makeGet } from "@/lib/api";
-export default function SalesFilter({ onApplyFilter }) {
+export default function SalesFilter({ onApplyFilter,hotel_type }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCities, setSelectedCities] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -31,7 +31,10 @@ export default function SalesFilter({ onApplyFilter }) {
   useEffect(() => {
     const fetchFilters = async () => {
       try {
-        const data = await makeGet("admin/filters");
+        const data = await makeGet("admin/filters", {
+          hotel_type: hotel_type, // or 0/1 based on your logic
+        });
+        
         setCities(data.cities || []);
         setCategories(data.categories || []);
         setHotels(data.hotels || []);

@@ -1,12 +1,13 @@
 'use client';
 
-import { Home, LineChart, Settings } from 'lucide-react';
+import { Boxes, Home, LineChart, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const navItems = [
   { name: 'Dashboard', href: '/admin/', icon: Home },
   { name: 'Sales', href: '/admin/sales', icon: LineChart },
+  { name: 'Boxes', href: '/admin/boxes', icon: Boxes },
   { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 
