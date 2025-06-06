@@ -178,6 +178,9 @@ const AdminPage = () => {
     "#85C1E9",
   ];
 
+  const tformatINRCurrency = (value) =>
+    `₹${Number(value).toLocaleString('en-IN')}`;
+  
   const StatCard = ({ title, value, change, trend, icon: Icon }) => (
     <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
       <div className="flex items-center justify-between mb-2">
@@ -419,9 +422,21 @@ toDate === today;
             <LineChart data={totalSalesData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis dataKey="date" fontSize={12} />
-              <YAxis fontSize={12} />
+             
+              <YAxis
+        fontSize={12}
+        domain={[0, 'dataMax + 40000']}
+        tickCount={14}
+        tickFormatter={(value) => tformatINRCurrency(value)}
+      />
               <Tooltip
                 formatter={(value) => [`${formatINRCurrency(value)}`, "Sales"]}
+                contentStyle={{
+                  backgroundColor: "white",
+                  color: "black",
+                  borderRadius: "8px",
+                  padding: "7px",
+                }}
               />
               <Line
                 type="monotone"
