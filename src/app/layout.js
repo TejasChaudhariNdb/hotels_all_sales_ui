@@ -29,6 +29,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+      <title>HP APP</title>
       <link rel="manifest" href="/manifest.json" />
         <Script id="theme-script" strategy="beforeInteractive">
           {`
@@ -47,6 +48,7 @@ export default function RootLayout({ children }) {
             })();
           `}
         </Script>
+       
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-black dark:bg-black dark:text-white transition-colors duration-300`}
