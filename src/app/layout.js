@@ -29,6 +29,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+      <link rel="manifest" href="/manifest.json" />
         <Script id="theme-script" strategy="beforeInteractive">
           {`
             (function() {
