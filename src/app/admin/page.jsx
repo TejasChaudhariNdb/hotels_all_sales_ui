@@ -218,9 +218,43 @@ const AdminPage = () => {
     : hotelCategories.slice(0, 10);
 
 
-  const handleFilter = ({ cities, categories, hotels, salesCategory }) => {
+    const handleFilter = async ({ cities, categories, hotels,salesCategory }) => {
+      try {
 
-  }
+      setLoading(true);
+      const query = new URLSearchParams();
+
+      cities?.forEach((id) => query.append("city_ids[]", id));
+      categories?.forEach((id) => query.append("category_ids[]", id));
+      hotels?.forEach((id) => query.append("hotel_ids[]", id));
+      salesCategory?.forEach((id) => query.append("sales_catogory_ids[]", id));
+
+      try {
+        const data = await makeGet(`/admin/dashboard?${query.toString()}`, {
+          start_date: selectedDate,
+          end_date: toDate,
+        });
+        setServiceCategories(data.sales_by_categories)
+        setHotelCategories(data.sales_by_hotel)
+        setTotalSalesData(data.sales_trend)
+        setCategoryData(data.salesByCategoryType)
+        setCityData(data.salesByCity)
+        setTotalSalesSummary(data.sales_summary)
+        setLoading(false);
+      } catch (error) {
+        console.error("Dashboard fetch error", error);
+        setLoading(false);
+      }
+
+
+
+      } catch (err) {
+        console.error("Failed to load sales", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
 
   function formatComparedTo(from, to) {
     const yesterday = new Date();
@@ -270,6 +304,7 @@ toDate === today;
 
           {/* Date Range Selector with Dropdown */}
           <div className="space-y-2">
+            <div className="flex">
             <button
               onClick={() => setIsDateFilterOpen(!isDateFilterOpen)}
               className="w-full flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-lg text-left hover:bg-slate-100 transition-colors"
@@ -288,6 +323,8 @@ toDate === today;
                 <ChevronDown className="w-4 h-4 text-slate-500" />
               )}
             </button>
+            <SalesFilter onApplyFilter={handleFilter} hotel_type={0} />
+            </div>
 
             {/* Animated Dropdown */}
             <div
@@ -327,7 +364,11 @@ toDate === today;
                 </button>
               </div>
             </div>
+                    
+
           </div>
+
+
         </div>
       </div>
 
