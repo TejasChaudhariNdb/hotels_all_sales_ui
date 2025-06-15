@@ -268,9 +268,9 @@ export default function SalesPage({role,hotel_type}) {
         : `${formatDate(fromDate)} - ${formatDate(toDate)}`}
     </span>
     {isDateFilterOpen ? (
-      <ChevronUp size={16} />
+      <ChevronUp color="black" size={16} />
     ) : (
-      <ChevronDown size={16} />
+      <ChevronDown color="black" size={16} />
     )}
   </button>
 
@@ -290,7 +290,7 @@ export default function SalesPage({role,hotel_type}) {
             type="date"
             value={fromDate}
             onChange={(e) => setFromDate(e.target.value)}
-            className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="text-black w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
         </div>
         <div>
@@ -301,7 +301,7 @@ export default function SalesPage({role,hotel_type}) {
             type="date"
             value={toDate}
             onChange={(e) => setToDate(e.target.value)}
-            className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="text-black w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
         </div>
       </div>
@@ -325,7 +325,7 @@ export default function SalesPage({role,hotel_type}) {
         <input
           type="text"
           placeholder="Search by category"
-          className="w-full border border-gray-300 pl-10 py-2 pr-3 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          className="text-black w-full border border-gray-300 pl-10 py-2 pr-3 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
