@@ -35,6 +35,7 @@ import {
   PieChart,
   Pie,
   Cell,
+Legend
 } from "recharts";
 import { makeGet } from "@/lib/api";
 import SalesFilter from "@/components/SalesFilter";
@@ -179,6 +180,34 @@ const AdminPage = () => {
     "#85C1E9",
   ];
 
+  const LCOLORS = [
+    "#3182CE", // Ocean blue
+    "#38A169", // Emerald green
+    "#D69E2E", // Golden yellow
+    "#805AD5", // Royal purple
+    "#DD6B20", // Warm orange
+    "#E53E3E", // Vibrant red
+    "#319795", // Teal
+    "#E53E3E", // Coral red
+    "#553C9A", // Deep purple
+    "#2B6CB0", // Sky blue
+    "#276749", // Forest green
+    "#B7791F", // Amber
+    "#C53030", // Cherry red
+    "#2C5282", // Navy blue
+    "#2F855A", // Pine green
+    "#ED8936", // Sunset orange
+    "#6B46C1", // Indigo
+    "#0987A0", // Turquoise
+    "#B83280", // Magenta
+    "#744210", // Bronze
+    "#1A202C", // Charcoal
+    "#2A4365", // Midnight blue
+    "#1A365D", // Steel blue
+    "#2D3748", // Slate gray
+    "#4A5568", // Cool gray
+  ];
+  
   const tformatINRCurrency = (value) =>
     `₹${Number(value).toLocaleString('en-IN')}`;
   
@@ -280,6 +309,14 @@ const AdminPage = () => {
    selectedDate === today &&
 toDate === today;
   
+
+const funnelData = serviceCategories
+.sort((a, b) => b.total - a.total)
+.map((item, index) => ({
+  name: item.category_name,
+  value: item.total,
+  fill: COLORS[index % COLORS.length]
+}));
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       {/* Header */}
@@ -609,33 +646,47 @@ toDate === today;
 
         {/* Service Categories Pie Chart */}
         <ChartCard title="Service Distribution">
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={serviceCategories}
-                cx="50%"
-                cy="50%"
-                outerRadius={100}
-                fill="#8884d8"
-                dataKey="total"
-                label={({ category_name, percent }) =>
-                  `${category_name} ${(percent * 100).toFixed(0)}%`
-                }
-                labelLine={false}
-                fontSize={10}>
-                {serviceCategories.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-              <Tooltip
-                formatter={(total) => [`${formatINRCurrency(total)}`, "Revenue"]}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-        </ChartCard>
+  <ResponsiveContainer width="100%" height={300}>
+    <PieChart>
+
+      <Pie
+        data={serviceCategories}
+        cx="50%"
+        cy="50%"
+        innerRadius={60} outerRadius={90}
+        fill="#8884d8"
+        dataKey="total"
+        label={({ category_name, percent }) =>
+          `${category_name} ${(percent * 100).toFixed(0)}%`
+        }
+        labelLine={true}
+        fontSize={12}
+        fontWeight="600"
+      >
+        {serviceCategories.map((entry, index) => (
+          <Cell
+            key={`cell-${index}`}
+            fill={LCOLORS[index % LCOLORS.length]}
+          />
+        ))}
+ 
+      </Pie>
+      <Tooltip
+        formatter={(total) => [`${formatINRCurrency(total)}`, "Revenue"]}
+      />
+      <Legend 
+        formatter={(value, entry) => `${entry.payload.category_name} (${((entry.payload.total / serviceCategories.reduce((sum, item) => sum + item.total, 0)) * 100).toFixed(1)}%)`}
+        verticalAlign="bottom"
+        iconType="circle"
+        wrapperStyle={{ fontSize: '12px' }}
+      />
+    </PieChart>
+  </ResponsiveContainer>
+</ChartCard>
+
+
+
+
       </div>
     </div>
   );
