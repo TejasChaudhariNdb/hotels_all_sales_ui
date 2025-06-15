@@ -154,9 +154,10 @@ const AdminPage = () => {
     new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency: "INR",
+      minimumFractionDigits: amount % 1 === 0 ? 0 : 2,
       maximumFractionDigits: 2,
     }).format(amount);
-
+  
   const applyDateFilter = () => {
     setIsDateFilterOpen(false);
     // Add your apply logic here
@@ -271,6 +272,8 @@ const AdminPage = () => {
     }
     return `${from} - ${to}`;
   }
+
+  
   const today = new Date().toISOString().split('T')[0];
 
   const isToday =
@@ -425,11 +428,11 @@ toDate === today;
               <p className="text-2xl font-bold text-gray-900">{formatINRCurrency(totalSalesSummary.amount)}</p>
             </div>
             <div>
-            <p className="text-gray-500 text-xs">
-      from {formatComparedTo(totalSalesSummary?.compared_to?.from, totalSalesSummary?.compared_to?.to)}
+            <p className="text-gray-500 text-xs text-end">
+       {formatComparedTo(totalSalesSummary?.compared_to?.from, totalSalesSummary?.compared_to?.to)}
     </p>
     <p
-      className={`text-2xl font-bold ${
+      className={`text-2xl font-bold text-end ${
         totalSalesSummary.trend === "up" ? "text-green-600" : "text-red-600"
       }`}
     >
