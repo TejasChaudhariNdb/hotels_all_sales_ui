@@ -7,7 +7,8 @@ import {
   Calendar,
   ChevronDown,
   ChevronUp,
-  Box
+  Box,
+  CalendarIcon
 } from "lucide-react";
 
 import SalesFilter from "@/components/SalesFilter";
@@ -258,21 +259,31 @@ export default function SalesPage({role,hotel_type}) {
 
 {/* Date Filter */}
 <div className="mb-4">
-  <button
-    onClick={() => setIsDateFilterOpen(!isDateFilterOpen)}
-    className="w-full flex items-center justify-between bg-gray-100 p-3 rounded-md text-left"
-  >
+<button
+  onClick={() => setIsDateFilterOpen(!isDateFilterOpen)}
+  className="w-full flex items-center justify-between bg-gray-100 hover:bg-gray-200 p-3 rounded-md text-left transition-colors duration-500 border border-indigo-300 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+  aria-expanded={isDateFilterOpen}
+  aria-label={isDateFilterOpen ? "Close date filter" : "Open date filter"}
+>
+  <div className="flex items-center gap-2">
+    <CalendarIcon size={16} className="text-gray-600" />
     <span className="text-gray-700 font-medium">
       {fromDate === toDate
         ? formatDate(fromDate)
         : `${formatDate(fromDate)} - ${formatDate(toDate)}`}
     </span>
+  </div>
+  <div className="flex items-center gap-1">
+    <span className="text-xs text-gray-500 hidden sm:inline">
+      {isDateFilterOpen ? 'Click to close' : 'Click to expand'}
+    </span>
     {isDateFilterOpen ? (
-      <ChevronUp color="black" size={16} />
+      <ChevronUp color="black" size={16} className="transition-transform duration-200" />
     ) : (
-      <ChevronDown color="black" size={16} />
+      <ChevronDown color="black" size={16} className="transition-transform duration-200" />
     )}
-  </button>
+  </div>
+</button>
 
   {/* Animated Dropdown */}
   <div
