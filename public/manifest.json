@@ -1,6 +1,6 @@
 {
-  "name": " Heera Sales",
-  "short_name": " HP Sales",
+  "name": "Admin Heera Sales",
+  "short_name": "Admin HP Sales",
   "start_url": "/admin",
   "display": "standalone",
   "theme_color": "#0d0d0d",
