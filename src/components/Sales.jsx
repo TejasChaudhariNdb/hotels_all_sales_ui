@@ -235,7 +235,7 @@ export default function SalesPage({role,hotel_type}) {
     
 
   return (
-    <div className="max-w-md mx-auto p-4 bg-gray-100">
+    <div className="max-w-md mx-auto p-4 bg-gray-100 ">
 
 
       {/* Header */}
@@ -418,6 +418,11 @@ export default function SalesPage({role,hotel_type}) {
           </div>
         </div>
       )}
+
+
+      <br />
+      <br />
+      <br />
     </div>
   );
 }
