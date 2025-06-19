@@ -8,10 +8,12 @@ import {
   ChevronDown,
   ChevronUp,
   Box,
-  CalendarIcon
+  CalendarIcon,
+  CopyXIcon
 } from "lucide-react";
 
 import SalesFilter from "@/components/SalesFilter";
+import Link from "next/link";
 export default function SalesPage({role,hotel_type}) {
   const [sales, setSales] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -253,6 +255,12 @@ export default function SalesPage({role,hotel_type}) {
           <Download size={16} className="mr-1" />
           Export
         </button>
+        {role === "admin" && (
+  <Link href={`/admin/noEntry?start=${fromDate}&todate=${toDate}`}>
+    <CopyXIcon className="text-rose-600" />
+  </Link>
+)}
+
         </div>
 
       </div>
@@ -340,6 +348,7 @@ export default function SalesPage({role,hotel_type}) {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+  
       </div>
 
       {/* Sales Data */}
