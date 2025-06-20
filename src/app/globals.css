@@ -11,18 +11,18 @@
 }
 
 /* CSS Variables for Dark mode, triggered by .dark class */
-.dark {
+/* .dark {
   --background: #0a0a0a;
   --foreground: #ededed;
-}
+} */
 
 /* Fallback system preference for dark if user hasn't toggled */
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root:not(.dark) {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
   background-color: var(--background);

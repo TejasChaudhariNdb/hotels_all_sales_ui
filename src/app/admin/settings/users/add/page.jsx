@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState, useMemo } from 'react';
-import axios from 'axios';
 import { makeGet, makePost } from "@/lib/api";
 
 export default function AddUserPage() {

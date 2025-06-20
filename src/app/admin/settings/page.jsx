@@ -30,14 +30,24 @@ export default function SettingsPage() {
       {/* <SettingItem icon={<Settings />} title="App Preferences" link="/admin/settings/users" /> */}
       <SettingItem icon={<Settings2 />} title="Manage Categories" link="/admin/settings/categorys" />
 
-      <Link href="/admin/settings/users">
-        <div className="flex items-center justify-between p-4 bg-white rounded-xl shadow hover:bg-gray-50">
+      <Link href="/admin/settings/users"  className="flex items-center justify-between p-4 bg-white rounded-xl shadow hover:bg-gray-50">
+       
           <div className="flex items-center">
             <Users className="text-blue-600 mr-3" />
             <span className="text-gray-800 font-medium">Manage Users</span>
           </div>
           <ArrowRight className="text-gray-400" />
-        </div>
+       
+      </Link>
+
+      <Link href="/admin/settings/manager"  className="flex items-center justify-between p-4 bg-white rounded-xl shadow hover:bg-gray-50">
+      
+          <div className="flex items-center">
+            <Users className="text-blue-600 mr-3" />
+            <span className="text-gray-800 font-medium">Manage Managers</span>
+          </div>
+          <ArrowRight className="text-gray-400" />
+    
       </Link>
 
       <button
