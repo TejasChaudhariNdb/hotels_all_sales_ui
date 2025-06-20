@@ -11,11 +11,14 @@ export default function UserLayout({ children }) {
 
   useEffect(() => {
     if (!user) {
-      router.push("/login")
+      router.push("/login");
+    } else if (user.role === "manager") {
+      router.push("/manager");
     } else if (user.role !== "user") {
-      router.push("/unauthorized")
+      router.push("/unauthorized");
     }
-  }, [user])
+  }, [user]);
+  
 
   if (!user || user.role !== "user") return null
 
