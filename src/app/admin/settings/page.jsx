@@ -1,11 +1,7 @@
 "use client";
-
 import {
   Bell,
-  Globe,
   ShieldCheck,
-  Settings,
-  UserPlus,
   Users,
   LogOut,
   ArrowRight,
@@ -24,7 +20,7 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-3">
-      {/* <SettingItem icon={<Bell />} title="Notifications" link="/admin/settings/users" /> */}
+      <SettingItem icon={<Bell />} title="Notifications" link="/admin/settings/notifications" />
       {/* <SettingItem icon={<Globe />} title="Language" link="/admin/settings/users" /> */}
       <SettingItem icon={<ShieldCheck />} title="Privacy & Security" link="/admin/settings/security" />
       {/* <SettingItem icon={<Settings />} title="App Preferences" link="/admin/settings/users" /> */}
