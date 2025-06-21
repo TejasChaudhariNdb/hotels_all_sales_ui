@@ -81,6 +81,17 @@ export default function Page() {
     );
   }
 
+  const notifyHotelUsers = async (hotelId, hotelName) => {
+    try {
+      const res = await makeGet(`/notify-hotel/${hotelId}`);
+      alert(`Notified users of "${hotelName}". ${res.message || ""}`);
+    } catch (err) {
+      console.error("Failed to send notification", err);
+      alert("Failed to send notification.");
+    }
+  };
+
+  
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto px-6 py-6">
@@ -198,7 +209,7 @@ export default function Page() {
                           <button className="px-3 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium active:bg-blue-100">
                             Call Manager
                           </button>
-                          <button className="px-3 py-2 bg-green-50 text-green-700 rounded-lg text-sm font-medium active:bg-green-100">
+                          <button  onClick={() => notifyHotelUsers(hotel.hotel_id, hotel.hotel_name)} className="px-3 py-2 bg-green-50 text-green-700 rounded-lg text-sm font-medium active:bg-green-100">
                             Notifiy
                           </button>
                         </div>
