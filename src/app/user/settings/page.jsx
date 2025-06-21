@@ -79,7 +79,7 @@ export default function SettingsPage() {
             icon={<Bell />}
             title="Notifications"
             subtitle="Manage your notification preferences"
-            link="/user/settings/"
+            link="/user/settings/notifaction"
           />
           <SettingItem
             icon={<Globe />}
