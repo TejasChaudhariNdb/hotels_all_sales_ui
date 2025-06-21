@@ -1,4 +1,5 @@
 'use client'
+import { useEffect } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider, useAuth } from '@/context/AuthContext'
@@ -23,8 +24,11 @@ function AuthWrapper({ children }) {
   return children
 }
 
+
+
 export default function RootLayout({ children }) {
   const [theme] = useTheme();
+
 
   return (
     <html lang="en" suppressHydrationWarning>

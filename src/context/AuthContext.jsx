@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect } from 'react'
 import { makeGet } from '@/lib/api'
-
+import { registerPush } from "@/lib/registerPush";
 const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
           const data = res
           setUser(data.user)
           setToken(savedToken)
+          registerPush();
         } catch (err) {
           console.error('Auth error:', err)
           logout() // Clear everything if token invalid
