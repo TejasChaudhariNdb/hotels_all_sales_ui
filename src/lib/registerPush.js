@@ -17,19 +17,19 @@ export async function registerPush() {
     // Ask for Notification permission
     const permission = await Notification.requestPermission();
 
-    if (permission === 'granted') {
-        console.log('Notification permission granted.');
-        // proceed with subscription
-      } else if (permission === 'denied') {
-        alert('You have blocked notifications. Please enable them from browser settings to receive alerts.');
-      } else {
-        console.log('Notification permission was dismissed.');
-      }
+    // if (permission === 'granted') {
+    //     console.log('Notification permission granted.');
+    //     // proceed with subscription
+    //   } else if (permission === 'denied') {
+    //     alert('You have blocked notifications. Please enable them from browser settings to receive alerts.');
+    //   } else {
+    //     console.log('Notification permission was dismissed.');
+    //   }
       
-    if (permission !== "granted") {
-      console.warn("Notification permission not granted.");
-      return;
-    }
+    // if (permission !== "granted") {
+    //   console.warn("Notification permission not granted.");
+    //   return;
+    // }
 
     // Check if user is already subscribed
     const existingSubscription = await registration.pushManager.getSubscription();
