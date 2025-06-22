@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { makeGet } from "@/lib/api";
+import { makeGet ,makeDelete} from "@/lib/api";
 import {
   Search,
   Download,
@@ -9,8 +9,10 @@ import {
   ChevronUp,
   Box,
   CalendarIcon,
-  CopyXIcon
+  CopyXIcon,
+  Trash2
 } from "lucide-react";
+
 
 import SalesFilter from "@/components/SalesFilter";
 import Link from "next/link";
@@ -27,11 +29,22 @@ export default function SalesPage({role,hotel_type}) {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedHotels, setSelectedHotels] = useState([]);
   const [selectedSalesCategories, setSelectedSalesCategories] = useState([]);
-
+  const [visibleDeleteGroup, setVisibleDeleteGroup] = useState(null);
+  let longPressTimer = null;
   useEffect(() => {
 
     fetchSales();
   }, []);
+
+  useEffect(() => {
+    if (visibleDeleteGroup) {
+      const timer = setTimeout(() => {
+        setVisibleDeleteGroup(null);
+      }, 5000); // hide after 5 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [visibleDeleteGroup]);
+  
 
   const fetchSales = async () => {
 
@@ -100,8 +113,9 @@ export default function SalesPage({role,hotel_type}) {
 
         // Use date from one of the entries
         const date = entries[0].date;
-
+        const sale_id = entries[0].id;
         return {
+          sale_id,
           date,
           formattedDate: formatDate(date),
           items: filteredItems,
@@ -233,6 +247,28 @@ export default function SalesPage({role,hotel_type}) {
         })),
       }));
     }
+    
+    
+    const handleDeleteGroup = async (group) => {
+      console.log(group)
+      const confirmed = confirm(
+        `Are you sure you want to delete sales for ${group.hotel.name} on ${group.formattedDate}?`
+      );
+    
+      if (!confirmed) return;
+    
+      try {
+        // Assuming group has a unique `id` (sale group ID)
+        const endpoint = hotel_type === 0 ? `/daily-sales/${group.sale_id}` : `/boxes-sales/${group.sale_id}`;
+        await makeDelete(endpoint);
+
+    
+        fetchSales(); // Refresh list after deletion
+      } catch (err) {
+        console.error("Failed to delete sales group", err);
+        alert("Failed to delete sales group.");
+      }
+    };
     
     
 
@@ -379,19 +415,48 @@ export default function SalesPage({role,hotel_type}) {
       ) : (
         <div>
           {groupedSales.map((group, groupIndex) => (
-            <div
-              key={`group-${groupIndex}`}
-              className="mb-6 bg-white shadow-md rounded-xl overflow-hidden border border-gray-200">
+          <div
+          key={`group-${groupIndex}`}
+          className="mb-6 bg-white shadow-md rounded-xl overflow-hidden border border-gray-200"
+          onDoubleClick={() =>
+            role === "admin" && setVisibleDeleteGroup((prev) =>
+              prev === `${group.hotel.id}-${group.date}` ? null : `${group.hotel.id}-${group.date}`
+            )
+          }
+        >
+        
               {/* Header */}
               <div className="bg-indigo-50 p-3 rounded-t-lg border border-gray-200">
+          
                 <div className="flex justify-between items-center mb-1">
-                  <div className="font-semibold text-sm text-gray-800">
-                    {group.hotel.name}
-                  </div>
-                  <div className="text-sm font-bold text-green-700">
-                    {hotel_type === 0 ? formatINRCurrency(group.total) : <div className="flex items-center gap-1"> <Box size={16}/> {parseFloat(group.total)}</div>}
-                  </div>
-                </div>
+  <div className="font-semibold text-sm text-gray-800">
+    {group.hotel.name}
+  </div>
+  <div className="flex items-center gap-2">
+    <div className="text-sm font-bold text-green-700">
+      {hotel_type === 0
+        ? formatINRCurrency(group.total)
+        : (
+          <div className="flex items-center gap-1">
+            <Box size={16} /> {parseFloat(group.total)}
+          </div>
+        )}
+    </div>
+
+    {role === "admin" &&
+  visibleDeleteGroup === `${group.hotel.id}-${group.date}` && (
+    <button
+      onClick={() => handleDeleteGroup(group)}
+      title="Delete this sales group"
+      className="text-red-600 hover:text-red-800"
+    >
+      <Trash2 size={16} />
+    </button>
+)}
+
+  </div>
+</div>
+
                 <div className="flex justify-between items-center mb-1">
                   <div className="text-xs text-gray-600">
                     {group.formattedDate}
