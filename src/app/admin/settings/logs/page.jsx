@@ -156,7 +156,7 @@ export default function LogsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-lg border-b border-white/20 p-4">
+      <div className="  shadow-sm rounded-xl bg-white/80 backdrop-blur-lg border-b border-white/20 p-4">
         <div className="max-w-md mx-auto">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -196,7 +196,7 @@ export default function LogsPage() {
               <button
                 key={type}
                 onClick={() => setSelectedFilter(type)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all capitalize ${
+                className={`px-4 py-2  shadow-sm rounded-lg text-sm font-medium whitespace-nowrap transition-all capitalize ${
                   selectedFilter === type
                     ? "bg-blue-500 text-white shadow-md"
                     : "bg-white text-gray-600 hover:bg-gray-50"
@@ -210,7 +210,7 @@ export default function LogsPage() {
       </div>
 
       {/* Content */}
-      <div className="p-4 pb-8">
+      <div className="mt-5 p-2 pb-8">
         <div className="max-w-md mx-auto">
           {filteredLogs.length === 0 ? (
             <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
