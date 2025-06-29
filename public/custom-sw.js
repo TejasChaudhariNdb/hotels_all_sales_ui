@@ -3,13 +3,13 @@ self.__WB_MANIFEST;
 
 self.addEventListener("push", function (event) {
     const data = event.data?.json() || {};
-  
+    console.log(data)
     const title = data.title || "New Notification";
     const options = {
       body: data.body || "You have a new message.",
       icon: "/logo.png",
       data: {
-        url: data.url || "/user", // ✅ this will open when clicked
+        url: data.data?.url|| "/user", // ✅ this will open when clicked
       },
     };
   
