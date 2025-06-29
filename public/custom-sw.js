@@ -38,10 +38,10 @@ self.addEventListener("push", function (event) {
   
 
   self.addEventListener('install', (event) => {
-    self.skipWaiting();
+    // self.skipWaiting();
   });
   
   self.addEventListener('activate', (event) => {
-    clients.claim();
+    // clients.claim();
   });
   
