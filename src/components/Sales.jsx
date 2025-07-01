@@ -303,31 +303,31 @@ export default function SalesPage({role,hotel_type}) {
 
 {/* Date Filter */}
 <div className="mb-4">
-<button
-  onClick={() => setIsDateFilterOpen(!isDateFilterOpen)}
-  className="w-full flex items-center justify-between bg-gray-100 hover:bg-gray-200 p-3 rounded-md text-left transition-colors duration-500 border border-indigo-300 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-  aria-expanded={isDateFilterOpen}
-  aria-label={isDateFilterOpen ? "Close date filter" : "Open date filter"}
->
-  <div className="flex items-center gap-2">
-    <CalendarIcon size={16} className="text-gray-600" />
-    <span className="text-gray-700 font-medium">
-      {fromDate === toDate
-        ? formatDate(fromDate)
-        : `${formatDate(fromDate)} - ${formatDate(toDate)}`}
-    </span>
-  </div>
-  <div className="flex items-center gap-1">
-    <span className="text-xs text-gray-500 hidden sm:inline">
-      {isDateFilterOpen ? 'Click to close' : 'Click to expand'}
-    </span>
-    {isDateFilterOpen ? (
-      <ChevronUp color="black" size={16} className="transition-transform duration-200" />
-    ) : (
-      <ChevronDown color="black" size={16} className="transition-transform duration-200" />
-    )}
-  </div>
-</button>
+  <button
+    onClick={() => setIsDateFilterOpen(!isDateFilterOpen)}
+    className="w-full flex items-center justify-between bg-gray-100 hover:bg-gray-200 p-3 rounded-md text-left transition-colors duration-500 border border-indigo-300 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+    aria-expanded={isDateFilterOpen}
+    aria-label={isDateFilterOpen ? "Close date filter" : "Open date filter"}
+  >
+    <div className="flex items-center gap-2">
+      <CalendarIcon size={16} className="text-gray-600" />
+      <span className="text-gray-700 font-medium">
+        {fromDate === toDate
+          ? formatDate(fromDate)
+          : `${formatDate(fromDate)} - ${formatDate(toDate)}`}
+      </span>
+    </div>
+    <div className="flex items-center gap-1">
+      <span className="text-xs text-gray-500 hidden sm:inline">
+        {isDateFilterOpen ? 'Click to close' : 'Click to expand'}
+      </span>
+      {isDateFilterOpen ? (
+        <ChevronUp color="black" size={16} className="transition-transform duration-200" />
+      ) : (
+        <ChevronDown color="black" size={16} className="transition-transform duration-200" />
+      )}
+    </div>
+  </button>
 
   {/* Animated Dropdown */}
   <div
@@ -336,6 +336,68 @@ export default function SalesPage({role,hotel_type}) {
     }`}
   >
     <div className="bg-white rounded-md shadow p-4 border border-gray-200">
+
+      {/* Shortcut Buttons */}
+{/* Shortcut Buttons */}
+<div className="flex gap-2 mb-4 overflow-x-auto no-scrollbar whitespace-nowrap">
+  {[
+    { label: "Today", offset: 0 },
+    { label: "Yesterday", offset: -1 },
+    { label: "This Week", type: "week" },
+    { label: "Last Week", type: "lastweek" },
+    { label: "This Month", type: "month" },
+    { label: "Last Month", type: "lastmonth" },
+  ].map((btn, idx) => (
+    <button
+      key={idx}
+      onClick={() => {
+        const today = new Date();
+        let from, to;
+
+        if (btn.offset !== undefined) {
+          const date = new Date(today);
+          date.setDate(today.getDate() + btn.offset);
+          from = to = date.toISOString().split('T')[0];
+        } else {
+          if (btn.type === "week") {
+            const day = today.getDay();
+            from = new Date(today);
+            from.setDate(today.getDate() - day + 1); // Monday
+            to = new Date(from);
+            to.setDate(from.getDate() + 6);
+            if (to > today) to = today;
+          } else if (btn.type === "lastweek") {
+            const day = today.getDay();
+            to = new Date(today);
+            to.setDate(today.getDate() - day);
+            from = new Date(to);
+            from.setDate(to.getDate() - 6);
+          } else if (btn.type === "month") {
+            from = new Date(today.getFullYear(), today.getMonth(), 1);
+            to = today;
+          } else if (btn.type === "lastmonth") {
+            const year = today.getMonth() === 0 ? today.getFullYear() - 1 : today.getFullYear();
+            const month = today.getMonth() === 0 ? 11 : today.getMonth() - 1;
+            from = new Date(year, month, 1);
+            to = new Date(year, month + 1, 0);
+          }
+
+          from = from.toISOString().split('T')[0];
+          to = to.toISOString().split('T')[0];
+        }
+
+        setFromDate(from);
+        setToDate(to);
+      }}
+      className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded border border-gray-300"
+    >
+      {btn.label}
+    </button>
+  ))}
+</div>
+
+
+      {/* Date Inputs */}
       <div className="grid grid-cols-2 gap-3 mb-3">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -360,6 +422,7 @@ export default function SalesPage({role,hotel_type}) {
           />
         </div>
       </div>
+
       <button
         onClick={applyDateFilter}
         className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors w-full"
@@ -369,6 +432,7 @@ export default function SalesPage({role,hotel_type}) {
     </div>
   </div>
 </div>
+
 
 
       {/* Search Input */}
