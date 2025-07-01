@@ -396,7 +396,7 @@ const funnelData = serviceCategories
                 <ChevronDown className="w-4 h-4 text-slate-500" />
               )}
             </button>
-            <SalesFilter onApplyFilter={handleFilter} hotel_type={0} />
+          
             </div>
 
             {/* Animated Dropdown */}
@@ -465,8 +465,13 @@ const funnelData = serviceCategories
           </svg>
         </div></>) : ""}
     
-
-      <div className="p-4 space-y-6">
+    
+      <div className="pt-0 p-4 space-y-6" >
+      <div className="flex justify-end mb-0 mt-0">
+          <SalesFilter onApplyFilter={handleFilter} hotel_type={0} />
+      
+        </div>
+      
         {/* Today's Summary */}
         <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
           <div className="flex justify-between">
