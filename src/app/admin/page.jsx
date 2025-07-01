@@ -482,10 +482,18 @@ const funnelData = serviceCategories
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div>
+            {/* <div>
               <p className="text-gray-600 text-sm">Total Revenue</p>
               <p className="text-2xl font-bold text-gray-900">{formatINRCurrency(totalSalesSummary.amount)}</p>
-            </div>
+            </div> */}
+            <div>
+  <p className="text-gray-600 text-sm">Total Revenue</p>
+  <p className="text-2xl font-bold text-gray-900">{formatINRCurrency(totalSalesSummary.amount)}</p>
+  <p className="text-sm text-gray-500 mt-1">
+    Avg: {formatINRCurrency(totalSalesSummary?.average?.value)} 
+  </p>
+</div>
+
             <div>
             <p className="text-gray-500 text-xs text-end">
        {formatComparedTo(totalSalesSummary?.compared_to?.from, totalSalesSummary?.compared_to?.to)}
