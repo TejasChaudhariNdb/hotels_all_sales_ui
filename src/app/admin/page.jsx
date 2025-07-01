@@ -64,6 +64,10 @@ const AdminPage = () => {
   const [totalSalesSummary, setTotalSalesSummary] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [selectedCities, setSelectedCities] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedHotels, setSelectedHotels] = useState([]);
+  const [selectedSalesCategories, setSelectedSalesCategories] = useState([]);
 
   useEffect(() => {
     const debounceTimeout = setTimeout(() => {
@@ -77,10 +81,20 @@ const AdminPage = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const data = await makeGet("/admin/dashboard", {
+
+      const query = new URLSearchParams();
+
+      selectedCities?.forEach((id) => query.append("city_ids[]", id));
+      selectedCategories?.forEach((id) => query.append("category_ids[]", id));
+      selectedHotels?.forEach((id) => query.append("hotel_ids[]", id));
+      selectedSalesCategories?.forEach((id) => query.append("sales_catogory_ids[]", id));
+      console.log(query.toString())
+
+      const data = await makeGet(`/admin/dashboard?${query.toString()}`, {
         start_date: selectedDate,
         end_date: toDate,
       });
+
       setServiceCategories(data.sales_by_categories)
       setHotelCategories(data.sales_by_hotel)
       setTotalSalesData(data.sales_trend)
@@ -88,6 +102,7 @@ const AdminPage = () => {
       setCityData(data.salesByCity)
       setTotalSalesSummary(data.sales_summary)
       setLoading(false);
+
     } catch (error) {
       console.error("Dashboard fetch error", error);
       setLoading(false);
@@ -149,6 +164,7 @@ const AdminPage = () => {
     setSelectedDate(formattedFrom);
     setToDate(formattedTo);
     setSelectedPeriod(period);
+
   };
 
   const formatINRCurrency = (amount) =>
@@ -258,6 +274,12 @@ const AdminPage = () => {
       categories?.forEach((id) => query.append("category_ids[]", id));
       hotels?.forEach((id) => query.append("hotel_ids[]", id));
       salesCategory?.forEach((id) => query.append("sales_catogory_ids[]", id));
+
+      setSelectedCities(cities)
+      setSelectedCategories(categories)
+      setSelectedHotels(hotels)
+      setSelectedSalesCategories(salesCategory)
+
 
       try {
         const data = await makeGet(`/admin/dashboard?${query.toString()}`, {
