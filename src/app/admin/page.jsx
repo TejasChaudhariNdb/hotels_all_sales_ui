@@ -132,40 +132,51 @@ const AdminPage = () => {
 
 
   const handlePeriodChange = (period) => {
-  
-
     let from = new Date();
     let to = new Date();
-
+  
     switch (period) {
       case "Today":
         from = to = new Date();
         break;
+  
       case "Yesterday":
-        from = new Date();
-        to = new Date();
         from.setDate(from.getDate() - 1);
         to.setDate(to.getDate() - 1);
         break;
-
+  
       case "Week":
         from = getStartOfWeek(new Date());
         to = getEndOfWeek(new Date());
         break;
+  
+      case "Last Week":
+        to = getStartOfWeek(new Date());
+        to.setDate(to.getDate() - 1); // Sunday of last week
+        from = getStartOfWeek(to);    // Monday of last week
+        break;
+  
       case "Month":
         from = getStartOfMonth(new Date());
         to = getEndOfMonth(new Date());
         break;
+  
+      case "Last Month":
+        const today = new Date();
+        const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+        from = getStartOfMonth(lastMonth);
+        to = getEndOfMonth(lastMonth);
+        break;
     }
-
+  
     const formattedFrom = formatDate(from);
     const formattedTo = formatDate(to);
-
+  
     setSelectedDate(formattedFrom);
     setToDate(formattedTo);
     setSelectedPeriod(period);
-
   };
+  
 
   const formatINRCurrency = (amount) =>
     new Intl.NumberFormat("en-IN", {
@@ -347,8 +358,8 @@ const funnelData = serviceCategories
         {/* Mobile-first vertical layout */}
         <div className="space-y-4">
           {/* Period Selector - Full width on mobile */}
-          <div className="grid grid-cols-4 gap-3">
-            {["Today", "Yesterday", "Week", "Month"].map((period) => (
+          <div className="flex  mb-4 overflow-x-auto no-scrollbar whitespace-nowrap gap-3">
+          {["Today", "Yesterday", "Week", "Last Week", "Month", "Last Month"].map((period) => (
               <button
                 key={period}
                 onClick={() => handlePeriodChange(period)}
