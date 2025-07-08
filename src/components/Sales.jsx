@@ -291,11 +291,11 @@ export default function SalesPage({role,hotel_type}) {
           <Download size={16} className="mr-1" />
           Export
         </button>
-        {role === "admin" && (
-  <Link href={`/admin/noEntry?start=${fromDate}&todate=${toDate}`}>
+
+  <Link href={`/user/noEntry?start=${fromDate}&todate=${toDate}`}>
     <CopyXIcon className="text-rose-600" />
   </Link>
-)}
+
 
         </div>
 

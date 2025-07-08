@@ -26,6 +26,22 @@ export default function DailySalesForm() {
   const [pendingSubmission, setPendingSubmission] = useState(null);
   const [isClosing, setIsClosing] = useState(false);
   const { user } = useAuth()
+
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const startDate = url.searchParams.get("start");
+  
+    if (startDate) {
+      setDate(startDate);
+  
+      // Remove 'start' from URL
+      url.searchParams.delete("start");
+      window.history.replaceState({}, "", url.pathname + url.search);
+    }
+  }, []);
+  
+
   useEffect(() => {
 
     const fetchCategories = async () => {
