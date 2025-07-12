@@ -292,9 +292,18 @@ export default function SalesPage({role,hotel_type}) {
           Export
         </button>
 
-  <Link href={`/user/noEntry?start=${fromDate}&todate=${toDate}`}>
+        {role === "admin" && (
+  <Link href={`/admin/noEntry?start=${fromDate}&todate=${toDate}`}>
     <CopyXIcon className="text-rose-600" />
   </Link>
+)}
+
+{role === "user" && (
+  <Link href={`/user/noEntry?start=${fromDate}&todate=${toDate}`}>
+  <CopyXIcon className="text-rose-600" />
+</Link>
+)}
+
 
 
         </div>
