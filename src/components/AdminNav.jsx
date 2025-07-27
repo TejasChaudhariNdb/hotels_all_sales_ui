@@ -18,12 +18,12 @@ export default function AdminNav() {
           </div>
           <div>
             <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              HP Hotel Sales
+              Heera Group
             </h1>
             <p className={`text-sm ${
               theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
             }`}>
-              Analytics Dashboard
+              Revenue Portal
             </p>
           </div>
         </div>

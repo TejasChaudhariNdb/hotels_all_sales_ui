@@ -39,6 +39,7 @@ import {
 } from "recharts";
 import { makeGet } from "@/lib/api";
 import SalesFilter from "@/components/SalesFilter";
+import Link from 'next/link';
 const formatDate = (input) => {
   const date = new Date(input);
   const year = date.getFullYear();
@@ -252,7 +253,10 @@ const AdminPage = () => {
     `₹${Number(value).toLocaleString('en-IN')}`;
 
   const StatCard = ({ title, value, change, trend,prev}) => (
-    <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+    <div   className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+     <Link  href={`/admin/city?city=${title}&from_date=${selectedDate}&to_date=${toDate}`}>
+
+ 
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-md font-medium text-gray-600 mb-1">{title}</h3>
       <div
@@ -276,7 +280,7 @@ const AdminPage = () => {
               Prev: {formatINRCurrency(prev)}
             </p>
 </div>
-   
+</Link>
     </div>
   );
 
@@ -595,57 +599,9 @@ const AdminPage = () => {
           </ResponsiveContainer>
         </ChartCard>
 
-        {/* Category Sales Bar Chart */}
-        <ChartCard title="Sales by Category">
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={categoryData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="category_type_name" fontSize={12} />
-              <YAxis fontSize={12} />
-              <Tooltip
-                formatter={(value) => [`${formatINRCurrency(value)}`, "Sales"]}
-              />
-              <Bar dataKey="total" radius={[4, 4, 0, 0]}>
-                {categoryData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-
-
-
-        {/* Service Categories Grid */}
-        <div>
-          <h2 className="text-lg font-semibold text-gray-800 mb-3">
-            Service Categories
-          </h2>
-          <div className="grid grid-cols-2 gap-3">
-            {serviceCategories.map((service) => {
-
-              return (
-                <div
-                  key={service.category_name}
-                  className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-sm font-medium text-gray-600 mb-1">
-                      {service.category_name}
-                    </h3>
-                    <ChevronRight className="w-4 h-4 text-gray-400" />
-                  </div>
-
-                  <p className="text-lg font-bold text-gray-900">
-                    {formatINRCurrency(service.total)}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
 
    {/* Hotel Categories Grid */}
-<div>
+   <div>
   <div className="flex items-center justify-between mb-3">
     <h2 className="text-lg font-semibold text-gray-800">
       Hotel Performance
@@ -657,7 +613,8 @@ const AdminPage = () => {
 
   <div className="grid grid-cols-1 gap-3">
     {displayedHotels.map((hotel, index) => (
-      <div
+      <Link
+      href={`/admin/hotel?hotel_id=${hotel.hotel_id}&from_date=${selectedDate}&to_date=${toDate}`}
         key={index}
         className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
         <div className="flex items-center justify-between mb-2">
@@ -710,7 +667,7 @@ const AdminPage = () => {
               Prev: {formatINRCurrency(hotel?.previous_total)}
             </p>
         </div>
-      </div>
+      </Link>
     ))}
   </div>
 
@@ -733,6 +690,56 @@ const AdminPage = () => {
     </button>
   )}
 </div>
+
+
+        {/* Category Sales Bar Chart */}
+        <ChartCard title="Sales by Category">
+          <ResponsiveContainer width="100%" height={200}>
+            <BarChart data={categoryData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <XAxis dataKey="category_type_name" fontSize={12} />
+              <YAxis fontSize={12} />
+              <Tooltip
+                formatter={(value) => [`${formatINRCurrency(value)}`, "Sales"]}
+              />
+              <Bar dataKey="total" radius={[4, 4, 0, 0]}>
+                {categoryData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartCard>
+
+
+
+        {/* Service Categories Grid */}
+        <div>
+          <h2 className="text-lg font-semibold text-gray-800 mb-3">
+            Service Categories
+          </h2>
+          <div className="grid grid-cols-2 gap-3">
+            {serviceCategories.map((service) => {
+
+              return (
+                <div
+                  key={service.category_name}
+                  className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-sm font-medium text-gray-600 mb-1">
+                      {service.category_name}
+                    </h3>
+                    <ChevronRight className="w-4 h-4 text-gray-400" />
+                  </div>
+
+                  <p className="text-lg font-bold text-gray-900">
+                    {formatINRCurrency(service.total)}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
 
 
         {/* Service Categories Pie Chart */}
