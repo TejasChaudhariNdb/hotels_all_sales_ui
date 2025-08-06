@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Filter, X } from "lucide-react";
 import { makeGet } from "@/lib/api";
+const LOCAL_STORAGE_KEY = "salesFilters"; 
 export default function SalesFilter({ onApplyFilter,hotel_type }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCities, setSelectedCities] = useState([]);
@@ -15,6 +16,24 @@ export default function SalesFilter({ onApplyFilter,hotel_type }) {
 
   const totalSelected =
     selectedCities.length + selectedCategories.length + selectedHotels.length + selectedSalesCategories.length;
+
+    useEffect(() => {
+      const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setSelectedCities(parsed.cities || []);
+        setSelectedCategories(parsed.categories || []);
+        setSelectedHotels(parsed.hotels || []);
+        setSelectedSalesCategories(parsed.salesCategory || []);
+      
+        onApplyFilter({
+          cities: parsed.cities || [],
+          categories: parsed.categories || [],
+          salesCategory: parsed.salesCategory || [],
+          hotels: parsed.hotels || [],
+        });
+      }
+    }, []);
 
   // Prevent body scroll when modal is open
   useEffect(() => {
@@ -59,12 +78,15 @@ export default function SalesFilter({ onApplyFilter,hotel_type }) {
 
 
   const handleApply = () => {
-    onApplyFilter({
+    const appliedFilters = {
       cities: selectedCities,
       categories: selectedCategories,
       salesCategory: selectedSalesCategories,
       hotels: selectedHotels,
-    });
+    };
+
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(appliedFilters)); // ✅
+    onApplyFilter(appliedFilters);
     setIsOpen(false);
   };
 
@@ -73,6 +95,7 @@ export default function SalesFilter({ onApplyFilter,hotel_type }) {
     setSelectedCategories([]);
     setSelectedHotels([]);
     setSelectedSalesCategories([]);
+    localStorage.removeItem(LOCAL_STORAGE_KEY); // ✅
   };
 
   const FilterChip = ({ label, isSelected, onClick }) => (

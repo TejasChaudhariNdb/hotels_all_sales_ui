@@ -40,6 +40,7 @@ import {
 import { makeGet } from "@/lib/api";
 import SalesFilter from "@/components/SalesFilter";
 import Link from 'next/link';
+const LOCAL_DATE_KEY = "dashboardDateFilters";
 const formatDate = (input) => {
   const date = new Date(input);
   const year = date.getFullYear();
@@ -73,10 +74,25 @@ const AdminPage = () => {
   const [selectedHotels, setSelectedHotels] = useState([]);
   const [selectedSalesCategories, setSelectedSalesCategories] = useState([]);
 
+
+
+  useEffect(() => {
+    const savedDates = localStorage.getItem(LOCAL_DATE_KEY);
+    if (savedDates) {
+      const { selectedDate, toDate, selectedPeriod } = JSON.parse(savedDates);
+      if (selectedDate) setSelectedDate(selectedDate);
+      if (toDate) setToDate(toDate);
+      if (selectedPeriod) setSelectedPeriod(selectedPeriod);
+    }
+  }, []);
+  
+
   useEffect(() => {
 
     const debounceTimeout = setTimeout(() => {
       fetchData();
+
+      
     }, 500); // 500ms debounce
 
     return () => clearTimeout(debounceTimeout); // cleanup previous timeout
@@ -113,8 +129,6 @@ const AdminPage = () => {
       setLoading(false);
     }
   };
-
-
 
 
   const getStartOfWeek = (date) => {
@@ -189,6 +203,15 @@ const AdminPage = () => {
     setSelectedDate(formattedFrom);
     setToDate(formattedTo);
     setSelectedPeriod(period);
+    localStorage.setItem(
+      LOCAL_DATE_KEY,
+      JSON.stringify({
+        selectedDate: formattedFrom,
+        toDate: formattedTo,
+        selectedPeriod: period,
+      })
+    );
+    
   };
 
 
@@ -201,8 +224,18 @@ const AdminPage = () => {
     }).format(amount);
 
   const applyDateFilter = () => {
+
     setIsDateFilterOpen(false);
     // Add your apply logic here
+
+    localStorage.setItem(
+      LOCAL_DATE_KEY,
+      JSON.stringify({
+        selectedDate,
+        toDate,
+        selectedPeriod,
+      })
+    );
     fetchData()
   };
 
@@ -292,6 +325,8 @@ const AdminPage = () => {
     </div>
   );
 
+
+  
   const displayedHotels = showAllHotels
     ? hotelCategories
     : hotelCategories.slice(0, 10);
