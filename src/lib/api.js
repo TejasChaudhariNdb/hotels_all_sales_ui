@@ -36,3 +36,9 @@ export const makeDelete = async (url, params = {}) => {
   const response = await api.delete(url, { params });
   return response.data;
 };
+
+// Generic PUT
+export const makePut = async (url, data = {}) => {
+  const response = await api.put(url, data)
+  return response.data
+}

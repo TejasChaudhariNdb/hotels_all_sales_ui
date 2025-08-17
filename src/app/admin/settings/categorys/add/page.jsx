@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState ,useEffect} from 'react'
 import {
   ArrowLeft,
   Save,
@@ -10,14 +10,21 @@ import {
   Tag
 } from 'lucide-react'
 
-import { makePost } from '@/lib/api'
-import { useRouter } from 'next/navigation'
+import { makePost ,makeGet,makePut} from '@/lib/api'
+import { useRouter,useSearchParams } from 'next/navigation'
 const channelToIdMap = {
     Hotel: 1,
     Trade: 2,
     Wineshop: 3,
   }
 
+
+
+const idToChannelMap = {
+  1: 'Hotel',
+  2: 'Trade',
+  3: 'Wineshop',
+}
 const channelOptions = [
   {
     value: 'Hotel',
@@ -48,14 +55,49 @@ const channelOptions = [
 export default function AddCategoryPage() {
   const [categoryName, setCategoryName] = useState('')
   const [selectedChannel, setSelectedChannel] = useState('')
+  const [margin, setMargin] = useState('') 
   const [errors, setErrors] = useState({})
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const categoryId = searchParams.get('id') // if present → edit mode
+  const isEditMode = Boolean(categoryId)
+
+
+
+
+   // Fetch category details if editing
+   useEffect(() => {
+    const fetchCategory = async () => {
+      if (!isEditMode) return
+      try {
+        setLoading(true)
+        const res = await makeGet(`/admin/sales-categories/${categoryId}`)
+        const data = res
+        setCategoryName(data.name)
+        setSelectedChannel(idToChannelMap[data.category_type_id])
+        setMargin(data.margin)
+      } catch (error) {
+        console.error("Failed to load category", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchCategory()
+  }, [categoryId, isEditMode])
+
+
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     const newErrors = {}
     if (!categoryName.trim()) newErrors.categoryName = 'Category name is required'
     if (!selectedChannel) newErrors.selectedChannel = 'Please select a channel'
+    if (!margin) newErrors.margin = 'Margin is required'
+    else if (isNaN(margin) || margin < 0) newErrors.margin = 'Margin must be a positive number'
+    else if (margin > 100) newErrors.margin = 'Margin cannot be greater than 100%'
+    
     setErrors(newErrors)
 
     if (Object.keys(newErrors).length === 0) {
@@ -63,14 +105,21 @@ export default function AddCategoryPage() {
         const payload = {
           name: categoryName.trim(),
           category_type_id: channelToIdMap[selectedChannel],
+          margin: Number(margin),  
         }
 
-        const res = await makePost('/admin/sales-categories', payload)
+       
+        if (isEditMode) {
+          await makePut(`/admin/sales-categories/${categoryId}`, payload)
+        } else {
+          await makePost('/admin/sales-categories', payload)
+        }
         router.push('/admin/settings/categorys')
 
         // Reset form
         setCategoryName('')
         setSelectedChannel('')
+        setMargin('')
       } catch (error) {
         console.error(error)
         alert('Something went wrong. Please try again.')
@@ -87,10 +136,12 @@ export default function AddCategoryPage() {
         <div className="mb-8">
           <div className="flex items-center gap-4 mb-4">
             <button className="p-2 hover:bg-white rounded-lg transition-colors shadow-sm">
-              <ArrowLeft size={20} className="text-gray-600" />
+              <ArrowLeft size={20} className="text-gray-600"  onClick={() => router.back()}  />
             </button>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Add New Category</h1>
+            <h1 className="text-2xl font-bold text-gray-900" >
+                {isEditMode ? 'Edit Category' : 'Add New Category'}
+              </h1>
             </div>
           </div>
         </div>
@@ -125,6 +176,37 @@ export default function AddCategoryPage() {
                 </p>
               )}
             </div>
+
+ {/* Margin Field */}
+ <div>
+              <label htmlFor="margin" className="block text-sm font-semibold text-gray-700 mb-3">
+                Margin (%)
+              </label>
+              <div className="relative">
+                <input
+                  type="number"
+                  id="margin"
+                  value={margin}
+                  onChange={(e) => setMargin(e.target.value)}
+                  placeholder="Enter margin..."
+                  className={`text-black w-full pr-12 pl-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all ${
+                    errors.margin ? 'border-red-300 bg-red-50' : 'border-gray-200'
+                  }`}
+                  min="0"
+                  max="100" 
+                />
+                <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">
+                  %
+                </span>
+              </div>
+              {errors.margin && (
+                <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                  <X size={14} />
+                  {errors.margin}
+                </p>
+              )}
+            </div>
+
 
             {/* Channel Assignment Field */}
             <div>
@@ -210,7 +292,7 @@ export default function AddCategoryPage() {
                 className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
               >
                 <Save size={18} />
-                Add Category
+                {isEditMode ? 'Update Category' : 'Add Category'}
               </button>
 
             </div>

@@ -176,19 +176,21 @@ export default function CategoryPage() {
                           <div className="min-w-0 flex-1">
                             <h3 className="font-semibold text-gray-900 truncate">{item.name}</h3>
                           </div>
+                          <div className="min-w-0 flex-1">
+                            <h3 className="font-semibold text-md text-gray-600 ">{item.margin}%</h3>
+                          </div>
+                     
                         </div>
-
                         {/* Action Menu */}
                         <div className={`flex items-center gap-1 transition-opacity duration-200 ${hoveredItem === item.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                 
                           <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                            <Eye size={16} className="text-gray-500" />
+                            <Edit size={16} className="text-gray-500"    onClick={(e) => {
+                              e.stopPropagation() // prevent parent click
+                              router.push(`categorys/add?id=${item.id}`)
+                            }}/>
                           </button>
-                          <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                            <Edit size={16} className="text-gray-500" />
-                          </button>
-                          <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                            <MoreVertical size={16} className="text-gray-500" />
-                          </button>
+                 
                         </div>
                       </div>
                     </div>
