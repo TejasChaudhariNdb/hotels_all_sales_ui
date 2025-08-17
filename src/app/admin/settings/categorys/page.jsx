@@ -176,12 +176,14 @@ export default function CategoryPage() {
                           <div className="min-w-0 flex-1">
                             <h3 className="font-semibold text-gray-900 truncate">{item.name}</h3>
                           </div>
-                          <div className="min-w-0 flex-1">
-                            <h3 className="font-semibold text-md text-gray-600 ">{item.margin}%</h3>
-                          </div>
+               
                      
                         </div>
                         {/* Action Menu */}
+                        <div className='flex items-center '>
+                        <div className="">
+                            <h3 className="font-semibold text-md text-gray-600 ">{item.margin}%</h3>
+                          </div>
                         <div className={`flex items-center gap-1 transition-opacity duration-200 ${hoveredItem === item.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
                  
                           <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
@@ -192,6 +194,8 @@ export default function CategoryPage() {
                           </button>
                  
                         </div>
+                        </div>
+                 
                       </div>
                     </div>
                   ))}
