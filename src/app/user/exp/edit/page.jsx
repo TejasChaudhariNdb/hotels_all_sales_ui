@@ -126,19 +126,18 @@ export default function EditExpenseForm() {
         <h1 className="text-2xl font-bold text-gray-900 mb-2">
           Editing {months[month - 1]} {year} Expenses
         </h1>
-        <p className="text-gray-600 text-sm">Update your monthly expenses</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6 max-w-md mx-auto">
         {/* Expense fields only (date removed) */}
         <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100">
-          <h3 className="text-sm font-semibold text-gray-700 mb-4">💰 Expense Details</h3>
+          <h3 className="text-xl font-semibold text-gray-700 mb-4">Expense Details</h3>
 
           <div className="space-y-4">
             {expenseFields.map((field) => (
               <div key={field.key} className="relative">
-                <label className="block text-xs font-medium text-gray-600 mb-2 flex items-center gap-2">
-                  <span className="text-lg">{field.icon}</span>
+                <label className="block text-lg font-medium text-gray-600 mb-2 flex items-center gap-2">
+
                   {field.label}
                 </label>
                 <div className="relative">

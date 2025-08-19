@@ -71,9 +71,6 @@ export default function ExpenseForm() {
         <h1 className="text-2xl font-bold text-gray-900 text-center mb-2">
           Monthly Expenses
         </h1>
-        <p className="text-gray-600 text-center text-sm">
-          Track your hotel's monthly expenses
-        </p>
       </div>
 
       <div className="space-y-6 max-w-md mx-auto">
@@ -114,14 +111,14 @@ export default function ExpenseForm() {
 
         {/* Expenses Card */}
         <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100">
-          <h3 className="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-2">
-            💰 Expense Details
+          <h3 className="text-xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
+           Expense Details
           </h3>
           <div className="space-y-4">
             {expenseFields.map((field) => (
               <div key={field.key} className="relative">
-                <label className="block text-xs font-medium text-gray-600 mb-2 flex items-center gap-2">
-                  <span className="text-lg">{field.icon}</span>
+                <label className="block text-lg font-medium text-gray-600 mb-2 flex items-center gap-2">
+              
                   {field.label}
                 </label>
                   <div className="relative">
