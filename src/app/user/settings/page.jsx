@@ -12,7 +12,8 @@ import {
   Settings2,
   User,
   Camera,
-  Edit3
+  Edit3,
+  WalletCards
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -80,6 +81,12 @@ export default function SettingsPage() {
             title="Notifications"
             subtitle="Manage your notification preferences"
             link="/user/settings/notifaction"
+          />
+          <SettingItem
+            icon={<WalletCards />}
+            title="Monthly Expense"
+            subtitle="Manage your monthly expense "
+            link="/user/exp"
           />
           <SettingItem
             icon={<Globe />}

@@ -6,7 +6,8 @@ import { AuthProvider, useAuth } from '@/context/AuthContext'
 import FullScreenLoader from '@/components/FullScreenLoader'
 import useTheme from '@/lib/useTheme';
 import Script from 'next/script';
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -59,6 +60,7 @@ export default function RootLayout({ children }) {
       >
          <AuthProvider>
           <AuthWrapper>
+          <ToastContainer position="top-right" autoClose={3000} />;
           {children}
           </AuthWrapper>
         </AuthProvider>
