@@ -353,6 +353,12 @@ export default function AdminExpensesDashboard() {
               </div>
             );
           })}
+
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
         </div>
       )}
 
