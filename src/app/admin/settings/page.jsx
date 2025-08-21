@@ -6,7 +6,8 @@ import {
   LogOut,
   ArrowRight,
   Settings2,
-  ScrollText
+  ScrollText,
+  WalletCards
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -24,8 +25,8 @@ export default function SettingsPage() {
       <SettingItem icon={<Bell />} title="Notifications" link="/admin/settings/notifications" />
       <SettingItem icon={<ShieldCheck />} title="Privacy & Security" link="/admin/settings/security" />
       <SettingItem icon={<ScrollText />} title="Activity Logs" link="/admin/settings/logs" />
+      <SettingItem icon={<WalletCards />} title="Monthly Expense" link="/admin/exp/" />
       <SettingItem icon={<Settings2 />} title="Manage Categories" link="/admin/settings/categorys" />
-
       <Link href="/admin/settings/users"  className="flex items-center justify-between p-4 bg-white rounded-xl shadow hover:bg-gray-50">
        
           <div className="flex items-center">
