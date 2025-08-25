@@ -1,18 +1,45 @@
 "use client"
 import { useState, useEffect } from "react";
-import { Calendar, TrendingUp, TrendingDown, Eye, Filter, Download, Plus, Building2, Users, ChevronDown, ChevronUp, Search } from "lucide-react";
+import { Calendar, TrendingUp, TrendingDown, Eye, Filter, Download, Plus, Building2, Users, ChevronDown, ChevronUp, Search, PieChart, BarChart3 } from "lucide-react";
 import { makeGet } from "@/lib/api";
 
 export default function AdminExpensesDashboard() {
   const [hotelExpenses, setHotelExpenses] = useState([]);
   const [summaryData, setSummaryData] = useState(null);
+  const [networkBreakdown, setNetworkBreakdown] = useState(null);
   const [previousMonthData, setPreviousMonthData] = useState({});
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [expandedHotel, setExpandedHotel] = useState(null);
+  const [expandedBreakdown, setExpandedBreakdown] = useState(false);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('total'); // 'total', 'name'
+
+
+
+  // Calculate network expense breakdown
+  const calculateNetworkBreakdown = (hotels) => {
+    const breakdown = {
+      rent: 0,
+      license_fee: 0,
+      salary: 0,
+      light_bill: 0,
+      interest: 0,
+      miscellaneous: 0
+    };
+
+    hotels.forEach(hotel => {
+      breakdown.rent += hotel.expenses.rent;
+      breakdown.license_fee += hotel.expenses.license_fee;
+      breakdown.salary += hotel.expenses.salary;
+      breakdown.light_bill += hotel.expenses.light_bill;
+      breakdown.interest += hotel.expenses.interest;
+      breakdown.miscellaneous += hotel.expenses.miscellaneous;
+    });
+
+    return breakdown;
+  };
 
   // Fetch expenses data from API
   const fetchExpenses = async () => {
@@ -43,13 +70,19 @@ export default function AdminExpensesDashboard() {
           }
         }));
         setHotelExpenses(transformedData);
+        
+        // Calculate network breakdown
+        const breakdown = calculateNetworkBreakdown(transformedData);
+        setNetworkBreakdown(breakdown);
       } else {
         setHotelExpenses([]);
+        setNetworkBreakdown(null);
       }
     } catch (error) {
       console.error('Error fetching expenses:', error);
       setHotelExpenses([]);
       setSummaryData(null);
+      setNetworkBreakdown(null);
     } finally {
       setLoading(false);
     }
@@ -224,6 +257,141 @@ export default function AdminExpensesDashboard() {
           </div>
         </div>
 
+        {/* Network Expense Breakdown Card */}
+        {!loading && networkBreakdown && (
+          <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden mb-4">
+            <div 
+              className="p-5 cursor-pointer"
+              onClick={() => setExpandedBreakdown(!expandedBreakdown)}
+            >
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center">
+                    <PieChart className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 text-lg"> Breakdown</h3>
+                    <p className="text-sm text-gray-500">All {summaryData?.total_hotels || 0} hotels combined</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <div className="text-right mr-2">
+                    <p className="text-lg font-bold text-gray-900">₹{(summaryData?.total_network_expenses || 0).toLocaleString("en-IN")}</p>
+                    <p className="text-xs text-gray-500">Total Network</p>
+                  </div>
+                  
+                  {expandedBreakdown ? (
+                    <ChevronUp className="w-5 h-5 text-gray-400" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5 text-gray-400" />
+                  )}
+                </div>
+              </div>
+
+              {/* Top 3 Categories Preview */}
+              {!expandedBreakdown && (
+                <div className="flex items-center gap-4 text-sm">
+                  {expenseCategories
+                    .map(cat => ({
+                      ...cat,
+                      amount: networkBreakdown[cat.key],
+                      percentage: (networkBreakdown[cat.key] / (summaryData?.total_network_expenses || 1)) * 100
+                    }))
+                    .sort((a, b) => b.amount - a.amount)
+                    .slice(0, 3)
+                    .map((cat, index) => (
+                      <div key={cat.key} className="flex items-center gap-2">
+                        <div className={`w-3 h-3 ${cat.color} rounded-full`}></div>
+                        <span className="text-gray-600">
+                          {cat.label}: {cat.percentage.toFixed(1)}%
+                        </span>
+                        {index < 2 && <div className="w-1 h-1 bg-gray-300 rounded-full"></div>}
+                      </div>
+                    ))}
+                </div>
+              )}
+            </div>
+
+            {/* Expanded Network Breakdown */}
+            {expandedBreakdown && (
+              <div className="border-t border-gray-100">
+                <div className="p-5 space-y-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="font-semibold text-gray-900">Detailed Breakdown</h4>
+                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                      <BarChart3 className="w-4 h-4" />
+                      <span>Network totals</span>
+                    </div>
+                  </div>
+                  
+                  {expenseCategories
+                    .map(category => ({
+                      ...category,
+                      amount: networkBreakdown[category.key],
+                      percentage: (networkBreakdown[category.key] / (summaryData?.total_network_expenses || 1)) * 100
+                    }))
+                    .sort((a, b) => b.amount - a.amount)
+                    .map((category) => {
+                      const maxAmount = Math.max(...Object.values(networkBreakdown));
+                      const barWidth = (category.amount / maxAmount) * 100;
+                      
+                      return (
+                        <div key={category.key} className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className={`w-8 h-8 ${category.color} rounded-lg flex items-center justify-center text-white text-sm`}>
+                                {category.icon}
+                              </div>
+                              <div>
+                                <p className="font-medium text-gray-900 text-sm">{category.label}</p>
+                                <p className="text-xs text-gray-500">{category.percentage.toFixed(1)}% of total</p>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <p className="font-semibold text-gray-900">₹{category.amount.toLocaleString('en-IN')}</p>
+                              <p className="text-xs text-gray-500">₹{Math.round(category.amount / (summaryData?.total_hotels || 1) / 1000)}K avg</p>
+                            </div>
+                          </div>
+                          
+                          {/* Progress Bar */}
+                          <div className="w-full bg-gray-100 rounded-full h-2">
+                            <div 
+                              className={`${category.color} h-2 rounded-full transition-all duration-500 ease-out`}
+                              style={{ width: `${barWidth}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      );
+                    })}
+
+                  {/* Network Insights */}
+                  <div className="mt-6 p-4 bg-gray-50 rounded-xl">
+                    <h5 className="font-medium text-gray-900 mb-2">Quick Insights</h5>
+                    <div className="space-y-2 text-sm text-gray-600">
+                      {(() => {
+                        const sortedCategories = expenseCategories
+                          .map(cat => ({ ...cat, amount: networkBreakdown[cat.key] }))
+                          .sort((a, b) => b.amount - a.amount);
+                        const topCategory = sortedCategories[0];
+                        const lowestCategory = sortedCategories[sortedCategories.length - 1];
+                        
+                        return (
+                          <>
+                            <p>• Highest expense: <span className="font-medium">{topCategory.label}</span> (₹{Math.round(topCategory.amount / 100000)}L)</p>
+                            <p>• Average per hotel: <span className="font-medium">₹{Math.round((summaryData?.average_per_hotel || 0) / 1000)}K</span></p>
+                            <p>• Lowest category: <span className="font-medium">{lowestCategory.label}</span> (₹{Math.round(lowestCategory.amount / 100000)}L)</p>
+                          </>
+                        );
+                      })()}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Search and Filter */}
         <div className="flex gap-3 mb-4">
           <div className="flex-1 relative">
@@ -345,8 +513,6 @@ export default function AdminExpensesDashboard() {
                           </div>
                         );
                       })}
-
-                
                     </div>
                   </div>
                 )}
