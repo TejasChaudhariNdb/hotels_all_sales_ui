@@ -176,7 +176,7 @@ export default function AdminExpensesDashboard() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Expenses Dashboard</h1>
             <p className="text-sm text-gray-600">Hotel Expenses Overview</p>
           </div>
           
