@@ -523,11 +523,30 @@ const AdminPage = () => {
       </div></>) : ""}
 
 
-      <div className="pt-0 p-4 space-y-6" >
-        <div className="flex justify-end mb-0 mt-0">
-          <SalesFilter onApplyFilter={handleFilter} hotel_type={0} />
+      <div className="pt-0 p-4 space-y-6">
+  <div className="flex justify-between items-center mb-0 mt-0">
+    <div className="flex items-center space-x-6">
+      <label className="flex items-center space-x-2 cursor-pointer">
+        <input 
+          type="checkbox" 
+          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+        />
+        <span className="text-sm font-medium text-gray-700">Include Margin</span>
+      </label>
+      
+      <label className="flex items-center space-x-2 cursor-pointer">
+        <input 
+          type="checkbox" 
+          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+        />
+        <span className="text-sm font-medium text-gray-700">Include Expense</span>
+      </label>
+    </div>
 
-        </div>
+    <SalesFilter onApplyFilter={handleFilter} hotel_type={0} />
+  </div>
+
+
 
         {/* Today's Summary */}
         <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
