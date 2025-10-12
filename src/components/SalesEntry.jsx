@@ -185,6 +185,7 @@ export default function DailySalesForm() {
       if (isBoxType) {
         payload = {
           date: date,
+          is_closed: true, // Mark as closed
           sales: closedSalesData.map(({ category_id }) => ({
             sales_category_id: category_id,
             quantity: 0,
@@ -194,6 +195,7 @@ export default function DailySalesForm() {
       } else {
         payload = {
           date: date,
+          is_closed: true, // Mark as closed
           sales: closedSalesData.map(({ category_id }) => ({
             category_id,
             amount: 0,
@@ -261,9 +263,9 @@ export default function DailySalesForm() {
           <h1 className="text-lg font-semibold text-gray-900">Daily Sales</h1>
           <button 
             onClick={handleClosedDay}
-            className="px-3 py-1 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 active:bg-red-700 transition-colors shadow-sm flex items-center gap-2"
+            className="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 active:bg-red-700 transition-colors shadow-sm flex items-center gap-2"
           >
-           
+            <XCircle className="w-4 h-4" />
             Closed
           </button>
           <div className="flex items-center gap-2 bg-gray-100 rounded-lg px-3 py-2">
@@ -424,7 +426,7 @@ export default function DailySalesForm() {
                 <h2 className="text-xl font-semibold text-gray-900">Mark Day as Closed</h2>
                 <button
                   onClick={handleCloseClosedModal}
-                  className="w-4 h-4 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors">
+                  className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors">
                   <X className="w-5 h-5 text-gray-400" />
                 </button>
               </div>

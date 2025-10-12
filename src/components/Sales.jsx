@@ -10,7 +10,8 @@ import {
   Box,
   CalendarIcon,
   CopyXIcon,
-  Trash2
+  Trash2,
+  XCircle
 } from "lucide-react";
 
 
@@ -110,13 +111,14 @@ export default function SalesPage({role,hotel_type}) {
 
         // Use first sale's hotel info (assuming all have same hotel)
         const hotel = entries[0].hotel || { id: entries[0].hotel_id, name: "Unknown Hotel" };
-
+        const is_closed = entries[0].is_closed || false; 
         // Use date from one of the entries
         const date = entries[0].date;
         const sale_id = entries[0].id;
         return {
           sale_id,
           date,
+          is_closed,
           formattedDate: formatDate(date),
           items: filteredItems,
           hotel,
@@ -487,60 +489,77 @@ export default function SalesPage({role,hotel_type}) {
         </div>
       ) : (
         <div>
-          {groupedSales.map((group, groupIndex) => (
+        {groupedSales.map((group, groupIndex) => (
           <div
-          key={`group-${groupIndex}`}
-          className="mb-6 bg-white shadow-md rounded-xl overflow-hidden border border-gray-200"
-          onDoubleClick={() =>
-            role === "admin" && setVisibleDeleteGroup((prev) =>
-              prev === `${group.hotel.id}-${group.date}` ? null : `${group.hotel.id}-${group.date}`
-            )
-          }
-        >
-        
-              {/* Header */}
-              <div className="bg-indigo-50 p-3 rounded-t-lg border border-gray-200">
-          
-                <div className="flex justify-between items-center mb-1">
-  <div className="font-semibold text-sm text-gray-800">
-    {group.hotel.name}
-  </div>
-  <div className="flex items-center gap-2">
-    <div className="text-sm font-bold text-green-700">
-      {hotel_type === 0
-        ? formatINRCurrency(group.total)
-        : (
-          <div className="flex items-center gap-1">
-            <Box size={16} /> {parseFloat(group.total)}
-          </div>
-        )}
-    </div>
-
-    {role === "admin" &&
-  visibleDeleteGroup === `${group.hotel.id}-${group.date}` && (
-    <button
-      onClick={() => handleDeleteGroup(group)}
-      title="Delete this sales group"
-      className="text-red-600 hover:text-red-800"
-    >
-      <Trash2 size={16} />
-    </button>
-)}
-
-  </div>
-</div>
-
-                <div className="flex justify-between items-center mb-1">
-                  <div className="text-xs text-gray-600">
-                    {group.formattedDate}
+            key={`group-${groupIndex}`}
+            className={`mb-6 bg-white shadow-md rounded-xl overflow-hidden border ${
+              group.is_closed ? 'border-red-300' : 'border-gray-200'
+            }`}
+            onDoubleClick={() =>
+              role === "admin" && setVisibleDeleteGroup((prev) =>
+                prev === `${group.hotel.id}-${group.date}` ? null : `${group.hotel.id}-${group.date}`
+              )
+            }
+          >
+            {/* Header */}
+            <div className={`p-3 rounded-t-lg border ${
+              group.is_closed ? 'bg-red-50 border-red-200' : 'bg-indigo-50 border-gray-200'
+            }`}>
+              <div className="flex justify-between items-center mb-1">
+                <div className="flex items-center gap-2">
+                  <div className="font-semibold text-sm text-gray-800">
+                    {group.hotel.name}
                   </div>
-                  <div className="text-xs text-gray-600">Total {hotel_type === 0 ? "Amount" : "Boxes"}</div>
+                  {group.is_closed && (
+                    <span className="px-2 py-0.5 text-xs font-semibold text-red-700 bg-red-200 rounded-full flex items-center gap-1">
+                      <XCircle size={12} />
+                      CLOSED
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className={`text-sm font-bold ${
+                    group.is_closed ? 'text-red-700' : 'text-green-700'
+                  }`}>
+                    {hotel_type === 0
+                      ? formatINRCurrency(group.total)
+                      : (
+                        <div className="flex items-center gap-1">
+                          <Box size={16} /> {parseFloat(group.total)}
+                        </div>
+                      )}
+                  </div>
+      
+                  {role === "admin" &&
+                    visibleDeleteGroup === `${group.hotel.id}-${group.date}` && (
+                      <button
+                        onClick={() => handleDeleteGroup(group)}
+                        title="Delete this sales group"
+                        className="text-red-600 hover:text-red-800"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                  )}
                 </div>
               </div>
-
-              {/* Items */}
-              <div className="divide-y divide-gray-200">
-                {group.items.map((item, index) => (
+      
+              <div className="flex justify-between items-center mb-1">
+                <div className="text-xs text-gray-600">
+                  {group.formattedDate}
+                </div>
+                <div className="text-xs text-gray-600">Total {hotel_type === 0 ? "Amount" : "Boxes"}</div>
+              </div>
+            </div>
+      
+            {/* Items */}
+            <div className="divide-y divide-gray-200">
+              {group.is_closed ? (
+                <div className="flex items-center justify-center px-4 py-6 text-red-600">
+                  <XCircle size={20} className="mr-2" />
+                  <span className="text-sm font-medium">No sales - Shop was closed</span>
+                </div>
+              ) : (
+                group.items.map((item, index) => (
                   <div
                     key={`item-${index}`}
                     className="flex justify-between items-center px-4 py-3">
@@ -551,19 +570,20 @@ export default function SalesPage({role,hotel_type}) {
                       {hotel_type === 0 ? formatINRCurrency(item.amount) : <>{parseFloat(item.amount)}</>}
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
-          ))}
-
-          {/* Grand Total */}
-          <div className="bg-green-100 border border-green-300 p-4 rounded-xl shadow flex justify-between items-center mt-6">
-            <div className="font-bold text-green-800 text-sm">Grand Total {hotel_type === 0 ? "Amount" : "Boxes"}</div>
-            <div className="font-bold text-green-800 text-sm">
-              {hotel_type === 0 ? formatINRCurrency(grandTotal) : parseFloat(grandTotal)}
+                ))
+              )}
             </div>
           </div>
+        ))}
+      
+        {/* Grand Total */}
+        <div className="bg-green-100 border border-green-300 p-4 rounded-xl shadow flex justify-between items-center mt-6">
+          <div className="font-bold text-green-800 text-sm">Grand Total {hotel_type === 0 ? "Amount" : "Boxes"}</div>
+          <div className="font-bold text-green-800 text-sm">
+            {hotel_type === 0 ? formatINRCurrency(grandTotal) : parseFloat(grandTotal)}
+          </div>
         </div>
+      </div>
       )}
 
 
