@@ -7,7 +7,8 @@ import {
   ArrowLeft,
   ArrowRight,
   X,
-  Box
+  Box,
+  XCircle
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -23,8 +24,10 @@ export default function DailySalesForm() {
   const [activeCategory, setActiveCategory] = useState(null);
   const [total, setTotal] = useState(0);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showClosedConfirmModal, setShowClosedConfirmModal] = useState(false);
   const [pendingSubmission, setPendingSubmission] = useState(null);
   const [isClosing, setIsClosing] = useState(false);
+  const [isClosingClosedModal, setIsClosingClosedModal] = useState(false);
   const { user } = useAuth()
 
 
@@ -159,6 +162,59 @@ export default function DailySalesForm() {
     
   };
 
+  const handleClosedDay = () => {
+    setShowClosedConfirmModal(true);
+    setIsClosingClosedModal(false);
+  };
+
+  const confirmClosedDay = async () => {
+    setLoading(true);
+    handleCloseClosedModal();
+
+    try {
+      const isBoxType = user.hotel_type === 1;
+      
+      // Create entries with 0 for all categories
+      const closedSalesData = categories.map((cat) => ({
+        category_id: cat.id,
+        amount: 0,
+        category_name: cat.name,
+      }));
+
+      let payload;
+      if (isBoxType) {
+        payload = {
+          date: date,
+          sales: closedSalesData.map(({ category_id }) => ({
+            sales_category_id: category_id,
+            quantity: 0,
+            box_type: 'small',
+          })),
+        };
+      } else {
+        payload = {
+          date: date,
+          sales: closedSalesData.map(({ category_id }) => ({
+            category_id,
+            amount: 0,
+          })),
+        };
+      }
+
+      const url = isBoxType ? '/boxes-sales/bulk' : '/daily-sales/bulk';
+      await makePost(url, payload);
+
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+      router.push('/user/sales');
+    } catch (error) {
+      console.error('Error submitting closed day:', error);
+      alert('Something went wrong while marking day as closed.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const formatINRCurrency = (amount) =>
     new Intl.NumberFormat("en-IN", {
       style: "currency",
@@ -175,6 +231,14 @@ export default function DailySalesForm() {
     setTimeout(() => {
       setShowConfirmModal(false);
       setIsClosing(false);
+    }, 300);
+  };
+
+  const handleCloseClosedModal = () => {
+    setIsClosingClosedModal(true);
+    setTimeout(() => {
+      setShowClosedConfirmModal(false);
+      setIsClosingClosedModal(false);
     }, 300);
   };
 
@@ -195,6 +259,13 @@ export default function DailySalesForm() {
       <div className="bg-white shadow-sm border-b border-gray-200 px-4 py-3">
         <div className="flex items-center justify-between">
           <h1 className="text-lg font-semibold text-gray-900">Daily Sales</h1>
+          <button 
+            onClick={handleClosedDay}
+            className="px-3 py-1 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 active:bg-red-700 transition-colors shadow-sm flex items-center gap-2"
+          >
+           
+            Closed
+          </button>
           <div className="flex items-center gap-2 bg-gray-100 rounded-lg px-3 py-2">
             <Calendar className="w-4 h-4 text-gray-500" />
             <input
@@ -332,7 +403,91 @@ export default function DailySalesForm() {
         </div>
       )}
 
-      {/* Mobile Optimized Confirmation Modal */}
+      {/* Closed Day Confirmation Modal */}
+      {showClosedConfirmModal && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center p-0">
+          <div
+            className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ease-out ${
+              isClosingClosedModal ? 'opacity-0' : 'opacity-100'
+            }`}
+            onClick={handleCloseClosedModal}
+          />
+
+          <div className={`relative bg-white rounded-t-3xl shadow-2xl w-full max-h-[70vh] overflow-y-auto transform transition-all duration-300 ease-out ${
+            isClosingClosedModal
+              ? 'translate-y-full opacity-0'
+              : 'translate-y-0 opacity-100'
+          }`}>
+            {/* Modal Header */}
+            <div className="sticky top-0 bg-white px-6 pt-6 pb-4 border-b border-gray-100 rounded-t-3xl">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-gray-900">Mark Day as Closed</h2>
+                <button
+                  onClick={handleCloseClosedModal}
+                  className="w-4 h-4 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors">
+                  <X className="w-5 h-5 text-gray-400" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Content */}
+            <div className="px-6 py-6">
+              <div className="bg-red-50 border-2 border-red-200 rounded-xl p-6 mb-6">
+                <div className="flex items-start">
+                  <div className="flex-shrink-0">
+                    <XCircle className="h-8 w-8 text-red-600" />
+                  </div>
+                  <div className="ml-4">
+                    <h3 className="text-lg font-semibold text-red-900 mb-2">Shop Closed</h3>
+                    <p className="text-sm text-red-700 leading-relaxed">
+                      Are you sure you want to mark <span className="font-semibold">{new Date(date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span> as closed?
+                    </p>
+                    <p className="text-sm text-red-700 mt-2">
+                      This will record zero {user.hotel_type === 0 ? 'sales' : 'boxes'} for all categories on this date.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Info box */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="text-sm text-blue-700">
+                  💡 This helps differentiate between days with no sales and days where data wasn't entered.
+                </p>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="sticky bottom-0 bg-white px-6 py-4 border-t border-gray-100 safe-area-bottom">
+              <div className="flex gap-3">
+                <button
+                  onClick={handleCloseClosedModal}
+                  className="flex-1 py-3 px-4 text-gray-700 bg-gray-100 rounded-xl font-medium hover:bg-gray-200 transition-colors">
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmClosedDay}
+                  disabled={loading}
+                  className="flex-1 py-3 px-4 text-white bg-red-500 rounded-xl font-medium hover:bg-red-600 active:bg-red-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+                  {loading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <XCircle className="w-4 h-4" />
+                      Mark as Closed
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Sales Confirmation Modal */}
       {showConfirmModal && pendingSubmission && (
         <div className="fixed inset-0 z-50 flex items-end justify-center p-0">
           <div
