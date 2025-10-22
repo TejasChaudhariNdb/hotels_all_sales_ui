@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { makeGet, makePost } from "@/lib/api"; // Make sure these exist
 import {
   BellRing,
   Loader2,
@@ -34,13 +35,7 @@ export default function NotificationPage() {
     setReminderResponse(null);
 
     try {
-      // Simulated API call - replace with: const res = await makeGet("/send-push-all");
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      const res = {
-        message: "Notifications sent successfully!",
-        users_notified: 147,
-        admins_notified: 12
-      };
+      const res = await makeGet("/send-push-all");
       setReminderResponse(res);
     } catch (err) {
       console.error("Error sending reminders:", err);
@@ -50,7 +45,7 @@ export default function NotificationPage() {
     }
   };
 
-  // --- Send Custom Notification (new) ---
+  // --- Send Custom Notification ---
   const sendCustomNotification = async () => {
     if (!title || !message) {
       setCustomError("Please enter both title and message.");
@@ -62,24 +57,24 @@ export default function NotificationPage() {
     setCustomResponse(null);
 
     try {
-      // Simulated API call - replace with: const res = await makePost("/send-custom-push", {...});
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      const res = {
-        message: "Custom notification sent!",
-        users_notified: 89,
-        admins_notified: 8
-      };
+      const res = await makePost("/send-custom-push", {
+        title,
+        message,
+        city,   // optional
+        target, // all/users/admins
+      });
+
       setCustomResponse(res);
-      
-      // Clear form on success
+
+      // Clear form after 2 seconds
       setTimeout(() => {
         setTitle("");
         setMessage("");
         setCity("");
         setTarget("all");
-      }, 2000);
+      }, 400);
     } catch (err) {
-      console.error(err);
+      console.error("Error sending custom notification:", err);
       setCustomError("Failed to send custom notification.");
     } finally {
       setLoadingCustom(false);
@@ -88,12 +83,10 @@ export default function NotificationPage() {
 
   return (
     <div className="min-h-screen pb-6">
-      {/* Header */}
-  
-
       <div className="px-1 space-y-4">
-        {/* -------------------- Sales Reminder Card -------------------- */}
+        {/* Sales Reminder Card */}
         <div className="bg-white rounded-2xl shadow-lg p-5 space-y-4">
+          {/* Header */}
           <div className="flex items-start gap-3">
             <div className="p-2 bg-blue-100 rounded-xl">
               <Sparkles className="text-blue-600" size={22} />
@@ -104,6 +97,7 @@ export default function NotificationPage() {
             </div>
           </div>
 
+          {/* Button */}
           <button
             onClick={sendReminders}
             disabled={loadingReminder}
@@ -128,7 +122,7 @@ export default function NotificationPage() {
 
           {/* Error */}
           {reminderError && (
-            <div className="flex items-start gap-2 p-3 bg-red-50 text-red-700 border border-red-200 rounded-xl animate-in fade-in slide-in-from-top-2">
+            <div className="flex items-start gap-2 p-3 bg-red-50 text-red-700 border border-red-200 rounded-xl">
               <AlertTriangle size={18} className="mt-0.5 flex-shrink-0" />
               <span className="text-sm">{reminderError}</span>
             </div>
@@ -136,7 +130,7 @@ export default function NotificationPage() {
 
           {/* Success */}
           {reminderResponse && (
-            <div className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl space-y-3 animate-in fade-in slide-in-from-top-2">
+            <div className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl space-y-3">
               <div className="flex items-center gap-2 text-green-800 font-semibold">
                 <CheckCircle size={20} />
                 <span>{reminderResponse.message}</span>
@@ -165,8 +159,9 @@ export default function NotificationPage() {
           )}
         </div>
 
-        {/* -------------------- Custom Notification Card -------------------- */}
-        <div className="bg-white rounded-2xl shadow-lg p-5 space-y-4 ">
+        {/* Custom Notification Card */}
+        <div className="bg-white rounded-2xl shadow-lg p-5 space-y-4">
+          {/* Header */}
           <div className="flex items-start gap-3">
             <div className="p-2 bg-orange-100 rounded-xl">
               <BellRing className="text-orange-600" size={22} />
@@ -179,73 +174,40 @@ export default function NotificationPage() {
 
           {/* Form Fields */}
           <div className="space-y-3">
-            {/* Title */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                Title
-              </label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Heera Group wishes you Happy Diwali ✨"
-                className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all"
-              />
-            </div>
-
-            {/* Message */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                Message
-              </label>
-              <textarea
-                rows="4"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Dear {{username}}, wishing you light & success at {{hotelname}} 🪔"
-                className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all resize-none"
-              />
-              <div className="mt-2 p-2 bg-amber-50 border border-amber-200 rounded-lg">
-                <p className="text-xs text-amber-800">
-                  💡 Use <code className="bg-amber-100 px-1.5 py-0.5 rounded">{"{{username}}"}</code> and{" "}
-                  <code className="bg-amber-100 px-1.5 py-0.5 rounded">{"{{hotelname}}"}</code> for personalization
-                </p>
-              </div>
-            </div>
-
-            {/* Target & City in Grid */}
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Heera Group wishes you Happy Diwali ✨"
+              className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all"
+            />
+            <textarea
+              rows="4"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Dear {{username}}, wishing you light & success at {{hotelname}} 🪔"
+              className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all resize-none"
+            />
             <div className="grid grid-cols-2 gap-3">
-              {/* Target */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                  Target
-                </label>
-                <select
-                  value={target}
-                  onChange={(e) => setTarget(e.target.value)}
-                  className="w-full border-2 border-gray-200 rounded-xl px-3 py-3 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all appearance-none bg-white"
-                >
-                  <option value="all">All</option>
-                  <option value="users">Users</option>
-                  <option value="admins">Admins</option>
-                </select>
-              </div>
+              <select
+                value={target}
+                onChange={(e) => setTarget(e.target.value)}
+                className="w-full border-2 border-gray-200 rounded-xl px-3 py-3 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all"
+              >
+                <option value="all">All</option>
+                <option value="users">Users</option>
+                <option value="admins">Admins</option>
+              </select>
 
-              {/* City */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                  City
-                </label>
-                <select
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  className="w-full border-2 border-gray-200 rounded-xl px-3 py-3 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all appearance-none bg-white"
-                >
-                  <option value="">All</option>
-                  <option value="Nashik">Nashik</option>
-                  <option value="Nandurbar">Nandurbar</option>
-                </select>
-              </div>
+              <select
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                className="w-full border-2 border-gray-200 rounded-xl px-3 py-3 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all"
+              >
+                <option value="">All</option>
+                <option value="Nashik">Nashik</option>
+                <option value="Nandurbar">Nandurbar</option>
+              </select>
             </div>
           </div>
 
@@ -274,7 +236,7 @@ export default function NotificationPage() {
 
           {/* Error */}
           {customError && (
-            <div className="flex items-start gap-2 p-3 bg-red-50 text-red-700 border border-red-200 rounded-xl animate-in fade-in slide-in-from-top-2">
+            <div className="flex items-start gap-2 p-3 bg-red-50 text-red-700 border border-red-200 rounded-xl">
               <AlertTriangle size={18} className="mt-0.5 flex-shrink-0" />
               <span className="text-sm">{customError}</span>
             </div>
@@ -282,7 +244,7 @@ export default function NotificationPage() {
 
           {/* Success */}
           {customResponse && (
-            <div className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl space-y-3 animate-in fade-in slide-in-from-top-2">
+            <div className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl space-y-3">
               <div className="flex items-center gap-2 text-green-800 font-semibold">
                 <CheckCircle size={20} />
                 <span>{customResponse.message}</span>
@@ -309,19 +271,8 @@ export default function NotificationPage() {
               </div>
             </div>
           )}
-        
         </div>
-
-     <div className="mb-30">
-<br />
-<br />
-<br />
-<br />
-<br />
-     </div>
       </div>
-    
-  
     </div>
   );
 }
