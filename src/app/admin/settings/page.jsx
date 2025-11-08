@@ -7,7 +7,8 @@ import {
   ArrowRight,
   Settings2,
   ScrollText,
-  WalletCards
+  WalletCards,
+  BetweenVerticalEnd
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -45,6 +46,15 @@ export default function SettingsPage() {
           </div>
           <ArrowRight className="text-gray-400" />
     
+      </Link>
+      <Link href="/admin/compare-hotels"  className="flex items-center justify-between p-4 bg-white rounded-xl shadow hover:bg-gray-50">
+      
+          <div className="flex items-center">
+            <BetweenVerticalEnd className="text-blue-600 mr-3" />
+            <span className="text-gray-800 font-medium">Compare Hotels</span>
+          </div>
+          <ArrowRight className="text-gray-400" />
+  
       </Link>
 
       <button
