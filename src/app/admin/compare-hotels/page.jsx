@@ -13,6 +13,11 @@ export default function CompareHotelsPage() {
   const [comparisonData, setComparisonData] = useState(null);
   const [error, setError] = useState("");
   const [expandedCategories, setExpandedCategories] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredHotels = hotels.filter(hotel => 
+    hotel.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     const fetchHotels = async () => {
@@ -151,11 +156,27 @@ export default function CompareHotelsPage() {
                 </div>
               )}
 
+              {/* Search Box */}
+              <div className="mb-3">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                  <input
+                    type="text"
+                    placeholder="Search hotels by name..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  />
+                </div>
+              </div>
+
               <div className="max-h-64 overflow-y-auto border border-gray-200 rounded-xl p-2 space-y-2">
-                {hotels.length === 0 ? (
-                  <div className="text-center py-4 text-gray-500">No hotels available</div>
+                {filteredHotels.length === 0 ? (
+                  <div className="text-center py-4 text-gray-500">
+                    {searchQuery ? "No hotels found matching your search" : "No hotels available"}
+                  </div>
                 ) : (
-                  hotels.map((hotel) => (
+                  filteredHotels.map((hotel) => (
                     <button key={hotel.id} onClick={() => toggleHotelSelection(hotel.id)} className={`w-full text-left p-3 rounded-lg border-2 transition-all ${selectedHotels.includes(hotel.id) ? "bg-gradient-to-r from-blue-50 to-purple-50 border-blue-500 shadow-md" : "bg-white border-gray-200 hover:border-blue-300 hover:shadow-sm"}`}>
                       <div className="flex items-center justify-between">
                         <span className="font-medium text-gray-800">{hotel.name}</span>
@@ -216,15 +237,11 @@ export default function CompareHotelsPage() {
           )}
         </button>
 
-        <br />
-        <br />
- 
-
         {/* Comparison Results */}
         {comparisonData && (
           <div className="space-y-4 sm:space-y-6">
             {/* Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl p-4 sm:p-6 text-white shadow-lg">
                 <div className="flex items-center justify-between mb-2">
                   <DollarSign size={28} className="opacity-80" />
@@ -233,6 +250,16 @@ export default function CompareHotelsPage() {
                 <p className="text-sm opacity-90 mb-1">Total Sales</p>
                 <p className="text-2xl sm:text-3xl font-bold">{formatCurrency(comparisonData.summary.totals.total_sales)}</p>
                 <p className="text-xs mt-2 opacity-75">{comparisonData.summary.period.days} days period</p>
+              </div>
+
+              <div className="bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl p-4 sm:p-6 text-white shadow-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <TrendingUp size={28} className="opacity-80" />
+                  <span className="text-xs sm:text-sm bg-white bg-opacity-20 px-2 py-1 rounded-full">Expenses</span>
+                </div>
+                <p className="text-sm opacity-90 mb-1">Total Expenses</p>
+                <p className="text-2xl sm:text-3xl font-bold">{formatCurrency(comparisonData.summary.totals.total_expenses)}</p>
+                <p className="text-xs mt-2 opacity-75">Avg: {formatCurrency(comparisonData.summary.averages.average_expenses)}</p>
               </div>
 
               <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl p-4 sm:p-6 text-white shadow-lg">
@@ -283,10 +310,15 @@ export default function CompareHotelsPage() {
                         <p className="text-xl font-bold text-green-800">{formatCurrency(hotel.sales.total)}</p>
                       </div>
 
+                      <div className="bg-red-50 rounded-lg p-3 border border-red-200">
+                        <p className="text-xs text-red-700 font-medium mb-1">Total Expenses</p>
+                        <p className="text-xl font-bold text-red-800">{formatCurrency(hotel.expenses.total)}</p>
+                      </div>
+
                       <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
                         <p className="text-xs text-blue-700 font-medium mb-1">Profit</p>
                         <p className="text-xl font-bold text-blue-800">{formatCurrency(hotel.profit)}</p>
-                        <p className="text-xs text-blue-600 mt-1">Margin: {hotel.profit_margin}%</p>
+                        <p className="text-xs text-blue-600 mt-1">Margin: {hotel.profit_margin.toFixed(2)}%</p>
                       </div>
 
                       <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
@@ -298,6 +330,48 @@ export default function CompareHotelsPage() {
                               <span className="text-sm font-semibold text-gray-800">{formatCurrency(cat.amount)}</span>
                             </div>
                           ))}
+                        </div>
+                      </div>
+
+                      <div className="bg-orange-50 rounded-lg p-3 border border-orange-200">
+                        <p className="text-xs text-orange-700 font-medium mb-2">Expense Breakdown</p>
+                        <div className="space-y-1.5">
+                          {hotel.expenses.rent > 0 && (
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs text-gray-600">Rent</span>
+                              <span className="text-xs font-semibold text-gray-800">{formatCurrency(hotel.expenses.rent)}</span>
+                            </div>
+                          )}
+                          {hotel.expenses.license_fee > 0 && (
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs text-gray-600">License Fee</span>
+                              <span className="text-xs font-semibold text-gray-800">{formatCurrency(hotel.expenses.license_fee)}</span>
+                            </div>
+                          )}
+                          {hotel.expenses.salary > 0 && (
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs text-gray-600">Salary</span>
+                              <span className="text-xs font-semibold text-gray-800">{formatCurrency(hotel.expenses.salary)}</span>
+                            </div>
+                          )}
+                          {hotel.expenses.light_bill > 0 && (
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs text-gray-600">Light Bill</span>
+                              <span className="text-xs font-semibold text-gray-800">{formatCurrency(hotel.expenses.light_bill)}</span>
+                            </div>
+                          )}
+                          {hotel.expenses.interest > 0 && (
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs text-gray-600">Interest</span>
+                              <span className="text-xs font-semibold text-gray-800">{formatCurrency(hotel.expenses.interest)}</span>
+                            </div>
+                          )}
+                          {hotel.expenses.miscellaneous > 0 && (
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs text-gray-600">Miscellaneous</span>
+                              <span className="text-xs font-semibold text-gray-800">{formatCurrency(hotel.expenses.miscellaneous)}</span>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
