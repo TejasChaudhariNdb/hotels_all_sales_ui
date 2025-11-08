@@ -1,7 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Hotel, Calendar, Search, X, TrendingUp, DollarSign, Award, BarChart3, ChevronDown, ChevronUp } from "lucide-react";
+import { Hotel, Calendar, Search, X, TrendingUp, DollarSign, Award, BarChart3, ChevronDown, ChevronUp, PieChart } from "lucide-react";
 import { makeGet, makePost } from "@/lib/api";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart as RePieChart, Pie, Cell, LineChart, Line } from "recharts";
 
 export default function CompareHotelsPage() {
   const [hotels, setHotels] = useState([]);
@@ -101,6 +102,76 @@ export default function CompareHotelsPage() {
 
   const getMaxAmount = (hotels) => {
     return Math.max(...hotels.map(h => h.amount));
+  };
+
+  // Chart colors
+  const COLORS = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#6366f1', '#f97316', '#06b6d4'];
+
+  // Prepare chart data
+  const prepareOverallComparisonData = () => {
+    if (!comparisonData) return [];
+    return comparisonData.hotels.map((hotel, idx) => ({
+      name: hotel.hotel_name,
+      Sales: hotel.sales.total,
+      Expenses: hotel.expenses.total,
+      Profit: hotel.profit,
+      fill: COLORS[idx % COLORS.length]
+    }));
+  };
+
+  const prepareCategoryComparisonData = () => {
+    if (!comparisonData) return [];
+    const categories = {};
+    
+    comparisonData.category_comparison.forEach(category => {
+      category.hotels.forEach(hotel => {
+        if (!categories[hotel.hotel_name]) {
+          categories[hotel.hotel_name] = { name: hotel.hotel_name };
+        }
+        categories[hotel.hotel_name][category.category_name] = hotel.amount;
+      });
+    });
+    
+    return Object.values(categories);
+  };
+
+  const prepareProfitMarginData = () => {
+    if (!comparisonData) return [];
+    return comparisonData.hotels.map((hotel, idx) => ({
+      name: hotel.hotel_name,
+      value: hotel.profit,
+      margin: hotel.profit_margin,
+      fill: COLORS[idx % COLORS.length]
+    }));
+  };
+
+  const prepareStackedCategoryData = () => {
+    if (!comparisonData) return [];
+    return comparisonData.hotels.map(hotel => {
+      const data = { name: hotel.hotel_name };
+      hotel.sales.by_category.forEach(cat => {
+        data[cat.category_name] = cat.amount;
+      });
+      return data;
+    });
+  };
+
+  const prepareOverallCategoryData = () => {
+    if (!comparisonData) return [];
+    return comparisonData.category_comparison.map(category => ({
+      name: category.category_name,
+      total: category.hotels.reduce((sum, hotel) => sum + hotel.amount, 0),
+      margin: category.margin
+    })).sort((a, b) => b.total - a.total);
+  };
+
+  const getCategoryColors = () => {
+    if (!comparisonData) return {};
+    const colors = {};
+    comparisonData.category_comparison.forEach((cat, idx) => {
+      colors[cat.category_name] = COLORS[idx % COLORS.length];
+    });
+    return colors;
   };
 
   return (
@@ -237,6 +308,11 @@ export default function CompareHotelsPage() {
           )}
         </button>
 
+        <br />
+        <br />
+        <hr />
+        <br />
+
         {/* Comparison Results */}
         {comparisonData && (
           <div className="space-y-4 sm:space-y-6">
@@ -245,7 +321,7 @@ export default function CompareHotelsPage() {
               <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl p-4 sm:p-6 text-white shadow-lg">
                 <div className="flex items-center justify-between mb-2">
                   <DollarSign size={28} className="opacity-80" />
-                  <span className="text-xs sm:text-sm bg-white bg-opacity-20 px-2 py-1 rounded-full">Total</span>
+                  <span className="text-xs sm:text-sm bg-white text-black bg-opacity-20 px-2 py-1 rounded-full">Total</span>
                 </div>
                 <p className="text-sm opacity-90 mb-1">Total Sales</p>
                 <p className="text-2xl sm:text-3xl font-bold">{formatCurrency(comparisonData.summary.totals.total_sales)}</p>
@@ -255,7 +331,7 @@ export default function CompareHotelsPage() {
               <div className="bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl p-4 sm:p-6 text-white shadow-lg">
                 <div className="flex items-center justify-between mb-2">
                   <TrendingUp size={28} className="opacity-80" />
-                  <span className="text-xs sm:text-sm bg-white bg-opacity-20 px-2 py-1 rounded-full">Expenses</span>
+                  <span className="text-xs sm:text-sm bg-white bg-opacity-20 px-2 py-1 rounded-full text-black">Expenses</span>
                 </div>
                 <p className="text-sm opacity-90 mb-1">Total Expenses</p>
                 <p className="text-2xl sm:text-3xl font-bold">{formatCurrency(comparisonData.summary.totals.total_expenses)}</p>
@@ -265,7 +341,7 @@ export default function CompareHotelsPage() {
               <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl p-4 sm:p-6 text-white shadow-lg">
                 <div className="flex items-center justify-between mb-2">
                   <TrendingUp size={28} className="opacity-80" />
-                  <span className="text-xs sm:text-sm bg-white bg-opacity-20 px-2 py-1 rounded-full">Profit</span>
+                  <span className="text-xs sm:text-sm bg-white bg-opacity-20 px-2 py-1 rounded-full text-black">Profit</span>
                 </div>
                 <p className="text-sm opacity-90 mb-1">Total Profit</p>
                 <p className="text-2xl sm:text-3xl font-bold">{formatCurrency(comparisonData.summary.totals.total_profit)}</p>
@@ -275,7 +351,7 @@ export default function CompareHotelsPage() {
               <div className="bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl p-4 sm:p-6 text-white shadow-lg">
                 <div className="flex items-center justify-between mb-2">
                   <Award size={28} className="opacity-80" />
-                  <span className="text-xs sm:text-sm bg-white bg-opacity-20 px-2 py-1 rounded-full">Best</span>
+                  <span className="text-xs sm:text-sm bg-white bg-opacity-20 px-2 py-1 rounded-full text-black">Best</span>
                 </div>
                 <p className="text-sm opacity-90 mb-1">Top Performer</p>
                 <p className="text-lg sm:text-xl font-bold truncate">{comparisonData.summary.best_performer.hotel_name}</p>
@@ -429,8 +505,108 @@ export default function CompareHotelsPage() {
                 })}
               </div>
             </div>
+
+            {/* Visual Charts Section */}
+            <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 border border-blue-100">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                <PieChart size={20} className="text-blue-600" />
+                Visual Analytics
+              </h2>
+
+              {/* 1. Hotel Overall Comparison - Bar Chart */}
+              <div className="mb-8">
+                <h3 className="text-base font-semibold text-gray-700 mb-4">Hotel Overall Comparison</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={prepareOverallComparisonData()}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" angle={-45} textAnchor="end" height={80} />
+                    <YAxis />
+                    <Tooltip formatter={(value) => formatCurrency(value)} />
+                    <Legend />
+                    <Bar dataKey="Sales" fill="#10b981" />
+                    <Bar dataKey="Expenses" fill="#ef4444" />
+                    <Bar dataKey="Profit" fill="#3b82f6" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* 2. Category Comparison by Hotel - Grouped Bar Chart */}
+              <div className="mb-8">
+                <h3 className="text-base font-semibold text-gray-700 mb-4">Category Comparison by Hotel</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={prepareCategoryComparisonData()}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" angle={-45} textAnchor="end" height={80} />
+                    <YAxis />
+                    <Tooltip formatter={(value) => formatCurrency(value)} />
+                    <Legend />
+                    {comparisonData && comparisonData.category_comparison.map((cat, idx) => (
+                      <Bar key={cat.category_id} dataKey={cat.category_name} fill={COLORS[idx % COLORS.length]} />
+                    ))}
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* 3. Profit Margin Visualization - Pie Chart */}
+              <div className="mb-8">
+                <h3 className="text-base font-semibold text-gray-700 mb-4">Profit Distribution</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <RePieChart>
+                    <Pie
+                      data={prepareProfitMarginData()}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ name, margin }) => `${name} (${margin.toFixed(1)}%)`}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {prepareProfitMarginData().map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.fill} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value) => formatCurrency(value)} />
+                  </RePieChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* 4. Category Contribution within Hotels - Stacked Bar Chart */}
+              <div className="mb-8">
+                <h3 className="text-base font-semibold text-gray-700 mb-4">Category Contribution within Each Hotel</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={prepareStackedCategoryData()}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" angle={-45} textAnchor="end" height={80} />
+                    <YAxis />
+                    <Tooltip formatter={(value) => formatCurrency(value)} />
+                    <Legend />
+                    {comparisonData && comparisonData.category_comparison.map((cat, idx) => (
+                      <Bar key={cat.category_id} dataKey={cat.category_name} stackId="a" fill={COLORS[idx % COLORS.length]} />
+                    ))}
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* 5. Overall Category Comparison - Horizontal Bar Chart */}
+              <div className="mb-4">
+                <h3 className="text-base font-semibold text-gray-700 mb-4">Overall Category Comparison (All Hotels)</h3>
+                <ResponsiveContainer width="100%" height={250}>
+                  <BarChart data={prepareOverallCategoryData()} layout="vertical">
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis type="number" />
+                    <YAxis dataKey="name" type="category" width={150} />
+                    <Tooltip formatter={(value) => formatCurrency(value)} />
+                    <Legend />
+                    <Bar dataKey="total" fill="#8b5cf6" label={{ position: 'right', formatter: (value) => formatCurrency(value) }} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
           </div>
         )}
+        <br />
+        <br />
       </div>
     </div>
   );
