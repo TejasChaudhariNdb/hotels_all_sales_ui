@@ -7,7 +7,7 @@ export default function AdminNav() {
   const [theme, toggleTheme] = useTheme();
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-md border-b transition-all duration-300 bg-white/80 border-gray-200 text-gray-900 ">
+    <header className="sticky top-0 z-50 backdrop-blur-md transition-all duration-300 bg-white/80 text-gray-900 shadow-sm">
       <div className="flex justify-between items-center px-6 py-4">
         {/* Logo Section */}
         <div className="flex items-center space-x-3">
@@ -32,10 +32,10 @@ export default function AdminNav() {
         <button
           aria-label="Toggle theme"
           onClick={toggleTheme}
-          className={`p-3 rounded-xl transition-all duration-200 hover:scale-105 ${
+          className={`p-3 rounded-xl transition-all duration-200 hover:scale-105 shadow-sm ${
             theme === 'dark'
-              ? 'bg-slate-800 hover:bg-slate-700 border border-slate-700'
-              : 'bg-gray-100 hover:bg-gray-200 border border-gray-200'
+              ? 'bg-slate-850 hover:bg-slate-800 text-white'
+              : 'bg-gray-100 hover:bg-gray-200 text-gray-800'
           }`}
         >
           {theme === 'dark' ? (

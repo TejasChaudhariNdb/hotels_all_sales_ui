@@ -15,7 +15,7 @@ export default function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="bg-white border-t border-gray-300 shadow-inner fixed bottom-0 left-0 right-0 flex justify-around py-2 z-50">
+    <nav className="fixed bottom-3.5 left-6 right-6 md:left-auto md:right-6 md:w-80 bg-slate-900/95 backdrop-blur-md rounded-xl shadow-lg flex justify-around p-1.5 z-50 border border-slate-800 transition-all duration-300">
       {navItems.map((item) => {
         const Icon = item.icon;
         const isDashboard = item.href === '/admin/';
@@ -27,12 +27,16 @@ export default function BottomNav() {
           <Link
             key={item.name}
             href={item.href}
-            className={`flex flex-col items-center text-sm ${
-              isActive ? 'text-blue-600 font-semibold' : 'text-gray-500'
+            className={`flex flex-col items-center justify-center transition-all duration-200 px-3 py-1 rounded-lg w-full ${
+              isActive ? 'bg-slate-800' : 'hover:bg-slate-800/40'
             }`}
           >
-            <Icon size={20} />
-            <span className="text-xs mt-1">{item.name}</span>
+            <Icon size={16} className={`transition-transform duration-200 ${isActive ? 'text-white' : 'text-slate-400'}`} />
+            <span className={`text-[9px] mt-0.5 font-semibold tracking-wide transition-colors duration-200 ${
+              isActive ? 'text-white' : 'text-slate-400'
+            }`}>
+              {item.name}
+            </span>
           </Link>
         );
       })}

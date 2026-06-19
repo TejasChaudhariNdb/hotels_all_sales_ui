@@ -22,61 +22,83 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="space-y-3">
-      <SettingItem icon={<Bell />} title="Notifications" link="/admin/settings/notifications" />
-      <SettingItem icon={<ShieldCheck />} title="Privacy & Security" link="/admin/settings/security" />
-      <SettingItem icon={<ScrollText />} title="Activity Logs" link="/admin/settings/logs" />
-      <SettingItem icon={<WalletCards />} title="Monthly Expense" link="/admin/exp/" />
-      <SettingItem icon={<Settings2 />} title="Manage Categories" link="/admin/settings/categorys" />
-      <Link href="/admin/settings/users"  className="flex items-center justify-between p-4 bg-white rounded-xl shadow hover:bg-gray-50">
-       
-          <div className="flex items-center">
-            <Users className="text-blue-600 mr-3" />
-            <span className="text-gray-800 font-medium">Manage Users</span>
-          </div>
-          <ArrowRight className="text-gray-400" />
-       
-      </Link>
+    <div className="max-w-4xl mx-auto space-y-3">
+      <SettingItem 
+        icon={<Bell size={18} />} 
+        title="Notifications" 
+        link="/admin/settings/notifications" 
+        accentClass="bg-purple-50 text-purple-600"
+      />
+      <SettingItem 
+        icon={<ShieldCheck size={18} />} 
+        title="Privacy & Security" 
+        link="/admin/settings/security" 
+        accentClass="bg-indigo-50 text-indigo-600"
+      />
+      <SettingItem 
+        icon={<ScrollText size={18} />} 
+        title="Activity Logs" 
+        link="/admin/settings/logs" 
+        accentClass="bg-slate-100 text-slate-650"
+      />
+      <SettingItem 
+        icon={<WalletCards size={18} />} 
+        title="Monthly Expense" 
+        link="/admin/exp/" 
+        accentClass="bg-emerald-50 text-emerald-600"
+      />
+      <SettingItem 
+        icon={<Settings2 size={18} />} 
+        title="Manage Categories" 
+        link="/admin/settings/categorys" 
+        accentClass="bg-orange-50 text-orange-600"
+      />
+      
+      <SettingItem 
+        icon={<Users size={18} />} 
+        title="Manage Users" 
+        link="/admin/settings/users" 
+        accentClass="bg-blue-50 text-blue-600"
+      />
 
-      <Link href="/admin/settings/manager"  className="flex items-center justify-between p-4 bg-white rounded-xl shadow hover:bg-gray-50">
-      
-          <div className="flex items-center">
-            <Users className="text-blue-600 mr-3" />
-            <span className="text-gray-800 font-medium">Manage Managers</span>
-          </div>
-          <ArrowRight className="text-gray-400" />
-    
-      </Link>
-      <Link href="/admin/compare-hotels"  className="flex items-center justify-between p-4 bg-white rounded-xl shadow hover:bg-gray-50">
-      
-          <div className="flex items-center">
-            <BetweenVerticalEnd className="text-blue-600 mr-3" />
-            <span className="text-gray-800 font-medium">Compare Hotels</span>
-          </div>
-          <ArrowRight className="text-gray-400" />
-  
-      </Link>
+      <SettingItem 
+        icon={<Users size={18} />} 
+        title="Manage Managers" 
+        link="/admin/settings/manager" 
+        accentClass="bg-sky-50 text-sky-600"
+      />
+
+      <SettingItem 
+        icon={<BetweenVerticalEnd size={18} />} 
+        title="Compare Hotels" 
+        link="/admin/compare-hotels" 
+        accentClass="bg-teal-50 text-teal-600"
+      />
 
       <button
         onClick={logout}
-        className="w-full mt-10 py-3 text-center bg-red-50 text-red-600 font-medium rounded-xl shadow hover:bg-red-100">
-        <LogOut className="inline-block mr-2" size={18} />
-        Logout
+        className="w-full mt-6 py-3.5 text-center bg-rose-50 hover:bg-rose-100/70 text-rose-600 font-extrabold rounded-2xl shadow-sm transition-all active:scale-[0.98]"
+      >
+        <LogOut className="inline-block mr-2" size={16} />
+        Sign Out
       </button>
     </div>
   );
 }
 
-function SettingItem({ icon, title ,link}) {
+function SettingItem({ icon, title, link, accentClass }) {
   return (
-    <Link href={link} className="flex items-center justify-between p-4 bg-white rounded-xl shadow hover:bg-gray-50">
-
+    <Link 
+      href={link} 
+      className="flex items-center justify-between p-3.5 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] hover:shadow-md hover:scale-[1.005] transition-all duration-200"
+    >
       <div className="flex items-center">
-        <div className="text-gray-600 mr-3">{icon}</div>
-        <span className="text-gray-800 font-medium">{title}</span>
+        <div className={`p-2 rounded-xl mr-3.5 ${accentClass}`}>
+          {icon}
+        </div>
+        <span className="text-slate-850 font-bold text-sm tracking-wide">{title}</span>
       </div>
-        <ArrowRight className="text-gray-400" />
-
+      <ArrowRight className="text-slate-400" size={16} />
     </Link>
   );
 }

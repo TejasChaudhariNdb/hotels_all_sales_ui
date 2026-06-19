@@ -285,42 +285,35 @@ const AdminPage = () => {
   const tformatINRCurrency = (value) =>
     `₹${Number(value).toLocaleString('en-IN')}`;
 
-  const StatCard = ({ title, value, change, trend,prev}) => (
-    <div   className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-     <Link  href={`/admin/city?city=${title}&from_date=${selectedDate}&to_date=${toDate}`}>
-
- 
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="text-md font-medium text-gray-600 mb-1">{title}</h3>
-      <div
-          className={`flex items-center space-x-1 px-2 py-1 rounded-full text-sm font-medium ${trend === "up"
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
-            }`}>
-          {trend === "up" ? (
-            <TrendingUp className="w-3 h-3" />
-          ) : (
-            <TrendingDown className="w-3 h-3" />
-          )}
-          <span>{Math.abs(change)}%</span>
-        </div> 
-      </div>
-<div className="flex justify-between">
-<p className="text-xl font-bold text-gray-900">
-        {formatINRCurrency(value)}
-      </p>
-      <p className="text-xs text-gray-500 mt-0.5">
-              Prev: {formatINRCurrency(prev)}
-            </p>
-</div>
-</Link>
+  const StatCard = ({ title, value, change, trend, prev }) => (
+    <div className="bg-slate-50 border border-slate-100 rounded-lg p-2.5 shadow-sm hover:shadow transition-all duration-200">
+      <Link href={`/admin/city?city=${title}&from_date=${selectedDate}&to_date=${toDate}`}>
+        <div className="flex items-center justify-between mb-1">
+          <h3 className="text-[10px] font-bold text-slate-550 uppercase tracking-wider">{title}</h3>
+          <div
+            className={`flex items-center space-x-0.5 px-1 py-0.5 rounded text-[9px] font-semibold ${
+              trend === "up" ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"
+            }`}
+          >
+            {trend === "up" ? (
+              <TrendingUp className="w-2.5 h-2.5" />
+            ) : (
+              <TrendingDown className="w-2.5 h-2.5" />
+            )}
+            <span>{Math.abs(change)}%</span>
+          </div>
+        </div>
+        <div className="flex justify-between items-baseline mt-2">
+          <p className="text-sm font-bold text-slate-900">{formatINRCurrency(value)}</p>
+          <p className="text-[9px] font-medium text-slate-400">Prev: {formatINRCurrency(prev)}</p>
+        </div>
+      </Link>
     </div>
   );
 
   const ChartCard = ({ title, children, className = "" }) => (
-    <div
-      className={`bg-white rounded-xl p-4 shadow-sm border border-gray-100 ${className}`}>
-      <h3 className="text-lg font-semibold text-gray-800 mb-4">{title}</h3>
+    <div className={`bg-white border border-slate-150 rounded-lg p-4 shadow-sm ${className}`}>
+      <h3 className="text-xs font-bold text-slate-800 mb-4 tracking-tight">{title}</h3>
       {children}
     </div>
   );
@@ -408,437 +401,426 @@ const AdminPage = () => {
       fill: COLORS[index % COLORS.length]
     }));
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
-      {/* Header */}
-
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mx-4 my-4">
-        {/* Mobile-first vertical layout */}
-        <div className="space-y-4">
-          {/* Period Selector - Full width on mobile */}
-          <div className="flex  mb-4 overflow-x-auto no-scrollbar whitespace-nowrap gap-3">
-            {["Today", "Yesterday",  "Last Yesterday", "Week", "Last Week", "14 Days", "Month", "Last Month"].map((period) => (
+    <div className="min-h-screen bg-slate-50/50 pb-8 px-3 md:px-6">
+      {/* Header filter container */}
+      <div className="bg-white rounded-lg border border-slate-100 p-4 mb-4 shadow-sm">
+        <div className="space-y-3">
+          {/* Period Selector */}
+          <div className="flex mb-1 overflow-x-auto no-scrollbar whitespace-nowrap gap-1.5 pb-1">
+            {["Today", "Yesterday", "Last Yesterday", "Week", "Last Week", "14 Days", "Month", "Last Month"].map((period) => (
               <button
                 key={period}
                 onClick={() => handlePeriodChange(period)}
-                className={`py-2 px-2 rounded-lg text-sm font-medium transition-all duration-200 ${selectedPeriod === period
-                  ? "bg-slate-900 text-white shadow-sm"
-                  : "bg-slate-50 text-slate-600 active:bg-slate-100 border border-slate-200"
+                className={`py-1 px-3 rounded-lg text-xs font-semibold transition-all duration-200 ${selectedPeriod === period
+                  ? "bg-slate-800 text-white shadow-sm active:scale-95"
+                  : "bg-slate-100 text-slate-600 hover:bg-slate-200 active:scale-95"
                   }`}
               >
                 {period}
               </button>
             ))}
-
-
           </div>
 
           {/* Date Range Selector with Dropdown */}
-          <div className="space-y-2">
-            <div className="flex">
-              <button
-                onClick={() => setIsDateFilterOpen(!isDateFilterOpen)}
-                className="w-full flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-lg text-left hover:bg-slate-100 transition-colors"
-              >
-                <div className="flex items-center space-x-2">
-                  <Calendar className="w-4 h-4 text-slate-500" />
-                  <span className="text-slate-700 font-medium">
-                    {selectedDate === toDate
-                      ? formatDate(selectedDate)
-                      : `${formatDate(selectedDate)} - ${formatDate(toDate)}`}
-                  </span>
-                </div>
-                {isDateFilterOpen ? (
-                  <ChevronUp className="w-4 h-4 text-slate-500" />
-                ) : (
-                  <ChevronDown className="w-4 h-4 text-slate-500" />
-                )}
-              </button>
-
-            </div>
-
-            {/* Animated Dropdown */}
-            <div
-              className={`transition-all duration-300 overflow-hidden ${isDateFilterOpen ? "max-h-[500px]" : "max-h-0"
-                }`}
+          <div className="relative">
+            <button
+              onClick={() => setIsDateFilterOpen(!isDateFilterOpen)}
+              className="w-full flex items-center justify-between px-3 py-2 bg-slate-50 border border-slate-200 hover:bg-slate-100/60 rounded-lg text-left transition-all font-semibold text-xs text-slate-700 focus:outline-none h-9"
             >
-              <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
-                <div className="space-y-3 mb-4 flex justify-between">
+              <div className="flex items-center space-x-2">
+                <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                <span>
+                  {selectedDate === toDate
+                    ? formatDate(selectedDate)
+                    : `${formatDate(selectedDate)} - ${formatDate(toDate)}`}
+                </span>
+              </div>
+              {isDateFilterOpen ? (
+                <ChevronUp className="w-3.5 h-3.5 text-slate-500" />
+              ) : (
+                <ChevronDown className="w-3.5 h-3.5 text-slate-500" />
+              )}
+            </button>
+
+            {/* Dropdown Container */}
+            {isDateFilterOpen && (
+              <div className="absolute left-0 right-0 mt-1 bg-white rounded-lg shadow-xl p-4 border border-slate-200 z-30 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="grid grid-cols-2 gap-3 mb-3">
                   <div className="space-y-1">
-                    <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide">
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                       From
                     </label>
                     <input
                       type="date"
                       value={selectedDate}
                       onChange={(e) => setSelectedDate(e.target.value)}
-                      className="w-full py-3 px-4 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all"
+                      className="w-full py-1.5 px-2.5 bg-slate-50 border border-slate-200 rounded-md text-xs font-semibold text-slate-700 focus:outline-none focus:border-slate-400 transition-all"
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide">
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                       To
                     </label>
                     <input
                       type="date"
                       value={toDate}
                       onChange={(e) => setToDate(e.target.value)}
-                      className="w-full py-3 px-4 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all"
+                      className="w-full py-1.5 px-2.5 bg-slate-50 border border-slate-200 rounded-md text-xs font-semibold text-slate-700 focus:outline-none focus:border-slate-400 transition-all"
                     />
                   </div>
                 </div>
                 <button
                   onClick={applyDateFilter}
-                  className="bg-slate-900 text-white px-4 py-3 rounded-lg hover:bg-slate-800 transition-colors w-full font-medium"
+                  className="bg-slate-800 hover:bg-slate-900 text-white py-1.5 rounded-lg transition-all w-full font-semibold shadow-sm active:scale-95 text-xs h-9"
                 >
-                  Apply
+                  Apply Filter
                 </button>
               </div>
-            </div>
-
-
+            )}
           </div>
-
-
         </div>
       </div>
 
-      {loading ? (<>  <div className="flex justify-center items-center py-10">
-        <svg
-          className="animate-spin h-6 w-6 text-indigo-600"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24">
-          <circle
-            className="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="4"></circle>
-          <path
-            className="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8v8H4z"></path>
-        </svg>
-      </div></>) : ""}
-
-
-      <div className="pt-0 p-4 space-y-6">
-  <div className="flex justify-between items-center mb-0 mt-0">
-    <div className="flex items-center space-x-6">
-      <label className="flex items-center space-x-2 cursor-pointer">
-        <input 
-          type="checkbox" 
-          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-        />
-        <span className="text-sm font-medium text-gray-700">Include Margin</span>
-      </label>
-      
-      <label className="flex items-center space-x-2 cursor-pointer">
-        <input 
-          type="checkbox" 
-          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-        />
-        <span className="text-sm font-medium text-gray-700">Include Expense</span>
-      </label>
-    </div>
-
-    <SalesFilter onApplyFilter={handleFilter} hotel_type={0} />
-  </div>
-
-
-
-        {/* Today's Summary */}
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-          <div className="flex justify-between">
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">
-              {isToday ? "Today's" : "Date"} Summary
-
-            </h3>
-            <div className="flex items-center space-x-1 mb-1">
-              <div
-                className={`flex items-center space-x-1 px-2 py-1 rounded-full text-sm font-medium ${totalSalesSummary.trend === "up"
-                  ? "bg-green-100 text-green-700"
-                  : "bg-red-100 text-red-700"
-                  }`}>
-                {totalSalesSummary.trend === "up" ? (
-                  <TrendingUp className="w-3 h-3" />
-                ) : (
-                  <TrendingDown className="w-3 h-3" />
-                )}
-                <p className="text-sm">{totalSalesSummary.label}</p>
-              </div>
-
-
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            {/* <div>
-              <p className="text-gray-600 text-sm">Total Revenue</p>
-              <p className="text-2xl font-bold text-gray-900">{formatINRCurrency(totalSalesSummary.amount)}</p>
-            </div> */}
-            <div>
-              <p className="text-gray-600 text-sm">Total Revenue</p>
-              <p className="text-2xl font-bold text-gray-900">{formatINRCurrency(totalSalesSummary.amount)}</p>
-              <p className="text-sm text-gray-500 mt-1">
-                Avg: {formatINRCurrency(totalSalesSummary?.average?.value)}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-gray-500 text-xs text-end">
-                {formatComparedTo(totalSalesSummary?.compared_to?.from, totalSalesSummary?.compared_to?.to)}
-              </p>
-              <p
-                className={`text-2xl font-bold text-end ${totalSalesSummary.trend === "up" ? "text-green-600" : "text-red-600"
-                  }`}
-              >
-                {totalSalesSummary.change_percent}%
-              </p>
-            </div>
-          </div>
+      {loading && (
+        <div className="flex justify-center items-center py-4">
+          <svg
+            className="animate-spin h-5 w-5 text-slate-800"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24">
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v8H4z"></path>
+          </svg>
         </div>
-
-        {/* City Sales Cards */}
-        <div>
-          <h2 className="text-lg font-semibold text-gray-800 mb-3">
-            City Performance
-          </h2>
-          <div className="space-y-3">
-            {cityData.map((city) => (
-              <StatCard
-                key={city.city}
-                title={city.city}
-                value={city.total}
-                change={city.change_percent}
-                trend={city.trend}
-                prev={city.previous_total}
-
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Total Sales Line Chart */}
-        <ChartCard title="Total Sales Trend">
-          <ResponsiveContainer width="100%" height={200}>
-            <LineChart data={totalSalesData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="date" fontSize={12} />
-
-              <YAxis
-                fontSize={12}
-                domain={[0, 'dataMax + 40000']}
-                tickCount={14}
-                tickFormatter={(value) => tformatINRCurrency(value)}
-              />
-              <Tooltip
-                formatter={(value) => [`${formatINRCurrency(value)}`, "Sales"]}
-                contentStyle={{
-                  backgroundColor: "white",
-                  color: "black",
-                  borderRadius: "8px",
-                  padding: "7px",
-                }}
-              />
-              <Line
-                type="monotone"
-                dataKey="total"
-                stroke="#4F46E5"
-                strokeWidth={2}
-                dot={{ fill: "#4F46E5", strokeWidth: 2, r: 4 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </ChartCard>
-
-
-   {/* Hotel Categories Grid */}
-   <div>
-  <div className="flex items-center justify-between mb-3">
-    <h2 className="text-lg font-semibold text-gray-800">
-      Hotel Performance
-    </h2>
-    <span className="text-sm text-gray-500">
-      {hotelCategories.length} hotels
-    </span>
-  </div>
-
-  <div className="grid grid-cols-1 gap-3">
-    {displayedHotels.map((hotel, index) => (
-      <Link
-      href={`/admin/hotel?hotel_id=${hotel.hotel_id}&from_date=${selectedDate}&to_date=${toDate}`}
-        key={index}
-        className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-        <div className="flex items-center justify-between mb-2">
-          <div
-            className="p-2 rounded-lg"
-            style={{ backgroundColor: `${COLORS[index % COLORS.length]}20` }}>
-            <Bed
-              className="w-5 h-5"
-              style={{ color: COLORS[index % COLORS.length] }}
-            />
-          </div>
-          <div className="flex items-center space-x-2 text-xs text-gray-500">
-          <div
-                className={`flex items-center space-x-1 px-2 py-1 rounded-full text-sm font-medium ${hotel.trend === "up"
-                  ? "bg-green-100 text-green-700"
-                  : "bg-red-100 text-red-700"
-                  }`}>
-                {hotel.trend === "up" ? (
-                  <TrendingUp className="w-3 h-3" />
-                ) : (
-                  <TrendingDown className="w-3 h-3" />
-                )}
-                <p className="text-sm"> {hotel?.change_percent}%</p>
-              </div>
-          </div>
-        </div>
-        <div className="flex items-center justify-between">
-        <h3 className="text-sm font-medium text-gray-800 mb-1">
-          {hotel?.hotel_name}
-        </h3>
-
-        <div className="flex items-center space-x-2 text-xs text-gray-500">
-            <MapPin className="w-3 h-3" />
-            <span>{hotel?.city}</span>
-            <ChevronRight className="w-4 h-4 text-gray-400" />
-          </div>
- 
-          
-</div>
-        <div className="flex items-center justify-between">
-          {/* Current Total */}
-          <div>
-            <p className="text-lg font-bold text-gray-900">
-              {formatINRCurrency(hotel?.total)}
-            </p>
-      
-          </div>
-      {/* Previous Total - small & muted */}
-      <p className="text-xs text-gray-500 mt-0.5">
-              Prev: {formatINRCurrency(hotel?.previous_total)}
-            </p>
-        </div>
-      </Link>
-    ))}
-  </div>
-
-  {/* Toggle More Hotels */}
-  {hotelCategories.length > 10 && (
-    <button
-      onClick={() => setShowAllHotels(!showAllHotels)}
-      className="w-full mt-3 bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex items-center justify-center space-x-2 text-blue-600 hover:bg-blue-50 transition-colors"
-    >
-      <span className="font-medium">
-        {showAllHotels
-          ? "Show Less Hotels"
-          : `Show ${hotelCategories.length - 10} More Hotels`}
-      </span>
-      {showAllHotels ? (
-        <ChevronUp className="w-4 h-4" />
-      ) : (
-        <ChevronDown className="w-4 h-4" />
       )}
-    </button>
-  )}
-</div>
 
-
-        {/* Category Sales Bar Chart */}
-        <ChartCard title="Sales by Category">
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={categoryData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="category_type_name" fontSize={12} />
-              <YAxis fontSize={12} />
-              <Tooltip
-                formatter={(value) => [`${formatINRCurrency(value)}`, "Sales"]}
+      {/* Main dashboard content */}
+      <div className="space-y-4">
+        {/* Toggle options & Filters Row */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white p-3 rounded-lg border border-slate-100 shadow-sm">
+          <div className="flex items-center space-x-4">
+            <label className="flex items-center space-x-1.5 cursor-pointer">
+              <input
+                type="checkbox"
+                className="w-3.5 h-3.5 text-slate-800 bg-gray-50 border-gray-300 rounded focus:ring-slate-500 focus:ring-1"
               />
-              <Bar dataKey="total" radius={[4, 4, 0, 0]}>
-                {categoryData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
+              <span className="text-xs font-semibold text-slate-700">Include Margin</span>
+            </label>
+            
+            <label className="flex items-center space-x-1.5 cursor-pointer">
+              <input
+                type="checkbox"
+                className="w-3.5 h-3.5 text-slate-800 bg-gray-50 border-gray-300 rounded focus:ring-slate-500 focus:ring-1"
+              />
+              <span className="text-xs font-semibold text-slate-700">Include Expense</span>
+            </label>
+          </div>
 
+          <SalesFilter onApplyFilter={handleFilter} hotel_type={0} />
+        </div>
 
-
-        {/* Service Categories Grid */}
-        <div>
-          <h2 className="text-lg font-semibold text-gray-800 mb-3">
-            Service Categories
-          </h2>
-          <div className="grid grid-cols-2 gap-3">
-            {serviceCategories.map((service) => {
-
-              return (
+        {/* Section 1: KPI Summary & City Performance Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {/* Today's / Period Summary Card */}
+          <div className="lg:col-span-1 bg-white border border-slate-150 rounded-lg p-4 shadow-sm flex flex-col justify-between">
+            <div>
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="text-xs font-bold text-slate-800 tracking-tight">
+                  {isToday ? "Today's" : "Period"} Summary
+                </h3>
                 <div
-                  key={service.category_name}
-                  className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-sm font-medium text-gray-600 mb-1">
-                      {service.category_name}
-                    </h3>
-                    <ChevronRight className="w-4 h-4 text-gray-400" />
-                  </div>
+                  className={`flex items-center space-x-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                    totalSalesSummary.trend === "up"
+                      ? "bg-emerald-50 text-emerald-700"
+                      : "bg-rose-50 text-rose-700"
+                  }`}
+                >
+                  {totalSalesSummary.trend === "up" ? (
+                    <TrendingUp className="w-3 h-3" />
+                  ) : (
+                    <TrendingDown className="w-3 h-3" />
+                  )}
+                  <span>{totalSalesSummary.label}</span>
+                </div>
+              </div>
 
-                  <p className="text-lg font-bold text-gray-900">
-                    {formatINRCurrency(service.total)}
+              <div className="space-y-3">
+                <div>
+                  <p className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Total Revenue</p>
+                  <p className="text-xl font-extrabold text-slate-900 mt-0.5">
+                    {formatINRCurrency(totalSalesSummary.amount)}
                   </p>
                 </div>
-              );
-            })}
+                <div className="p-2.5 bg-slate-50 border border-slate-100 rounded-lg flex items-center justify-between shadow-sm">
+                  <span className="text-slate-500 text-[11px] font-semibold">Average / Day</span>
+                  <span className="font-bold text-slate-800 text-xs">
+                    {formatINRCurrency(totalSalesSummary?.average?.value)}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center">
+              <span className="text-[10px] font-medium text-slate-400">
+                vs {formatComparedTo(totalSalesSummary?.compared_to?.from, totalSalesSummary?.compared_to?.to)}
+              </span>
+              <span
+                className={`text-sm font-bold ${
+                  totalSalesSummary.trend === "up" ? "text-emerald-600" : "text-rose-600"
+                }`}
+              >
+                {totalSalesSummary.change_percent}%
+              </span>
+            </div>
+          </div>
+
+          {/* City Performance Cards */}
+          <div className="lg:col-span-2 bg-white border border-slate-150 rounded-lg p-4 shadow-sm flex flex-col justify-between">
+            <div>
+              <h2 className="text-xs font-bold text-slate-800 mb-3.5 flex items-center gap-1.5">
+                <MapPin className="text-slate-500 w-4 h-4" />
+                <span>City Performance</span>
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {cityData.map((city) => (
+                  <StatCard
+                    key={city.city}
+                    title={city.city}
+                    value={city.total}
+                    change={city.change_percent}
+                    trend={city.trend}
+                    prev={city.previous_total}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
+        {/* Section 2: Charts Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <ChartCard title="Total Sales Trend">
+            <ResponsiveContainer width="100%" height={230}>
+              <LineChart data={totalSalesData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                <XAxis dataKey="date" fontSize={10} tickLine={false} />
+                <YAxis
+                  fontSize={10}
+                  domain={[0, 'dataMax + 40000']}
+                  tickLine={false}
+                  tickFormatter={(value) => tformatINRCurrency(value)}
+                />
+                <Tooltip
+                  formatter={(value) => [`${formatINRCurrency(value)}`, "Sales"]}
+                  contentStyle={{
+                    backgroundColor: "white",
+                    borderRadius: "8px",
+                    border: "1px solid #e2e8f0",
+                    boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="total"
+                  stroke="#1e293b"
+                  strokeWidth={2}
+                  dot={{ fill: "#1e293b", strokeWidth: 1.5, r: 3 }}
+                  activeDot={{ r: 5 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </ChartCard>
 
-        {/* Service Categories Pie Chart */}
-        <ChartCard title="Service Distribution">
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
+          <ChartCard title="Sales by Category">
+            <ResponsiveContainer width="100%" height={230}>
+              <BarChart data={categoryData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                <XAxis dataKey="category_type_name" fontSize={10} tickLine={false} />
+                <YAxis fontSize={10} tickLine={false} />
+                <Tooltip
+                  formatter={(value) => [`${formatINRCurrency(value)}`, "Sales"]}
+                  contentStyle={{
+                    backgroundColor: "white",
+                    borderRadius: "8px",
+                    border: "1px solid #e2e8f0",
+                    boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+                  }}
+                />
+                <Bar dataKey="total" radius={[4, 4, 0, 0]}>
+                  {categoryData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={LCOLORS[index % LCOLORS.length]} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </ChartCard>
+        </div>        {/* Section 3: Hotel Performance & Service Distribution */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {/* Hotel Performance */}
+          <div className="lg:col-span-2 bg-white border border-slate-150 rounded-lg p-4 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xs font-bold text-slate-800">
+                Hotel Performance
+              </h2>
+              <span className="text-[10px] px-2 py-0.5 rounded bg-slate-100 font-bold text-slate-500">
+                {hotelCategories.length} hotels
+              </span>
+            </div>
 
-              <Pie
-                data={serviceCategories}
-                cx="50%"
-                cy="50%"
-                innerRadius={60} outerRadius={90}
-                fill="#8884d8"
-                dataKey="total"
-                label={({ category_name, percent }) =>
-                  `${category_name} ${(percent * 100).toFixed(0)}%`
-                }
-                labelLine={true}
-                fontSize={12}
-                fontWeight="600"
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+              {displayedHotels.map((hotel, index) => (
+                <Link
+                  href={`/admin/hotel?hotel_id=${hotel.hotel_id}&from_date=${selectedDate}&to_date=${toDate}`}
+                  key={index}
+                  className="bg-slate-50/50 border border-slate-100 hover:border-slate-200 rounded-lg p-2.5 shadow-sm hover:shadow transition-all duration-205 flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <div
+                        className="p-1 rounded bg-slate-100 text-slate-700"
+                      >
+                        <Bed className="w-3 h-3 text-slate-600" />
+                      </div>
+                      <div
+                        className={`flex items-center space-x-0.5 px-1 py-0.5 rounded text-[9px] font-semibold ${
+                          hotel.trend === "up"
+                            ? "bg-emerald-50 text-emerald-700"
+                            : "bg-rose-50 text-rose-700"
+                        }`}
+                      >
+                        {hotel.trend === "up" ? (
+                          <TrendingUp className="w-2 h-2" />
+                        ) : (
+                          <TrendingDown className="w-2 h-2" />
+                        )}
+                        <span>{hotel?.change_percent}%</span>
+                      </div>
+                    </div>
+
+                    <h3 className="text-[11px] font-bold text-slate-850 truncate">
+                      {hotel?.hotel_name}
+                    </h3>
+                    <div className="flex items-center space-x-0.5 text-[9px] text-slate-400 font-semibold mb-1.5">
+                      <MapPin className="w-2 h-2 text-slate-350" />
+                      <span>{hotel?.city}</span>
+                    </div>
+                  </div>
+
+                  <div className="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[10px]">
+                    <div className="flex gap-2">
+                      <div>
+                        <span className="text-[8px] text-slate-400 block leading-tight">Current</span>
+                        <span className="font-bold text-slate-850">{formatINRCurrency(hotel?.total)}</span>
+                      </div>
+                      <div className="border-l border-slate-100 pl-2">
+                        <span className="text-[8px] text-slate-400 block leading-tight">Prev</span>
+                        <span className="font-medium text-slate-500">{formatINRCurrency(hotel?.previous_total)}</span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            {/* Toggle More Hotels */}
+            {hotelCategories.length > 10 && (
+              <button
+                onClick={() => setShowAllHotels(!showAllHotels)}
+                className="w-full mt-3 bg-slate-50 hover:bg-slate-100 rounded-lg p-2 flex items-center justify-center space-x-1.5 text-slate-700 font-semibold transition-all text-xs active:scale-95 border border-slate-100"
               >
-                {serviceCategories.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={LCOLORS[index % LCOLORS.length]}
+                <span>
+                  {showAllHotels
+                    ? "Show Less"
+                    : `Show ${hotelCategories.length - 10} More Hotels`}
+                </span>
+                {showAllHotels ? (
+                  <ChevronUp className="w-3.5 h-3.5" />
+                ) : (
+                  <ChevronDown className="w-3.5 h-3.5" />
+                )}
+              </button>
+            )}
+          </div>
+
+          {/* Service Categories Grid & Distribution Chart */}
+          <div className="lg:col-span-1 space-y-4">
+            {/* Service Distribution Pie Chart */}
+            <ChartCard title="Service Distribution">
+              <ResponsiveContainer width="100%" height={230}>
+                <PieChart>
+                  <Pie
+                    data={serviceCategories}
+                    cx="50%"
+                    cy="40%"
+                    innerRadius={50}
+                    outerRadius={75}
+                    fill="#8884d8"
+                    dataKey="total"
+                    labelLine={false}
+                  >
+                    {serviceCategories.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={LCOLORS[index % LCOLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    formatter={(total) => [`${formatINRCurrency(total)}`, "Revenue"]}
                   />
+                  <Legend
+                    formatter={(value, entry) => (
+                      <span className="text-[10px] font-medium text-slate-600">
+                        {entry.payload.category_name} (
+                        {(
+                          (entry.payload.total /
+                            (serviceCategories.reduce((sum, item) => sum + item.total, 0) || 1)) *
+                          100
+                        ).toFixed(1)}
+                        %)
+                      </span>
+                    )}
+                    verticalAlign="bottom"
+                    iconType="circle"
+                    iconSize={6}
+                    wrapperStyle={{ paddingTop: "10px" }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </ChartCard>
+
+            {/* Service Categories Grid */}
+            <div className="bg-white border border-slate-150 rounded-lg p-4 shadow-sm space-y-3">
+              <h2 className="text-xs font-bold text-slate-800">
+                Service Categories
+              </h2>
+              <div className="grid grid-cols-2 gap-2">
+                {serviceCategories.map((service) => (
+                  <div
+                    key={service.category_name}
+                    className="bg-slate-50 border border-slate-100 rounded-lg p-2.5 flex flex-col justify-between transition-all hover:bg-slate-100/60"
+                  >
+                    <span className="text-[10px] font-semibold text-slate-400 truncate mb-0.5">
+                      {service.category_name}
+                    </span>
+                    <span className="text-xs font-bold text-slate-800 truncate">
+                      {formatINRCurrency(service.total)}
+                    </span>
+                  </div>
                 ))}
-
-              </Pie>
-              <Tooltip
-                formatter={(total) => [`${formatINRCurrency(total)}`, "Revenue"]}
-              />
-              <Legend
-                formatter={(value, entry) => `${entry.payload.category_name} (${((entry.payload.total / serviceCategories.reduce((sum, item) => sum + item.total, 0)) * 100).toFixed(1)}%)`}
-                verticalAlign="bottom"
-                iconType="circle"
-                wrapperStyle={{ fontSize: '12px' }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-        </ChartCard>
-
-
-
-
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
