@@ -12,6 +12,7 @@ import {
   ShieldCheck,
   Send,
   Sparkles,
+  ChevronDown
 } from "lucide-react";
 
 export default function NotificationPage() {
@@ -231,11 +232,10 @@ export default function NotificationPage() {
             {/* Options */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <label
-                className={`flex flex-col p-5 rounded-2xl cursor-pointer transition-all duration-300 ${
-                  preferenceType === "all"
+                className={`flex flex-col p-5 rounded-2xl cursor-pointer transition-all duration-300 ${preferenceType === "all"
                     ? "bg-purple-50/60 shadow-sm shadow-purple-500/5 ring-2 ring-purple-600/20 scale-[1.01]"
                     : "bg-slate-50 hover:bg-slate-100/80 text-gray-700"
-                }`}
+                  }`}
               >
                 <div className="flex items-center gap-3">
                   <input
@@ -254,11 +254,10 @@ export default function NotificationPage() {
               </label>
 
               <label
-                className={`flex flex-col p-5 rounded-2xl cursor-pointer transition-all duration-300 ${
-                  preferenceType === "specific"
+                className={`flex flex-col p-5 rounded-2xl cursor-pointer transition-all duration-300 ${preferenceType === "specific"
                     ? "bg-purple-50/60 shadow-sm shadow-purple-500/5 ring-2 ring-purple-600/20 scale-[1.01]"
                     : "bg-slate-50 hover:bg-slate-100/80 text-gray-700"
-                }`}
+                  }`}
               >
                 <div className="flex items-center gap-3">
                   <input
@@ -277,11 +276,10 @@ export default function NotificationPage() {
               </label>
 
               <label
-                className={`flex flex-col p-5 rounded-2xl cursor-pointer transition-all duration-300 ${
-                  preferenceType === "none"
+                className={`flex flex-col p-5 rounded-2xl cursor-pointer transition-all duration-300 ${preferenceType === "none"
                     ? "bg-purple-50/60 shadow-sm shadow-purple-500/5 ring-2 ring-purple-600/20 scale-[1.01]"
                     : "bg-slate-50 hover:bg-slate-100/80 text-gray-700"
-                }`}
+                  }`}
               >
                 <div className="flex items-center gap-3">
                   <input
@@ -313,11 +311,10 @@ export default function NotificationPage() {
                       return (
                         <label
                           key={hotel.id}
-                          className={`flex items-center gap-3 p-3.5 rounded-xl text-sm cursor-pointer transition-all duration-200 ${
-                            isChecked
+                          className={`flex items-center gap-3 p-3.5 rounded-xl text-sm cursor-pointer transition-all duration-200 ${isChecked
                               ? "bg-purple-100/40 text-purple-950 font-bold shadow-sm"
                               : "bg-white text-gray-600 hover:bg-gray-50 shadow-sm"
-                          }`}
+                            }`}
                         >
                           <input
                             type="checkbox"
@@ -344,11 +341,10 @@ export default function NotificationPage() {
             <button
               onClick={savePreferences}
               disabled={savingPref}
-              className={`w-full flex items-center justify-center gap-2 px-5 py-4 rounded-2xl text-white font-extrabold tracking-wide transition-all active:scale-[0.98] ${
-                savingPref
+              className={`w-full flex items-center justify-center gap-2 px-5 py-4 rounded-2xl text-white font-extrabold tracking-wide transition-all active:scale-[0.98] ${savingPref
                   ? "bg-purple-400 cursor-not-allowed"
                   : "bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-md shadow-purple-600/10"
-              }`}
+                }`}
             >
               {savingPref ? (
                 <>
@@ -394,11 +390,10 @@ export default function NotificationPage() {
         <button
           onClick={sendReminders}
           disabled={loadingReminder}
-          className={`w-full flex items-center justify-center gap-2 px-5 py-4 rounded-2xl text-white font-extrabold tracking-wide transition-all active:scale-[0.98] ${
-            loadingReminder
+          className={`w-full flex items-center justify-center gap-2 px-5 py-4 rounded-2xl text-white font-extrabold tracking-wide transition-all active:scale-[0.98] ${loadingReminder
               ? "bg-blue-400 cursor-not-allowed"
               : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-md shadow-blue-600/10"
-          }`}
+            }`}
         >
           {loadingReminder ? (
             <>
@@ -550,11 +545,10 @@ export default function NotificationPage() {
         <button
           onClick={sendCustomNotification}
           disabled={loadingCustom}
-          className={`w-full py-4 rounded-2xl text-white font-extrabold tracking-wide flex justify-center items-center gap-2 transition-all active:scale-[0.98] ${
-            loadingCustom
+          className={`w-full py-4 rounded-2xl text-white font-extrabold tracking-wide flex justify-center items-center gap-2 transition-all active:scale-[0.98] ${loadingCustom
               ? "bg-emerald-400 cursor-not-allowed"
               : "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-md shadow-emerald-600/10"
-          }`}
+            }`}
         >
           {loadingCustom ? (
             <>

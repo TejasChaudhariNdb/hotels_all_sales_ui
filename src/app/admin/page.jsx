@@ -286,33 +286,33 @@ const AdminPage = () => {
     `₹${Number(value).toLocaleString('en-IN')}`;
 
   const StatCard = ({ title, value, change, trend, prev }) => (
-    <div className="bg-white rounded-xl p-3.5 shadow-sm hover:shadow-md transition-all duration-200">
+    <div className="bg-white rounded-xl p-3.5 md:p-5 shadow-sm hover:shadow-md transition-all duration-200">
       <Link href={`/admin/city?city=${title}&from_date=${selectedDate}&to_date=${toDate}`}>
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wider">{title}</h3>
+          <h3 className="text-xs md:text-sm font-bold text-slate-600 uppercase tracking-wider">{title}</h3>
           <div
-            className={`flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-bold ${trend === "up" ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"
+            className={`flex items-center gap-1 px-2 py-1 rounded-full text-[11px] md:text-xs font-bold ${trend === "up" ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"
               }`}
           >
             {trend === "up" ? (
-              <TrendingUp className="w-3 h-3" />
+              <TrendingUp className="w-3 h-3 md:w-3.5 md:h-3.5" />
             ) : (
-              <TrendingDown className="w-3 h-3" />
+              <TrendingDown className="w-3 h-3 md:w-3.5 md:h-3.5" />
             )}
             <span>{Math.abs(change)}%</span>
           </div>
         </div>
         <div className="mt-1">
-          <p className="text-base font-extrabold text-slate-900 leading-tight">{formatINRCurrency(value)}</p>
-          <p className="text-[11px] font-medium text-slate-400 mt-1">Prev: {formatINRCurrency(prev)}</p>
+          <p className="text-base md:text-2xl font-extrabold text-slate-900 leading-tight">{formatINRCurrency(value)}</p>
+          <p className="text-[11px] md:text-sm font-medium text-slate-400 mt-1">Prev: {formatINRCurrency(prev)}</p>
         </div>
       </Link>
     </div>
   );
 
   const ChartCard = ({ title, children, className = "" }) => (
-    <div className={`bg-white rounded-xl p-4 shadow-sm ${className}`}>
-      <h3 className="text-sm font-bold text-slate-800 mb-4 tracking-tight">{title}</h3>
+    <div className={`bg-white rounded-xl p-4 md:p-6 shadow-sm ${className}`}>
+      <h3 className="text-sm md:text-base font-bold text-slate-800 mb-4 tracking-tight">{title}</h3>
       {children}
     </div>
   );
@@ -530,14 +530,14 @@ const AdminPage = () => {
         {/* Section 1: KPI Summary & City Performance Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Today's / Period Summary Card */}
-          <div className="lg:col-span-1 bg-white rounded-xl p-4 shadow-sm flex flex-col justify-between">
+          <div className="lg:col-span-1 bg-white rounded-xl p-4 md:p-6 shadow-sm flex flex-col justify-between">
             <div>
               <div className="flex justify-between items-center mb-3">
-                <h3 className="text-xs font-bold text-slate-800 tracking-tight">
+                <h3 className="text-xs md:text-base font-bold text-slate-800 tracking-tight">
                   {isToday ? "Today's" : "Period"} Summary
                 </h3>
                 <div
-                  className={`flex items-center space-x-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold ${totalSalesSummary.trend === "up"
+                  className={`flex items-center space-x-0.5 px-1.5 py-0.5 rounded text-[10px] md:text-xs font-bold ${totalSalesSummary.trend === "up"
                     ? "bg-emerald-50 text-emerald-700"
                     : "bg-rose-50 text-rose-700"
                     }`}
@@ -553,14 +553,14 @@ const AdminPage = () => {
 
               <div className="space-y-3">
                 <div>
-                  <p className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Total Revenue</p>
-                  <p className="text-xl font-extrabold text-slate-900 mt-0.5">
+                  <p className="text-slate-400 text-[10px] md:text-xs font-bold uppercase tracking-wider">Total Revenue</p>
+                  <p className="text-xl md:text-4xl font-extrabold text-slate-900 mt-0.5">
                     {formatINRCurrency(totalSalesSummary.amount)}
                   </p>
                 </div>
-                <div className="p-2.5 bg-slate-50 border border-slate-100 rounded-lg flex items-center justify-between shadow-sm">
-                  <span className="text-slate-500 text-[11px] font-semibold">Average / Day</span>
-                  <span className="font-bold text-slate-800 text-xs">
+                <div className="p-2.5 md:p-3.5 bg-slate-50 border border-slate-100 rounded-lg flex items-center justify-between shadow-sm">
+                  <span className="text-slate-500 text-[11px] md:text-sm font-semibold">Average / Day</span>
+                  <span className="font-bold text-slate-800 text-xs md:text-sm">
                     {formatINRCurrency(totalSalesSummary?.average?.value)}
                   </span>
                 </div>
@@ -568,11 +568,11 @@ const AdminPage = () => {
             </div>
 
             <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center">
-              <span className="text-[10px] font-medium text-slate-400">
+              <span className="text-[10px] md:text-xs font-medium text-slate-400">
                 vs {formatComparedTo(totalSalesSummary?.compared_to?.from, totalSalesSummary?.compared_to?.to)}
               </span>
               <span
-                className={`text-sm font-bold ${totalSalesSummary.trend === "up" ? "text-emerald-600" : "text-rose-600"
+                className={`text-sm md:text-xl font-bold ${totalSalesSummary.trend === "up" ? "text-emerald-600" : "text-rose-600"
                   }`}
               >
                 {totalSalesSummary.change_percent}%
@@ -581,10 +581,10 @@ const AdminPage = () => {
           </div>
 
           {/* City Performance Cards */}
-          <div className="lg:col-span-2 bg-white rounded-xl p-4 shadow-sm flex flex-col justify-between">
+          <div className="lg:col-span-2 bg-white rounded-xl p-4 md:p-6 shadow-sm flex flex-col justify-between">
             <div>
-              <h2 className="text-xs font-bold text-slate-800 mb-3.5 flex items-center gap-1.5">
-                <MapPin className="text-slate-500 w-4 h-4" />
+              <h2 className="text-xs md:text-base font-bold text-slate-800 mb-3.5 flex items-center gap-1.5">
+                <MapPin className="text-slate-500 w-4 h-4 md:w-5 md:h-5" />
                 <span>City Performance</span>
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
