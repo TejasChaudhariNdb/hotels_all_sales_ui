@@ -300,7 +300,7 @@ export default function LogsPage() {
                             <span className="text-xs md:text-sm text-gray-500 font-medium">
                               {formatDate(log.created_at)}
                             </span>
-                          </div>   </div>
+                          </div>
                           
                           {/* Quick info preview */}
                           {log.additional_info && (

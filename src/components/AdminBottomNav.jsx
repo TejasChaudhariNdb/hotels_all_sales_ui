@@ -15,7 +15,7 @@ export default function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:w-96 bg-slate-950/95 backdrop-blur-md rounded-2xl shadow-2xl flex justify-around p-2.5 z-50 border border-slate-800/90 transition-all duration-300">
+    <nav className="fixed bottom-4 left-4 right-4 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-2xl shadow-xl flex justify-around p-1.5 z-50 border border-slate-200/80 dark:border-slate-800/80 transition-all duration-300">
       {navItems.map((item) => {
         const Icon = item.icon;
         const isDashboard = item.href === '/admin/';
@@ -27,14 +27,27 @@ export default function BottomNav() {
           <Link
             key={item.name}
             href={item.href}
-            className={`flex flex-col items-center justify-center transition-all duration-200 py-2.5 px-2 rounded-xl w-full group ${
-              isActive ? 'bg-slate-800/90 shadow-inner' : 'hover:bg-slate-800/40'
+            className={`flex flex-col items-center justify-center transition-all duration-200 py-2 px-2 rounded-xl w-full group ${
+              isActive 
+                ? 'bg-slate-800 dark:bg-slate-800 text-white shadow-sm' 
+                : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/30'
             }`}
           >
-            <Icon size={24} className={`transition-all duration-200 ${isActive ? 'text-white scale-105' : 'text-slate-350 group-hover:text-slate-200'}`} />
-            <span className={`text-[13px] mt-1 font-bold tracking-wide transition-colors duration-200 ${
-              isActive ? 'text-white font-extrabold' : 'text-slate-400'
-            }`}>
+            <Icon 
+              size={20} 
+              className={`transition-all duration-200 ${
+                isActive 
+                  ? 'text-white scale-105' 
+                  : 'text-slate-400 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-200'
+              }`} 
+            />
+            <span 
+              className={`text-[11px] mt-0.5 font-bold tracking-wide transition-colors duration-200 ${
+                isActive 
+                  ? 'text-white font-extrabold' 
+                  : 'text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-200'
+              }`}
+            >
               {item.name}
             </span>
           </Link>
@@ -43,5 +56,6 @@ export default function BottomNav() {
     </nav>
   );
 }
+
 
 

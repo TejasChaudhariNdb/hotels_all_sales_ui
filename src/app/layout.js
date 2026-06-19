@@ -30,6 +30,16 @@ function AuthWrapper({ children }) {
 export default function RootLayout({ children }) {
   const [theme] = useTheme();
 
+  useEffect(() => {
+    // Automatically unregister stale service workers in development mode to prevent Workbox caching errors
+    if ('serviceWorker' in navigator && process.env.NODE_ENV === 'development') {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (let registration of registrations) {
+          registration.unregister();
+        }
+      });
+    }
+  }, []);
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -57,6 +67,7 @@ export default function RootLayout({ children }) {
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-black  transition-colors duration-300`}
+        suppressHydrationWarning
       >
          <AuthProvider>
           <AuthWrapper>
