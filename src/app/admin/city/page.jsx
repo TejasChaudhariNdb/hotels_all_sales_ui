@@ -81,65 +81,63 @@ export default function HotelSalesByCityPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white">
-        <div className="p-4">
-          <div className="text-center py-8">
-            <p className="text-gray-500">Loading...</p>
-          </div>
-        </div>
+      <div className="min-h-screen bg-slate-50/50 flex items-center justify-center">
+        <svg className="animate-spin h-6 w-6 text-slate-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+        </svg>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Header Section */}
-      <br />
+    <div className="min-h-screen bg-slate-50/50 pb-8">
 
-      <div className="bg-white p-4 pb-6 shadow-md m-3 rounded-lg mb-8">
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex-1">
-            
-           
-            <div className="flex items-center space-x-2 mb-2">
-            
-              <h1 className="text-2xl font-bold text-gray-900 mb-3">{city}</h1>
+      {/* Header Card */}
+      <div className="bg-white shadow-sm rounded-xl mb-4">
+        <div className="px-5 py-5">
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <MapPin className="w-4 h-4 text-slate-400" />
+                <h1 className="text-xl font-bold text-slate-900">{city}</h1>
+              </div>
+              <p className="text-sm text-slate-500 font-medium">{dateRangeDisplay}</p>
             </div>
-            <p className="text-sm text-blue-600 font-medium">{dateRangeDisplay}</p>
-          </div>
-          
-          <div className="text-right">
-            <p className="text-xs text-gray-500 mb-1">Total Revenue</p>
-            <p className="text-xl font-bold text-gray-900">
-              {formatINRCurrency(totalRevenue)}
-            </p>
-          </div>
-        </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="bg-blue-50 rounded-2xl p-4">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-blue-100 rounded-xl">
-                <Building2 className="w-5 h-5 text-blue-600" />
-              </div>
-              <div>
-                <p className="text-sm text-blue-700 font-medium">Hotels</p>
-                <p className="text-2xl font-bold text-blue-900">{hotels.length}</p>
-              </div>
+            <div className="text-right">
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Total Revenue</p>
+              <p className="text-xl font-extrabold text-slate-900">
+                {formatINRCurrency(totalRevenue)}
+              </p>
             </div>
           </div>
-          
-          <div className="bg-green-50 rounded-2xl p-4">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-green-100 rounded-xl">
-                <Star className="w-5 h-5 text-green-600" />
+
+          {/* Stats Cards */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-slate-50 rounded-xl p-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-slate-200/60 rounded-lg">
+                  <Building2 className="w-4 h-4 text-slate-600" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Hotels</p>
+                  <p className="text-2xl font-extrabold text-slate-800">{hotels.length}</p>
+                </div>
               </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm text-green-700 font-medium">Top Hotel</p>
-                <p className="text-sm font-bold text-green-900 truncate">
-                  {topPerformer ? topPerformer.hotel_name : 'N/A'}
-                </p>
+            </div>
+
+            <div className="bg-slate-50 rounded-xl p-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-slate-200/60 rounded-lg">
+                  <Star className="w-4 h-4 text-amber-500" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Top Hotel</p>
+                  <p className="text-sm font-bold text-slate-800 truncate">
+                    {topPerformer ? topPerformer.hotel_name : 'N/A'}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -147,73 +145,64 @@ export default function HotelSalesByCityPage() {
       </div>
 
       {/* Hotels List Container */}
-      <div className="px-4 pb-6">
-
+      <div className="px-0 pb-6">
         {/* Hotel List - Ordered by Revenue */}
         <div className="space-y-3">
         {displayedHotels
-          .sort((a, b) => (b.total || 0) - (a.total || 0)) // Order by revenue descending
+          .sort((a, b) => (b.total || 0) - (a.total || 0))
           .map((hotel, index) => (
           <Link
             href={`/admin/hotel?hotel_id=${hotel.hotel_id}&from_date=${fromDate}&to_date=${toDate}`}
             key={index}
-            className="block bg-white rounded-xl p-4 shadow-sm"
+            className="flex items-center bg-white rounded-xl px-4 py-4 shadow-sm hover:shadow-md transition-all duration-200"
           >
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center space-x-3">
-                {/* Rank Number */}
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                  index === 0 ? 'bg-yellow-100 text-yellow-800' :
-                  index === 1 ? 'bg-gray-100 text-gray-800' :
-                  index === 2 ? 'bg-orange-100 text-orange-800' :
-                  'bg-blue-100 text-blue-800'
-                }`}>
-                  {index + 1}
-                </div>
-                
-                <div
-                  className="p-2 rounded-lg"
-                  style={{ backgroundColor: `${COLORS[index % COLORS.length]}20` }}
-                >
-                  <Bed
-                    className="w-5 h-5"
-                    style={{ color: COLORS[index % COLORS.length] }}
-                  />
-                </div>
+            {/* Rank + Icon */}
+            <div className="flex items-center gap-3 mr-4">
+              <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
+                index === 0 ? 'bg-amber-100 text-amber-700' :
+                index === 1 ? 'bg-slate-100 text-slate-600' :
+                index === 2 ? 'bg-orange-100 text-orange-700' :
+                'bg-slate-100 text-slate-500'
+              }`}>
+                {index + 1}
               </div>
-              
               <div
-                className={`flex items-center space-x-1 px-3 py-1 rounded-full text-sm font-medium ${
+                className="p-2 rounded-lg"
+                style={{ backgroundColor: `${COLORS[index % COLORS.length]}18` }}
+              >
+                <Bed
+                  className="w-4 h-4"
+                  style={{ color: COLORS[index % COLORS.length] }}
+                />
+              </div>
+            </div>
+
+            {/* Hotel Info */}
+            <div className="flex-1 min-w-0">
+              <h3 className="text-sm font-bold text-slate-800 truncate">{hotel?.hotel_name}</h3>
+              <div className="flex items-center gap-2 mt-1">
+                <span className="text-xl font-extrabold text-slate-900">{formatINRCurrency(hotel?.total)}</span>
+                <span className="text-xs text-slate-400 font-medium">Prev: {formatINRCurrency(hotel?.previous_total)}</span>
+              </div>
+            </div>
+
+            {/* Trend Badge + Arrow */}
+            <div className="flex items-center gap-2 ml-3 flex-shrink-0">
+              <div
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold ${
                   hotel.trend === "up"
-                    ? "bg-green-100 text-green-700"
-                    : "bg-red-100 text-red-700"
+                    ? "bg-emerald-50 text-emerald-700"
+                    : "bg-rose-50 text-rose-700"
                 }`}
               >
                 {hotel.trend === "up" ? (
-                  <TrendingUp className="w-4 h-4" />
+                  <TrendingUp className="w-3.5 h-3.5" />
                 ) : (
-                  <TrendingDown className="w-4 h-4" />
+                  <TrendingDown className="w-3.5 h-3.5" />
                 )}
                 <span>{hotel?.change_percent}%</span>
               </div>
-            </div>
-
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-lg font-semibold text-gray-900">
-                {hotel?.hotel_name}
-              </h3>
-              <ChevronRight className="w-5 h-5 text-gray-400" />
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-2xl font-bold text-gray-900">
-                  {formatINRCurrency(hotel?.total)}
-                </p>
-              </div>
-              <p className="text-sm text-gray-500">
-                Prev: {formatINRCurrency(hotel?.previous_total)}
-              </p>
+              <ChevronRight className="w-4 h-4 text-slate-300" />
             </div>
           </Link>
         ))}
@@ -223,7 +212,7 @@ export default function HotelSalesByCityPage() {
         {hotels.length > 7 && (
           <button
             onClick={() => setShowAllHotels(!showAllHotels)}
-            className="w-full mt-4 bg-gray-50 rounded-xl p-4 text-blue-600 font-medium flex items-center justify-center space-x-2"
+            className="w-full mt-4 bg-slate-800 hover:bg-slate-900 rounded-xl p-3.5 text-white font-semibold flex items-center justify-center gap-2 text-sm transition-all active:scale-95"
           >
             <span>
               {showAllHotels
@@ -238,9 +227,6 @@ export default function HotelSalesByCityPage() {
           </button>
         )}
       </div>
-      <br />
-      <br />
-      <br />
     </div>
   );
 }

@@ -478,11 +478,11 @@ export default function SalesPage({role,hotel_type}) {
         </div>
       ) : (
         <div className="space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {groupedSales.map((group, groupIndex) => (
               <div
                 key={`group-${groupIndex}`}
-                className="bg-white border border-slate-150 hover:border-slate-250 shadow-sm rounded-lg overflow-hidden flex flex-col justify-between transition-all duration-200"
+                className="bg-white shadow-sm hover:shadow-md rounded-xl overflow-hidden flex flex-col justify-between transition-all duration-200"
                 onDoubleClick={() =>
                   role === "admin" && setVisibleDeleteGroup((prev) =>
                     prev === `${group.hotel.id}-${group.date}` ? null : `${group.hotel.id}-${group.date}`
@@ -491,65 +491,65 @@ export default function SalesPage({role,hotel_type}) {
               >
                 <div>
                   {/* Header */}
-                  <div className={`p-3 flex flex-col gap-0.5 ${
-                    group.is_closed ? 'bg-rose-50/30' : 'bg-slate-50/50'
+                  <div className={`px-4 pt-4 pb-3 flex flex-col gap-1 ${
+                    group.is_closed ? 'bg-rose-50/40' : 'bg-slate-50/60'
                   }`}>
                     <div className="flex justify-between items-start gap-2">
-                      <div className="font-bold text-slate-800 text-xs line-clamp-1 leading-tight">
+                      <div className="font-bold text-slate-800 text-sm line-clamp-2 leading-snug">
                         {group.hotel.name}
                       </div>
                       <div className="flex items-center gap-1.5 flex-shrink-0">
                         {group.is_closed && (
-                          <span className="px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-rose-700 bg-rose-100 rounded flex items-center gap-0.5">
-                            <XCircle size={8} />
+                          <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-rose-700 bg-rose-100 rounded-full flex items-center gap-1">
+                            <XCircle size={10} />
                             CLOSED
                           </span>
                         )}
-                        <span className={`text-xs font-bold ${
+                        <span className={`text-sm font-extrabold ${
                           group.is_closed ? 'text-rose-600' : 'text-slate-900'
                         }`}>
                           {hotel_type === 0
                             ? formatINRCurrency(group.total)
                             : (
-                              <span className="flex items-center gap-1 text-[11px] font-bold">
-                                <Box size={10} className="text-slate-500" /> {parseFloat(group.total)}
+                              <span className="flex items-center gap-1 text-sm font-bold">
+                                <Box size={12} className="text-slate-500" /> {parseFloat(group.total)}
                               </span>
                             )}
                         </span>
                       </div>
                     </div>
 
-                    <div className="flex justify-between items-center text-[9px] font-semibold text-slate-400 uppercase tracking-wider mt-1">
+                    <div className="flex justify-between items-center text-xs font-semibold text-slate-400 mt-0.5">
                       <span>{group.formattedDate}</span>
                       {role === "admin" && visibleDeleteGroup === `${group.hotel.id}-${group.date}` && (
                         <button
                           onClick={() => handleDeleteGroup(group)}
                           title="Delete this sales group"
-                          className="text-rose-500 hover:text-rose-700 p-0.5 rounded hover:bg-rose-50 transition-colors"
+                          className="text-rose-500 hover:text-rose-700 p-1 rounded-lg hover:bg-rose-50 transition-colors"
                         >
-                          <Trash2 size={12} />
+                          <Trash2 size={14} />
                         </button>
                       )}
                     </div>
                   </div>
 
                   {/* Items list */}
-                  <div className="px-3 py-2 divide-y divide-slate-100">
+                  <div className="px-4 py-2 divide-y divide-slate-100">
                     {group.is_closed ? (
-                      <div className="flex items-center justify-center py-3 text-rose-500">
-                        <XCircle size={14} className="mr-1.5 flex-shrink-0" />
-                        <span className="text-[9px] font-semibold uppercase tracking-wider">No sales - Closed</span>
+                      <div className="flex items-center justify-center py-4 text-rose-500">
+                        <XCircle size={16} className="mr-2 flex-shrink-0" />
+                        <span className="text-xs font-semibold uppercase tracking-wide">No sales - Closed</span>
                       </div>
                     ) : (
                       group.items.map((item, index) => (
                         <div
                           key={`item-${index}`}
-                          className="flex justify-between items-center py-1.5"
+                          className="flex justify-between items-center py-2"
                         >
-                          <span className="text-[11px] font-normal text-slate-600">
+                          <span className="text-sm font-normal text-slate-600">
                             {item.sales_category?.name || "N/A"}
                           </span>
-                          <span className="text-[11px] font-semibold text-slate-800">
+                          <span className="text-sm font-semibold text-slate-800">
                             {hotel_type === 0 ? formatINRCurrency(item.amount) : parseFloat(item.amount)}
                           </span>
                         </div>
@@ -562,11 +562,11 @@ export default function SalesPage({role,hotel_type}) {
           </div>
 
           {/* Grand Total - Sleek slate summary bar */}
-          <div className="bg-slate-800 p-3.5 rounded-lg flex justify-between items-center text-white mt-6 shadow-sm">
-            <span className="font-bold text-xs uppercase tracking-wider opacity-90">
+          <div className="bg-slate-800 p-4 rounded-xl flex justify-between items-center text-white mt-6 shadow-md">
+            <span className="font-bold text-sm uppercase tracking-wider opacity-90">
               Grand Total {hotel_type === 0 ? "Amount" : "Boxes"}
             </span>
-            <span className="font-bold text-base tracking-tight">
+            <span className="font-extrabold text-lg tracking-tight">
               {hotel_type === 0 ? formatINRCurrency(grandTotal) : parseFloat(grandTotal)}
             </span>
           </div>

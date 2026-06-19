@@ -286,34 +286,34 @@ const AdminPage = () => {
     `₹${Number(value).toLocaleString('en-IN')}`;
 
   const StatCard = ({ title, value, change, trend, prev }) => (
-    <div className="bg-slate-50 border border-slate-100 rounded-lg p-2.5 shadow-sm hover:shadow transition-all duration-200">
+    <div className="bg-white rounded-xl p-3.5 shadow-sm hover:shadow-md transition-all duration-200">
       <Link href={`/admin/city?city=${title}&from_date=${selectedDate}&to_date=${toDate}`}>
-        <div className="flex items-center justify-between mb-1">
-          <h3 className="text-[10px] font-bold text-slate-550 uppercase tracking-wider">{title}</h3>
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wider">{title}</h3>
           <div
-            className={`flex items-center space-x-0.5 px-1 py-0.5 rounded text-[9px] font-semibold ${
+            className={`flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-bold ${
               trend === "up" ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"
             }`}
           >
             {trend === "up" ? (
-              <TrendingUp className="w-2.5 h-2.5" />
+              <TrendingUp className="w-3 h-3" />
             ) : (
-              <TrendingDown className="w-2.5 h-2.5" />
+              <TrendingDown className="w-3 h-3" />
             )}
             <span>{Math.abs(change)}%</span>
           </div>
         </div>
-        <div className="flex justify-between items-baseline mt-2">
-          <p className="text-sm font-bold text-slate-900">{formatINRCurrency(value)}</p>
-          <p className="text-[9px] font-medium text-slate-400">Prev: {formatINRCurrency(prev)}</p>
+        <div className="mt-1">
+          <p className="text-base font-extrabold text-slate-900 leading-tight">{formatINRCurrency(value)}</p>
+          <p className="text-[11px] font-medium text-slate-400 mt-1">Prev: {formatINRCurrency(prev)}</p>
         </div>
       </Link>
     </div>
   );
 
   const ChartCard = ({ title, children, className = "" }) => (
-    <div className={`bg-white border border-slate-150 rounded-lg p-4 shadow-sm ${className}`}>
-      <h3 className="text-xs font-bold text-slate-800 mb-4 tracking-tight">{title}</h3>
+    <div className={`bg-white rounded-xl p-4 shadow-sm ${className}`}>
+      <h3 className="text-sm font-bold text-slate-800 mb-4 tracking-tight">{title}</h3>
       {children}
     </div>
   );
@@ -403,7 +403,7 @@ const AdminPage = () => {
   return (
     <div className="min-h-screen bg-slate-50/50 pb-8 px-3 md:px-6">
       {/* Header filter container */}
-      <div className="bg-white rounded-lg border border-slate-100 p-4 mb-4 shadow-sm">
+      <div className="bg-white rounded-xl p-4 mb-4 shadow-sm">
         <div className="space-y-3">
           {/* Period Selector */}
           <div className="flex mb-1 overflow-x-auto no-scrollbar whitespace-nowrap gap-1.5 pb-1">
@@ -506,7 +506,7 @@ const AdminPage = () => {
       {/* Main dashboard content */}
       <div className="space-y-4">
         {/* Toggle options & Filters Row */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white p-3 rounded-lg border border-slate-100 shadow-sm">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white p-3 rounded-xl shadow-sm">
           <div className="flex items-center space-x-4">
             <label className="flex items-center space-x-1.5 cursor-pointer">
               <input
@@ -531,7 +531,7 @@ const AdminPage = () => {
         {/* Section 1: KPI Summary & City Performance Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Today's / Period Summary Card */}
-          <div className="lg:col-span-1 bg-white border border-slate-150 rounded-lg p-4 shadow-sm flex flex-col justify-between">
+          <div className="lg:col-span-1 bg-white rounded-xl p-4 shadow-sm flex flex-col justify-between">
             <div>
               <div className="flex justify-between items-center mb-3">
                 <h3 className="text-xs font-bold text-slate-800 tracking-tight">
@@ -584,7 +584,7 @@ const AdminPage = () => {
           </div>
 
           {/* City Performance Cards */}
-          <div className="lg:col-span-2 bg-white border border-slate-150 rounded-lg p-4 shadow-sm flex flex-col justify-between">
+          <div className="lg:col-span-2 bg-white rounded-xl p-4 shadow-sm flex flex-col justify-between">
             <div>
               <h2 className="text-xs font-bold text-slate-800 mb-3.5 flex items-center gap-1.5">
                 <MapPin className="text-slate-500 w-4 h-4" />
@@ -666,64 +666,62 @@ const AdminPage = () => {
         </div>        {/* Section 3: Hotel Performance & Service Distribution */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Hotel Performance */}
-          <div className="lg:col-span-2 bg-white border border-slate-150 rounded-lg p-4 shadow-sm">
+          <div className="lg:col-span-2 bg-white rounded-xl p-4 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xs font-bold text-slate-800">
+              <h2 className="text-sm font-bold text-slate-800">
                 Hotel Performance
               </h2>
-              <span className="text-[10px] px-2 py-0.5 rounded bg-slate-100 font-bold text-slate-500">
+              <span className="text-xs px-2.5 py-1 rounded-full bg-slate-100 font-bold text-slate-500">
                 {hotelCategories.length} hotels
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {displayedHotels.map((hotel, index) => (
                 <Link
                   href={`/admin/hotel?hotel_id=${hotel.hotel_id}&from_date=${selectedDate}&to_date=${toDate}`}
                   key={index}
-                  className="bg-slate-50/50 border border-slate-100 hover:border-slate-200 rounded-lg p-2.5 shadow-sm hover:shadow transition-all duration-205 flex flex-col justify-between"
+                  className="bg-slate-50 hover:bg-slate-100/60 rounded-xl p-3.5 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between"
                 >
                   <div>
-                    <div className="flex items-center justify-between mb-1.5">
-                      <div
-                        className="p-1 rounded bg-slate-100 text-slate-700"
-                      >
-                        <Bed className="w-3 h-3 text-slate-600" />
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="p-1.5 rounded-lg bg-slate-200/60 text-slate-600">
+                        <Bed className="w-3.5 h-3.5" />
                       </div>
                       <div
-                        className={`flex items-center space-x-0.5 px-1 py-0.5 rounded text-[9px] font-semibold ${
+                        className={`flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-bold ${
                           hotel.trend === "up"
                             ? "bg-emerald-50 text-emerald-700"
                             : "bg-rose-50 text-rose-700"
                         }`}
                       >
                         {hotel.trend === "up" ? (
-                          <TrendingUp className="w-2 h-2" />
+                          <TrendingUp className="w-3 h-3" />
                         ) : (
-                          <TrendingDown className="w-2 h-2" />
+                          <TrendingDown className="w-3 h-3" />
                         )}
                         <span>{hotel?.change_percent}%</span>
                       </div>
                     </div>
 
-                    <h3 className="text-[11px] font-bold text-slate-850 truncate">
+                    <h3 className="text-sm font-bold text-slate-800 truncate leading-tight">
                       {hotel?.hotel_name}
                     </h3>
-                    <div className="flex items-center space-x-0.5 text-[9px] text-slate-400 font-semibold mb-1.5">
-                      <MapPin className="w-2 h-2 text-slate-350" />
+                    <div className="flex items-center gap-1 text-xs text-slate-400 font-medium mt-0.5 mb-2">
+                      <MapPin className="w-3 h-3" />
                       <span>{hotel?.city}</span>
                     </div>
                   </div>
 
-                  <div className="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[10px]">
-                    <div className="flex gap-2">
+                  <div className="pt-2 mt-1 border-t border-slate-200/60 flex items-center justify-between">
+                    <div className="flex gap-3">
                       <div>
-                        <span className="text-[8px] text-slate-400 block leading-tight">Current</span>
-                        <span className="font-bold text-slate-850">{formatINRCurrency(hotel?.total)}</span>
+                        <span className="text-[10px] text-slate-400 block leading-tight font-medium">Current</span>
+                        <span className="font-bold text-slate-800 text-sm">{formatINRCurrency(hotel?.total)}</span>
                       </div>
-                      <div className="border-l border-slate-100 pl-2">
-                        <span className="text-[8px] text-slate-400 block leading-tight">Prev</span>
-                        <span className="font-medium text-slate-500">{formatINRCurrency(hotel?.previous_total)}</span>
+                      <div className="border-l border-slate-200/60 pl-3">
+                        <span className="text-[10px] text-slate-400 block leading-tight font-medium">Prev</span>
+                        <span className="font-semibold text-slate-500 text-xs">{formatINRCurrency(hotel?.previous_total)}</span>
                       </div>
                     </div>
                   </div>
@@ -799,20 +797,20 @@ const AdminPage = () => {
             </ChartCard>
 
             {/* Service Categories Grid */}
-            <div className="bg-white border border-slate-150 rounded-lg p-4 shadow-sm space-y-3">
-              <h2 className="text-xs font-bold text-slate-800">
+            <div className="bg-white rounded-xl p-4 shadow-sm space-y-3">
+              <h2 className="text-sm font-bold text-slate-800">
                 Service Categories
               </h2>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-2.5">
                 {serviceCategories.map((service) => (
                   <div
                     key={service.category_name}
-                    className="bg-slate-50 border border-slate-100 rounded-lg p-2.5 flex flex-col justify-between transition-all hover:bg-slate-100/60"
+                    className="bg-slate-50 hover:bg-slate-100/70 rounded-xl p-3 flex flex-col justify-between transition-all"
                   >
-                    <span className="text-[10px] font-semibold text-slate-400 truncate mb-0.5">
+                    <span className="text-xs font-semibold text-slate-400 truncate mb-1">
                       {service.category_name}
                     </span>
-                    <span className="text-xs font-bold text-slate-800 truncate">
+                    <span className="text-sm font-bold text-slate-800 truncate">
                       {formatINRCurrency(service.total)}
                     </span>
                   </div>
