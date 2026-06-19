@@ -1,184 +1,115 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { makePost } from '@/lib/api'
-export default function PinCheck({onSuccess}) {
-  const [pin, setPin] = useState('');
-  const [error, setError] = useState('');
-  const [isVerifying, setIsVerifying] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [shakingError, setShakingError] = useState(false);
-  const inputRef = useRef(null);
-  const correctPin = '123456'; // In production, use secure verification
+import { useState, useEffect } from 'react';
+import { Lock, Fingerprint, ScanFace } from 'lucide-react';
 
-  // Focus input on mount
+export default function PinCheck({ onSuccess }) {
+  const [error, setError] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const [isBiometricSupported, setIsBiometricSupported] = useState(true);
+
+  // Trigger biometric prompt immediately on load
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
+    if (typeof window !== "undefined" && window.PublicKeyCredential) {
+      setIsBiometricSupported(true);
+      const timer = setTimeout(() => {
+        authenticateBiometrics();
+      }, 300);
+      return () => clearTimeout(timer);
+    } else {
+      setIsBiometricSupported(false);
+      setError("Native lock screen is not supported on this browser or device.");
     }
   }, []);
 
-  // Handle individual PIN digits display
-  const pinDisplay = Array(6).fill('').map((_, i) => (
-    <div
-      key={i}
-      className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-        pin.length > i
-          ? 'border-blue-500 bg-blue-500'
-          : 'border-gray-600 bg-transparent'
-      }`}
-    >
-      {pin.length > i && (
-        <div className="w-2 h-2 rounded-full bg-white"></div>
-      )}
-    </div>
-  ));
-
-  const handleNumpadClick = (num) => {
-    if (pin.length < 6) {
-      const newPin = pin + num;
-      setPin(newPin);
-
-      // Auto-submit when 6 digits are entered
-      if (newPin.length === 6) {
-        verifyPin(newPin);
-      }
-    }
-  };
-
-  const handleBackspace = () => {
-    setPin(pin.slice(0, -1));
+  const authenticateBiometrics = async () => {
     setError('');
-  };
-
-  const verifyPin = async (pinToCheck) => {
-    setIsVerifying(true);
-    setError('');
+    setIsAuthenticating(true);
 
     try {
-      // Simulate delay for API verification
-      await new Promise(resolve => setTimeout(resolve, 100));
+      const challenge = new Uint8Array(32);
+      window.crypto.getRandomValues(challenge);
 
-      const res = await makePost('/admin/pin', { pin: pinToCheck });
-      if (res.status) {
-        setIsSuccess(true);
+      // Trigger OS biometric / passcode prompt
+      await navigator.credentials.get({
+        publicKey: {
+          challenge,
+          userVerification: "required",
+        },
+      });
 
-        // Simulate redirection after successful verification
-        setTimeout(() => {
-          setIsSuccess(false);
-          setPin('');
-          setIsVerifying(false);
-          onSuccess();
-        }, 10);
-      } else {
-        throw new Error('Incorrect PIN');
-      }
+      // Verification successful
+      setIsSuccess(true);
+      setTimeout(() => {
+        setIsSuccess(false);
+        setIsAuthenticating(false);
+        onSuccess();
+      }, 200);
 
     } catch (err) {
-      setError(err.message || 'Invalid credentials. Try again.');
-      setShakingError(true);
-      setPin('');
-      setTimeout(() => setShakingError(false), 10600);
-      setIsVerifying(false);
+      console.error("Biometric authentication failed:", err);
+      setError("Authentication failed. Tap the button to retry.");
+      setIsAuthenticating(false);
     }
-  };
-
-
-  // Create numpad buttons
-  const renderNumpad = () => {
-    // Create buttons for numbers 1-9
-    const numButtons = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
-      <button
-        key={num}
-        type="button"
-        onClick={() => handleNumpadClick(num.toString())}
-        disabled={isVerifying || isSuccess || pin.length >= 6}
-        className="w-16 h-16 rounded-full bg-gray-800 text-white text-2xl font-medium flex items-center justify-center hover:bg-gray-700 active:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:opacity-50"
-      >
-        {num}
-      </button>
-    ));
-
-    // Add zero button separately
-    return [...numButtons];
   };
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-gray-900 to-gray-800 flex flex-col justify-center items-center z-50 p-4">
-      <div className={`bg-gray-900 rounded-3xl p-8 w-full max-w-sm flex flex-col items-center shadow-2xl border border-gray-800 ${
-        shakingError ? 'animate-shake' : ''
-      }`}>
-
-        {/* App Logo */}
-        <div className="w-16 h-16 bg-blue-600 rounded-2xl mb-6 flex items-center justify-center">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-          </svg>
+    <div className="fixed inset-0 bg-gradient-to-br from-slate-950 to-slate-900 flex flex-col justify-center items-center z-50 p-4">
+      <div className="bg-slate-900/90 backdrop-blur-md rounded-3xl p-8 w-full max-w-sm flex flex-col items-center shadow-2xl border border-slate-800/80 transition-all duration-300">
+        
+        {/* App Logo / Biometric Indicator */}
+        <div className="relative mb-8">
+          <div className="w-20 h-20 bg-blue-600/10 rounded-3xl border border-blue-500/30 flex items-center justify-center shadow-inner shadow-blue-500/5">
+            {isSuccess ? (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-emerald-500 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+              </svg>
+            ) : isAuthenticating ? (
+              <Fingerprint className="w-10 h-10 text-blue-500 animate-pulse" />
+            ) : (
+              <Lock className="w-10 h-10 text-blue-500" />
+            )}
+          </div>
         </div>
 
         {/* Title */}
-        <h2 className="text-white text-xl mb-8 font-semibold">Enter App PIN</h2>
+        <h2 className="text-white text-xl mb-2 font-bold tracking-tight">App Locked</h2>
+        <p className="text-slate-400 text-xs text-center mb-8 max-w-[240px] leading-relaxed">
+          Please verify your identity using your device Face ID, Touch ID, or lockscreen passcode to unlock the Admin Panel.
+        </p>
 
-        {/* Hidden actual input for accessibility */}
-        <input
-          ref={inputRef}
-          type="password"
-          className="sr-only"
-          value={pin}
-          readOnly
-          aria-hidden="true"
-        />
-
-        {/* PIN Dots Display */}
-        <div className="flex gap-3 mb-8">
-          {pinDisplay}
-        </div>
-
-        {/* Error Message */}
-        <div className="h-6 mb-6">
-          {error && <p className="text-red-500 text-sm font-medium">{error}</p>}
-          {isSuccess && <p className="text-green-500 text-sm font-medium">PIN verified successfully!</p>}
-        </div>
-
-        {/* Numpad */}
-        <div className="grid grid-cols-3 gap-4 mb-4">
-          {renderNumpad()}
-          <div className="col-span-1"></div> {/* Empty space for alignment */}
+        {/* Biometrics Action Panel */}
+        <div className="w-full flex flex-col items-center space-y-4">
           <button
-            type="button"
-            onClick={() => handleNumpadClick('0')}
-            disabled={isVerifying || isSuccess || pin.length >= 6}
-            className="w-16 h-16 rounded-full bg-gray-800 text-white text-2xl font-medium flex items-center justify-center hover:bg-gray-700 active:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:opacity-50"
+            onClick={authenticateBiometrics}
+            disabled={isAuthenticating || isSuccess || !isBiometricSupported}
+            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800/40 text-white font-extrabold py-3.5 px-4 rounded-2xl shadow-md transition-all active:scale-[0.98] flex items-center justify-center gap-2.5 text-sm"
           >
-            0
-          </button>
-          <div className="col-span-1"></div> {/* Empty space for alignment */}
-        </div>
-
-        {/* Backspace Button */}
-        <div className="flex justify-center mt-2">
-          <button
-            type="button"
-            onClick={handleBackspace}
-            disabled={pin.length === 0 || isVerifying || isSuccess}
-            className="w-16 h-16 rounded-full bg-gray-800 text-white flex items-center justify-center hover:bg-gray-700 active:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:opacity-50"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 001.414.586H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z" />
-            </svg>
+            {isAuthenticating ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                <span>Verifying...</span>
+              </>
+            ) : (
+              <>
+                <ScanFace size={18} />
+                <span>Unlock App</span>
+              </>
+            )}
           </button>
         </div>
 
-        {/* Status Indicator */}
-        {isVerifying && (
-          <div className="mt-6">
-            <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-blue-500"></div>
-          </div>
-        )}
+        {/* Error / Status Messages */}
+        <div className="h-6 mt-6 text-center">
+          {error && <p className="text-rose-500 text-xs font-bold leading-relaxed">{error}</p>}
+          {isSuccess && <p className="text-emerald-500 text-sm font-bold">Identity verified!</p>}
+        </div>
+
       </div>
 
-      <div className="text-gray-500 text-xs mt-8">
-        Secure PIN Authentication
+      <div className="text-slate-500 text-xs mt-8 font-semibold tracking-wider uppercase">
+        Secure Device Authentication
       </div>
     </div>
   );

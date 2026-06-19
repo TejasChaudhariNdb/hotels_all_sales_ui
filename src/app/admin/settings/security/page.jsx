@@ -11,7 +11,8 @@ import {
   CheckCircle,
   Info,
   Database,
-  ShieldAlert
+  ShieldAlert,
+  Fingerprint
 } from "lucide-react";
 import { useState } from "react";
 import { makePost} from "@/lib/api";
@@ -23,6 +24,68 @@ export default function SecurityPage() {
   const [dataEncryption, setDataEncryption] = useState(true);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [errorMessgae, setErrorMessage] = useState("");
+
+  const [biometricEnabled, setBiometricEnabled] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("app_lock_enabled") === "true";
+    }
+    return false;
+  });
+  const [isSettingUpBiometrics, setIsSettingUpBiometrics] = useState(false);
+
+  const handleBiometricToggle = async () => {
+    if (typeof window === "undefined" || !window.PublicKeyCredential) {
+      alert("❌ Native biometric authentication is not supported or enabled on this browser.");
+      return;
+    }
+
+    if (biometricEnabled) {
+      setBiometricEnabled(false);
+      localStorage.setItem("app_lock_enabled", "false");
+      return;
+    }
+
+    setIsSettingUpBiometrics(true);
+    try {
+      const challenge = new Uint8Array(32);
+      window.crypto.getRandomValues(challenge);
+      const userId = new Uint8Array(16);
+      window.crypto.getRandomValues(userId);
+
+      await navigator.credentials.create({
+        publicKey: {
+          challenge,
+          rp: { name: "Heera Group Admin" },
+          user: {
+            id: userId,
+            name: "admin",
+            displayName: "Heera Admin",
+          },
+          pubKeyCredParams: [
+            { alg: -7, type: "public-key" },
+            { alg: -257, type: "public-key" },
+          ],
+          authenticatorSelection: {
+            authenticatorAttachment: "platform",
+            userVerification: "required",
+            residentKey: "preferred",
+          },
+          timeout: 60000,
+          attestation: "none",
+        },
+      });
+
+      setBiometricEnabled(true);
+      localStorage.setItem("app_lock_enabled", "true");
+      alert("✅ Biometric Screen Lock set up successfully!");
+    } catch (err) {
+      console.error("Biometric setup failed:", err);
+      alert("❌ Biometric setup failed or was cancelled.");
+    } finally {
+      setIsSettingUpBiometrics(false);
+    }
+  };
+
 
 
   const handlePasswordChange = async () => {
@@ -169,7 +232,42 @@ export default function SecurityPage() {
     </div>
 
 </> : <>""</>}
-   
+          {/* Biometric / Passkey App Lock Section */}
+          <div className="bg-white rounded-lg shadow-sm p-4">
+            <div className="flex items-center mb-4">
+              <Fingerprint className="text-purple-600 mr-3 animate-pulse" size={20} />
+              <h2 className="text-lg md:text-xl font-semibold text-gray-800">Biometric App Lock</h2>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="flex items-start justify-between">
+                <div className="flex-1 pr-4">
+                  <h3 className="font-medium text-gray-800 text-sm md:text-base">Use Device Security Lock</h3>
+                  <p className="text-xs md:text-sm text-gray-650 mt-1 leading-relaxed">
+                    Require Face ID, Touch ID, or lockscreen passcode when opening the Admin Panel.
+                  </p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer flex-shrink-0">
+                  <input
+                    type="checkbox"
+                    checked={biometricEnabled}
+                    onChange={handleBiometricToggle}
+                    disabled={isSettingUpBiometrics}
+                    className="sr-only peer"
+                  />
+                  <div className="w-10 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-purple-600"></div>
+                </label>
+              </div>
+
+              {isSettingUpBiometrics && (
+                <div className="flex items-center gap-2 text-xs md:text-sm text-purple-650 animate-pulse font-medium">
+                  <div className="animate-spin rounded-full h-3.5 w-3.5 border border-purple-600 border-t-transparent"></div>
+                  <span>Please follow your system biometrics prompt...</span>
+                </div>
+              )}
+            </div>
+          </div>
+
           {/* Data Encryption Section */}
           <div className="bg-white rounded-lg shadow-sm p-4">
             <div className="flex items-center mb-4">
