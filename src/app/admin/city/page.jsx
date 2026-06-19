@@ -107,7 +107,7 @@ export default function HotelSalesByCityPage() {
 
             <div className="text-right">
               <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Total Revenue</p>
-              <p className="text-xl font-extrabold text-slate-900">
+              <p className="text-xl font-extrabold text-emerald-600">
                 {formatINRCurrency(totalRevenue)}
               </p>
             </div>
@@ -145,7 +145,7 @@ export default function HotelSalesByCityPage() {
       </div>
 
       {/* Hotels List Container */}
-      <div className="px-0 pb-6">
+      <div className="pb-6 space-y-3">
         {/* Hotel List - Ordered by Revenue */}
         <div className="space-y-3">
         {displayedHotels
@@ -154,10 +154,11 @@ export default function HotelSalesByCityPage() {
           <Link
             href={`/admin/hotel?hotel_id=${hotel.hotel_id}&from_date=${fromDate}&to_date=${toDate}`}
             key={index}
-            className="flex items-center bg-white rounded-xl px-4 py-4 shadow-sm hover:shadow-md transition-all duration-200"
+            className="block bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-200"
           >
-            {/* Rank + Icon */}
-            <div className="flex items-center gap-3 mr-4">
+            {/* Top row: rank + icon + name + trend + chevron */}
+            <div className="flex items-center gap-3 mb-2">
+              {/* Rank */}
               <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
                 index === 0 ? 'bg-amber-100 text-amber-700' :
                 index === 1 ? 'bg-slate-100 text-slate-600' :
@@ -166,43 +167,51 @@ export default function HotelSalesByCityPage() {
               }`}>
                 {index + 1}
               </div>
+
+              {/* Bed icon */}
               <div
-                className="p-2 rounded-lg"
+                className="p-1.5 rounded-lg flex-shrink-0"
                 style={{ backgroundColor: `${COLORS[index % COLORS.length]}18` }}
               >
                 <Bed
-                  className="w-4 h-4"
+                  className="w-3.5 h-3.5"
                   style={{ color: COLORS[index % COLORS.length] }}
                 />
               </div>
-            </div>
 
-            {/* Hotel Info */}
-            <div className="flex-1 min-w-0">
-              <h3 className="text-sm font-bold text-slate-800 truncate">{hotel?.hotel_name}</h3>
-              <div className="flex items-center gap-2 mt-1">
-                <span className="text-xl font-extrabold text-slate-900">{formatINRCurrency(hotel?.total)}</span>
-                <span className="text-xs text-slate-400 font-medium">Prev: {formatINRCurrency(hotel?.previous_total)}</span>
-              </div>
-            </div>
+              {/* Hotel name — takes all remaining space */}
+              <h3 className="flex-1 text-sm font-bold text-slate-800 truncate">{hotel?.hotel_name}</h3>
 
-            {/* Trend Badge + Arrow */}
-            <div className="flex items-center gap-2 ml-3 flex-shrink-0">
+              {/* Trend badge */}
               <div
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold ${
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold flex-shrink-0 ${
                   hotel.trend === "up"
                     ? "bg-emerald-50 text-emerald-700"
                     : "bg-rose-50 text-rose-700"
                 }`}
               >
                 {hotel.trend === "up" ? (
-                  <TrendingUp className="w-3.5 h-3.5" />
+                  <TrendingUp className="w-3 h-3" />
                 ) : (
-                  <TrendingDown className="w-3.5 h-3.5" />
+                  <TrendingDown className="w-3 h-3" />
                 )}
                 <span>{hotel?.change_percent}%</span>
               </div>
-              <ChevronRight className="w-4 h-4 text-slate-300" />
+
+              {/* Chevron */}
+              <ChevronRight className="w-4 h-4 text-slate-300 flex-shrink-0" />
+            </div>
+
+            {/* Bottom row: current amount + prev */}
+            <div className="pl-[4.5rem] flex items-baseline gap-3">
+              <span className={`text-xl font-extrabold ${
+                hotel.trend === "up" ? "text-emerald-600" : "text-rose-600"
+              }`}>
+                {formatINRCurrency(hotel?.total)}
+              </span>
+              <span className="text-xs text-slate-400 font-medium">
+                Prev: {formatINRCurrency(hotel?.previous_total)}
+              </span>
             </div>
           </Link>
         ))}

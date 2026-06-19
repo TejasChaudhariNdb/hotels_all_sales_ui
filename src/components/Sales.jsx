@@ -498,15 +498,15 @@ export default function SalesPage({role,hotel_type}) {
                       <div className="font-bold text-slate-800 text-sm line-clamp-2 leading-snug">
                         {group.hotel.name}
                       </div>
-                      <div className="flex items-center gap-1.5 flex-shrink-0">
+                      <div className="flex flex-col items-end flex-shrink-0">
                         {group.is_closed && (
-                          <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-rose-700 bg-rose-100 rounded-full flex items-center gap-1">
+                          <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-rose-700 bg-rose-100 rounded-full flex items-center gap-1 mb-1">
                             <XCircle size={10} />
                             CLOSED
                           </span>
                         )}
                         <span className={`text-sm font-extrabold ${
-                          group.is_closed ? 'text-rose-600' : 'text-slate-900'
+                          group.is_closed ? 'text-rose-600' : 'text-emerald-600'
                         }`}>
                           {hotel_type === 0
                             ? formatINRCurrency(group.total)
@@ -516,6 +516,9 @@ export default function SalesPage({role,hotel_type}) {
                               </span>
                             )}
                         </span>
+                        {!group.is_closed && hotel_type === 0 && (
+                          <span className="text-[10px] text-slate-400 font-medium mt-0.5">Total Amount</span>
+                        )}
                       </div>
                     </div>
 
@@ -561,12 +564,12 @@ export default function SalesPage({role,hotel_type}) {
             ))}
           </div>
 
-          {/* Grand Total - Sleek slate summary bar */}
-          <div className="bg-slate-800 p-4 rounded-xl flex justify-between items-center text-white mt-6 shadow-md">
-            <span className="font-bold text-sm uppercase tracking-wider opacity-90">
+          {/* Grand Total */}
+          <div className="bg-emerald-50 border border-emerald-200 p-4 rounded-xl flex justify-between items-center mt-6">
+            <span className="font-bold text-sm text-emerald-800">
               Grand Total {hotel_type === 0 ? "Amount" : "Boxes"}
             </span>
-            <span className="font-extrabold text-lg tracking-tight">
+            <span className="font-extrabold text-lg text-emerald-600 tracking-tight">
               {hotel_type === 0 ? formatINRCurrency(grandTotal) : parseFloat(grandTotal)}
             </span>
           </div>

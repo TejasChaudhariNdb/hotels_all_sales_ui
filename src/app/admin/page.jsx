@@ -85,14 +85,14 @@ const AdminPage = () => {
       if (selectedPeriod) setSelectedPeriod(selectedPeriod);
     }
   }, []);
-  
+
 
   useEffect(() => {
 
     const debounceTimeout = setTimeout(() => {
       fetchData();
 
-      
+
     }, 500); // 500ms debounce
 
     return () => clearTimeout(debounceTimeout); // cleanup previous timeout
@@ -164,10 +164,10 @@ const AdminPage = () => {
         to.setDate(to.getDate() - 1);
         break;
 
-        case "Last Yesterday":
-  from.setDate(from.getDate() - 2);
-  to.setDate(to.getDate() - 2);
-  break;
+      case "Last Yesterday":
+        from.setDate(from.getDate() - 2);
+        to.setDate(to.getDate() - 2);
+        break;
 
       case "Week":
         from = getStartOfWeek(new Date());
@@ -180,9 +180,9 @@ const AdminPage = () => {
         from = getStartOfWeek(to);    // Monday of last week
         break;
 
-        case "14 Days":
-  from.setDate(from.getDate() - 13);
-  break;
+      case "14 Days":
+        from.setDate(from.getDate() - 13);
+        break;
 
       case "Month":
         from = getStartOfMonth(new Date());
@@ -211,7 +211,7 @@ const AdminPage = () => {
         selectedPeriod: period,
       })
     );
-    
+
   };
 
 
@@ -291,9 +291,8 @@ const AdminPage = () => {
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wider">{title}</h3>
           <div
-            className={`flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-bold ${
-              trend === "up" ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"
-            }`}
+            className={`flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-bold ${trend === "up" ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"
+              }`}
           >
             {trend === "up" ? (
               <TrendingUp className="w-3 h-3" />
@@ -319,7 +318,7 @@ const AdminPage = () => {
   );
 
 
-  
+
   const displayedHotels = showAllHotels
     ? hotelCategories
     : hotelCategories.slice(0, 10);
@@ -401,7 +400,7 @@ const AdminPage = () => {
       fill: COLORS[index % COLORS.length]
     }));
   return (
-    <div className="min-h-screen bg-slate-50/50 pb-8 px-3 md:px-6">
+    <div className="min-h-screen bg-slate-50/50 pb-8 px-2 md:px-3">
       {/* Header filter container */}
       <div className="bg-white rounded-xl p-4 mb-4 shadow-sm">
         <div className="space-y-3">
@@ -515,7 +514,7 @@ const AdminPage = () => {
               />
               <span className="text-xs font-semibold text-slate-700">Include Margin</span>
             </label>
-            
+
             <label className="flex items-center space-x-1.5 cursor-pointer">
               <input
                 type="checkbox"
@@ -538,11 +537,10 @@ const AdminPage = () => {
                   {isToday ? "Today's" : "Period"} Summary
                 </h3>
                 <div
-                  className={`flex items-center space-x-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold ${
-                    totalSalesSummary.trend === "up"
-                      ? "bg-emerald-50 text-emerald-700"
-                      : "bg-rose-50 text-rose-700"
-                  }`}
+                  className={`flex items-center space-x-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold ${totalSalesSummary.trend === "up"
+                    ? "bg-emerald-50 text-emerald-700"
+                    : "bg-rose-50 text-rose-700"
+                    }`}
                 >
                   {totalSalesSummary.trend === "up" ? (
                     <TrendingUp className="w-3 h-3" />
@@ -574,9 +572,8 @@ const AdminPage = () => {
                 vs {formatComparedTo(totalSalesSummary?.compared_to?.from, totalSalesSummary?.compared_to?.to)}
               </span>
               <span
-                className={`text-sm font-bold ${
-                  totalSalesSummary.trend === "up" ? "text-emerald-600" : "text-rose-600"
-                }`}
+                className={`text-sm font-bold ${totalSalesSummary.trend === "up" ? "text-emerald-600" : "text-rose-600"
+                  }`}
               >
                 {totalSalesSummary.change_percent}%
               </span>
@@ -689,11 +686,10 @@ const AdminPage = () => {
                         <Bed className="w-3.5 h-3.5" />
                       </div>
                       <div
-                        className={`flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-bold ${
-                          hotel.trend === "up"
-                            ? "bg-emerald-50 text-emerald-700"
-                            : "bg-rose-50 text-rose-700"
-                        }`}
+                        className={`flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-bold ${hotel.trend === "up"
+                          ? "bg-emerald-50 text-emerald-700"
+                          : "bg-rose-50 text-rose-700"
+                          }`}
                       >
                         {hotel.trend === "up" ? (
                           <TrendingUp className="w-3 h-3" />
@@ -717,7 +713,8 @@ const AdminPage = () => {
                     <div className="flex gap-3">
                       <div>
                         <span className="text-[10px] text-slate-400 block leading-tight font-medium">Current</span>
-                        <span className="font-bold text-slate-800 text-sm">{formatINRCurrency(hotel?.total)}</span>
+                        <span className={`font-bold text-sm ${hotel.trend === "up" ? "text-emerald-600" : "text-rose-600"
+                          }`}>{formatINRCurrency(hotel?.total)}</span>
                       </div>
                       <div className="border-l border-slate-200/60 pl-3">
                         <span className="text-[10px] text-slate-400 block leading-tight font-medium">Prev</span>
