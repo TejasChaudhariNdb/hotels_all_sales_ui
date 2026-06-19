@@ -27,7 +27,7 @@ export default function SecurityPage() {
 
   const [biometricEnabled, setBiometricEnabled] = useState(() => {
     if (typeof window !== "undefined") {
-      return localStorage.getItem("app_lock_enabled") === "true";
+      return localStorage.getItem("heera_admin_lock_enabled") === "true";
     }
     return false;
   });
@@ -41,7 +41,7 @@ export default function SecurityPage() {
 
     if (biometricEnabled) {
       setBiometricEnabled(false);
-      localStorage.setItem("app_lock_enabled", "false");
+      localStorage.setItem("heera_admin_lock_enabled", "false");
       return;
     }
 
@@ -76,7 +76,7 @@ export default function SecurityPage() {
       });
 
       setBiometricEnabled(true);
-      localStorage.setItem("app_lock_enabled", "true");
+      localStorage.setItem("heera_admin_lock_enabled", "true");
       alert("✅ Biometric Screen Lock set up successfully!");
     } catch (err) {
       console.error("Biometric setup failed:", err);

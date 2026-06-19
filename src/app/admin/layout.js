@@ -8,18 +8,27 @@ import { useState, useEffect } from 'react';
 
 function AdminLayout({ children }) {
   const [pinVerified, setPinVerified] = useState(false);
+  const [loadingLockState, setLoadingLockState] = useState(true);
+
   useEffect(() => {
-    // Check if PIN is already verified in this session
-    const isVerified = sessionStorage.getItem('pinVerified');
-    if (isVerified === 'true') {
+    // Check if biometric app lock is active on this device
+    const isLockEnabled = localStorage.getItem('heera_admin_lock_enabled') === 'true';
+    const isVerified = sessionStorage.getItem('pinVerified') === 'true';
+
+    if (!isLockEnabled || isVerified) {
       setPinVerified(true);
     }
+    setLoadingLockState(false);
   }, []);
 
   const handlePinSuccess = () => {
     sessionStorage.setItem('pinVerified', 'true');
     setPinVerified(true);
   };
+
+  if (loadingLockState) {
+    return null;
+  }
 
   if (!pinVerified) {
     return <PinCheck onSuccess={handlePinSuccess} />;
