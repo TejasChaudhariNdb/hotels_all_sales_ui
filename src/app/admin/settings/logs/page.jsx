@@ -163,8 +163,8 @@ export default function LogsPage() {
               <ScrollText className="text-white" size={20} />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">Activity Logs</h1>
-              <p className="text-sm text-gray-500">{filteredLogs.length} entries</p>
+              <h1 className="text-xl md:text-2xl font-bold text-gray-900">Activity Logs</h1>
+              <p className="text-sm md:text-base text-gray-500">{filteredLogs.length} entries</p>
             </div>
           </div>
 
@@ -176,7 +176,7 @@ export default function LogsPage() {
               placeholder="Search activities..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-gray-50 border-0 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+              className="w-full pl-10 pr-4 py-3 bg-gray-50 border-0 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white text-sm md:text-base transition-all"
             />
           </div>
 
@@ -184,7 +184,7 @@ export default function LogsPage() {
           <div className="flex gap-2 overflow-x-auto pb-1">
             <button
               onClick={() => setSelectedFilter("all")}
-              className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
+              className={`px-4 py-2 rounded-lg text-sm md:text-base font-medium whitespace-nowrap transition-all ${
                 selectedFilter === "all"
                   ? "bg-blue-500 text-white shadow-md"
                   : "bg-white text-gray-600 hover:bg-gray-50"
@@ -196,7 +196,7 @@ export default function LogsPage() {
               <button
                 key={type}
                 onClick={() => setSelectedFilter(type)}
-                className={`px-4 py-2  shadow-sm rounded-lg text-sm font-medium whitespace-nowrap transition-all capitalize ${
+                className={`px-4 py-2  shadow-sm rounded-lg text-sm md:text-base font-medium whitespace-nowrap transition-all capitalize ${
                   selectedFilter === type
                     ? "bg-blue-500 text-white shadow-md"
                     : "bg-white text-gray-600 hover:bg-gray-50"
@@ -244,7 +244,7 @@ export default function LogsPage() {
                         <div className="flex-1 min-w-0">
                           {/* Main description */}
                           <div className="flex items-start justify-between gap-3 mb-3">
-                            <p className="font-medium text-gray-900 text-sm leading-relaxed flex-1">
+                            <p className="font-medium text-gray-900 text-sm md:text-base leading-relaxed flex-1">
                               {log.description}
                             </p>
                             
@@ -263,23 +263,23 @@ export default function LogsPage() {
                           
                           {/* Action and target type badges */}
                           <div className="flex items-center gap-2 mb-3">
-                            <span className={`px-2.5 py-1 rounded-full text-xs font-medium capitalize ${getActionColor(log.action)}`}>
+                            <span className={`px-2.5 py-1 rounded-full text-xs md:text-sm font-semibold capitalize ${getActionColor(log.action)}`}>
                               {log.action}
                             </span>
                             
                             {log.target_type && (
-                              <span className="px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">
+                              <span className="px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full text-xs md:text-sm font-semibold">
                                 {getTargetTypeName(log.target_type)}
                               </span>
                             )}
-
+ 
 {log.additional_info && (
                             <div className="flex items-center  ">
                       
                               {log.additional_info.items && (
                                 <div className="flex items-center gap-1.5">
                                   <span className="text-sm">📦</span>
-                                  <span className="text-xs text-gray-600 font-medium">{log.additional_info.items.length} items</span>
+                                  <span className="text-xs md:text-sm text-gray-600 font-medium">{log.additional_info.items.length} items</span>
                                 </div>
                               )}
                             </div>
@@ -292,15 +292,15 @@ export default function LogsPage() {
                               {log.user?.name && (
                                 <div className="flex items-center gap-1.5 text-blue-600">
                                   <span className="text-sm">{log.user.role === 'user' ? '👤' : '👑'}</span>
-                                  <span className="text-xs font-medium">{log.user.name}</span>
+                                  <span className="text-xs md:text-sm font-medium">{log.user.name}</span>
                                 </div>
                               )}
                             </div>
                             
-                            <span className="text-xs text-gray-500 font-medium">
+                            <span className="text-xs md:text-sm text-gray-500 font-medium">
                               {formatDate(log.created_at)}
                             </span>
-                          </div>
+                          </div>   </div>
                           
                           {/* Quick info preview */}
                           {log.additional_info && (
@@ -308,13 +308,13 @@ export default function LogsPage() {
                               {log.additional_info.hotel_id && (
                                 <div className="flex items-center gap-1.5">
                                   <span className="text-sm">🏨</span>
-                                  <span className="text-xs text-gray-600 font-medium">{log.user.hotel.name}</span>
+                                  <span className="text-xs md:text-sm text-gray-600 font-medium">{log.user.hotel.name}</span>
                                 </div>
                               )}
                               {log.additional_info.date && (
                                 <div className="flex items-center gap-1.5">
                                   <span className="text-sm">📅</span>
-                                  <span className="text-xs text-gray-600 font-medium">{formatDateString(log.additional_info.date)}</span>
+                                  <span className="text-xs md:text-sm text-gray-600 font-medium">{formatDateString(log.additional_info.date)}</span>
                                 </div>
                               )}
                       
@@ -325,20 +325,20 @@ export default function LogsPage() {
                       
                       {log.additional_info && isExpanded && (
                         <div className="mt-4 pt-4 border-t border-gray-100">
-                          <p className="text-xs font-medium text-gray-700 mb-3">📋 Additional Details</p>
+                          <p className="text-xs md:text-sm font-medium text-gray-700 mb-3">📋 Additional Details</p>
                           <div className="space-y-3">
                             
                             {/* Formatted key-value pairs */}
                             {Object.entries(formatAdditionalInfo(log.additional_info, log.target_type) || {}).map(([key, value]) => {
                               if (key === 'item_details' && Array.isArray(value)) {
-                                return (
+                                  return (
                                   <div key={key} className="bg-gray-50 rounded-xl p-3">
-                                    <p className="text-xs font-medium text-gray-700 mb-2 capitalize">
+                                    <p className="text-xs md:text-sm font-medium text-gray-700 mb-2 capitalize">
                                       📦 Items ({value.length})
                                     </p>
                                     <div className="space-y-2">
                                       {value.map((item, idx) => (
-                                        <div key={idx} className="bg-white rounded-lg p-2 text-xs">
+                                        <div key={idx} className="bg-white rounded-lg p-2 text-xs md:text-sm">
                                           <div className="grid grid-cols-2 gap-2">
                                             <span className="text-gray-500">ID:</span>
                                             <span className="font-mono">{item.id}</span>
@@ -360,10 +360,10 @@ export default function LogsPage() {
                               
                               return (
                                 <div key={key} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-b-0">
-                                  <span className="text-xs text-gray-500 capitalize font-medium">
+                                  <span className="text-xs md:text-sm text-gray-500 capitalize font-medium">
                                     {key.replace(/_/g, ' ')}:
                                   </span>
-                                  <span className="text-xs text-gray-700 font-mono max-w-32 truncate">
+                                  <span className="text-xs md:text-sm text-gray-700 font-mono max-w-32 truncate">
                                     {typeof value === 'object' ? JSON.stringify(value) : String(value)}
                                   </span>
                                 </div>
@@ -373,26 +373,26 @@ export default function LogsPage() {
                                 {/* Hotel information section */}
                                 {log.user?.hotel && (
                               <div className="bg-blue-50 rounded-xl p-3 mt-3">
-                                <p className="text-xs font-medium text-blue-700 mb-2">🏨 Hotel Information</p>
+                                <p className="text-xs md:text-sm font-medium text-blue-700 mb-2">🏨 Hotel Information</p>
                                 <div className="space-y-2">
                                   <div className="flex justify-between items-center">
-                                    <span className="text-xs text-gray-600">Name:</span>
-                                    <span className="text-xs text-gray-800 font-medium">{log.user.hotel.name}</span>
+                                    <span className="text-xs md:text-sm text-gray-600">Name:</span>
+                                    <span className="text-xs md:text-sm text-gray-800 font-medium">{log.user.hotel.name}</span>
                                   </div>
                                   {log.user.hotel.city && (
                                     <div className="flex justify-between items-center">
-                                      <span className="text-xs text-gray-600">City:</span>
-                                      <span className="text-xs text-gray-800 font-medium">{log.user.hotel.city}</span>
+                                      <span className="text-xs md:text-sm text-gray-600">City:</span>
+                                      <span className="text-xs md:text-sm text-gray-800 font-medium">{log.user.hotel.city}</span>
                                     </div>
                                   )}
                                   <div className="flex justify-between items-center">
-                                    <span className="text-xs text-gray-600">Hotel ID:</span>
-                                    <span className="text-xs text-gray-800 font-mono">#{log.user.hotel.id}</span>
+                                    <span className="text-xs md:text-sm text-gray-600">Hotel ID:</span>
+                                    <span className="text-xs md:text-sm text-gray-800 font-mono">#{log.user.hotel.id}</span>
                                   </div>
                                   {log.user.hotel.hotel_type !== undefined && (
                                     <div className="flex justify-between items-center">
-                                      <span className="text-xs text-gray-600">Type:</span>
-                                      <span className="text-xs text-gray-800 font-medium">
+                                      <span className="text-xs md:text-sm text-gray-600">Type:</span>
+                                      <span className="text-xs md:text-sm text-gray-800 font-medium">
                                         {log.user.hotel.hotel_type === 0 ? 'Standard' : 'Premium'}
                                       </span>
                                     </div>

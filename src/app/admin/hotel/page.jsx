@@ -107,19 +107,19 @@ const HotelCategorySalesPage = () => {
         <div className="px-5 py-5">
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-xl font-bold text-slate-900">{hotelName}</h1>
+              <h1 className="text-xl md:text-2xl font-bold text-slate-900">{hotelName}</h1>
               {dateRange && (
-                <p className="text-sm text-slate-500 font-medium mt-1">{dateRange}</p>
+                <p className="text-sm md:text-base text-slate-500 font-medium mt-1">{dateRange}</p>
               )}
               {meta.selected_days && (
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs md:text-sm text-slate-400 mt-1">
                   {meta.selected_days} of {meta.days_in_month} days selected
                 </p>
               )}
             </div>
             <div className={`text-right px-4 py-2 rounded-xl ${netProfit >= 0 ? 'bg-emerald-50' : 'bg-rose-50'}`}>
-              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Net Profit</p>
-              <p className={`text-xl font-extrabold mt-0.5 ${netProfit >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
+              <p className="text-xs md:text-sm font-semibold text-slate-400 uppercase tracking-wider">Net Profit</p>
+              <p className={`text-xl md:text-2xl font-extrabold mt-0.5 ${netProfit >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
                 ₹{netProfit.toLocaleString("en-IN")}
               </p>
             </div>
@@ -149,8 +149,8 @@ const HotelCategorySalesPage = () => {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Sales</p>
-                    <p className="text-lg font-extrabold text-emerald-600">
+                    <p className="text-xs md:text-sm font-semibold text-slate-400 uppercase tracking-wider">Total Sales</p>
+                    <p className="text-lg md:text-xl font-extrabold text-emerald-600">
                       ₹{totalSales.toLocaleString("en-IN")}
                     </p>
                   </div>
@@ -165,8 +165,8 @@ const HotelCategorySalesPage = () => {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Gross Profit</p>
-                    <p className="text-lg font-extrabold text-slate-700">
+                    <p className="text-xs md:text-sm font-semibold text-slate-400 uppercase tracking-wider">Gross Profit</p>
+                    <p className="text-lg md:text-xl font-extrabold text-slate-700">
                       ₹{totalGrossProfit.toLocaleString("en-IN")}
                     </p>
                   </div>
@@ -181,8 +181,8 @@ const HotelCategorySalesPage = () => {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Expenses</p>
-                    <p className="text-lg font-extrabold text-rose-600">
+                    <p className="text-xs md:text-sm font-semibold text-slate-400 uppercase tracking-wider">Expenses</p>
+                    <p className="text-lg md:text-xl font-extrabold text-rose-600">
                       ₹{(totalExpenses).toLocaleString("en-IN")}
                     </p>
                   </div>
@@ -197,8 +197,8 @@ const HotelCategorySalesPage = () => {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Categories</p>
-                    <p className="text-lg font-extrabold text-slate-800">{sales.length}</p>
+                    <p className="text-xs md:text-sm font-semibold text-slate-400 uppercase tracking-wider">Categories</p>
+                    <p className="text-lg md:text-xl font-extrabold text-slate-800">{sales.length}</p>
                   </div>
                 </div>
               </div>
@@ -211,8 +211,8 @@ const HotelCategorySalesPage = () => {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Net Profit</p>
-                    <p className={`text-lg font-extrabold ${netProfit >= 0 ? 'text-emerald-700' : 'text-rose-700'}`}>
+                    <p className="text-xs md:text-sm font-semibold text-slate-400 uppercase tracking-wider">Net Profit</p>
+                    <p className={`text-lg md:text-xl font-extrabold ${netProfit >= 0 ? 'text-emerald-700' : 'text-rose-700'}`}>
                       ₹{netProfit.toLocaleString("en-IN")}
                     </p>
                   </div>
@@ -226,18 +226,18 @@ const HotelCategorySalesPage = () => {
               {sales.length > 0 && (
                 <div className="bg-white rounded-xl shadow-sm overflow-hidden">
                   <div className="px-5 py-4 bg-emerald-50/50">
-                    <h2 className="text-sm font-bold text-slate-800">Revenue by Category</h2>
+                    <h2 className="text-sm md:text-base font-bold text-slate-800">Revenue by Category</h2>
                   </div>
                   
                   <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-slate-100">
                       <thead>
                         <tr className="bg-slate-50">
-                          <th className="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Category</th>
-                          <th className="px-4 py-3 text-right text-xs font-bold text-slate-400 uppercase tracking-wider">Sales</th>
-                          <th className="px-4 py-3 text-right text-xs font-bold text-slate-400 uppercase tracking-wider">Margin</th>
-                          <th className="px-4 py-3 text-right text-xs font-bold text-slate-400 uppercase tracking-wider">Profit</th>
-                          <th className="px-4 py-3 text-right text-xs font-bold text-slate-400 uppercase tracking-wider">Share</th>
+                          <th className="px-4 py-3 text-left text-xs md:text-sm font-bold text-slate-400 uppercase tracking-wider">Category</th>
+                          <th className="px-4 py-3 text-right text-xs md:text-sm font-bold text-slate-400 uppercase tracking-wider">Sales</th>
+                          <th className="px-4 py-3 text-right text-xs md:text-sm font-bold text-slate-400 uppercase tracking-wider">Margin</th>
+                          <th className="px-4 py-3 text-right text-xs md:text-sm font-bold text-slate-400 uppercase tracking-wider">Profit</th>
+                          <th className="px-4 py-3 text-right text-xs md:text-sm font-bold text-slate-400 uppercase tracking-wider">Share</th>
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-slate-100">
@@ -256,25 +256,25 @@ const HotelCategorySalesPage = () => {
                                       index === 2 ? 'bg-violet-500' :
                                       'bg-slate-300'
                                     }`}></span>
-                                    <span className="text-sm font-medium text-slate-800">
+                                    <span className="text-sm md:text-base font-medium text-slate-800">
                                       {item.category_name}
                                     </span>
                                   </div>
                                 </td>
                                 <td className="px-4 py-3 text-right">
-                                  <span className="text-sm font-bold text-slate-900">
+                                  <span className="text-sm md:text-base font-bold text-slate-900">
                                     ₹{item.amount.toLocaleString("en-IN")}
                                   </span>
                                 </td>
                                 <td className="px-4 py-3 text-right">
-                                  <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold ${
+                                  <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs md:text-sm font-bold ${
                                     item.margin > 0 ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'
                                   }`}>
                                     {item.margin}%
                                   </span>
                                 </td>
                                 <td className="px-4 py-3 text-right">
-                                  <span className={`text-sm font-semibold ${
+                                  <span className={`text-sm md:text-base font-semibold ${
                                     categoryProfit > 0 ? 'text-emerald-600' : 'text-slate-400'
                                   }`}>
                                     ₹{categoryProfit.toLocaleString("en-IN")}
@@ -288,7 +288,7 @@ const HotelCategorySalesPage = () => {
                                         style={{ width: `${percentage}%` }}
                                       ></div>
                                     </div>
-                                    <span className="text-xs font-semibold text-slate-500 min-w-[2.5rem] text-right">
+                                    <span className="text-xs md:text-sm font-semibold text-slate-500 min-w-[2.5rem] text-right">
                                       {percentage}%
                                     </span>
                                   </div>
@@ -297,13 +297,13 @@ const HotelCategorySalesPage = () => {
                             );
                           })}
                         <tr className="bg-slate-800 font-semibold">
-                          <td className="px-4 py-3 text-sm font-bold text-white">Total Revenue</td>
-                          <td className="px-4 py-3 text-right text-sm font-bold text-emerald-400">₹{totalSales.toLocaleString("en-IN")}</td>
-                          <td className="px-4 py-3 text-right text-sm text-slate-300">
+                          <td className="px-4 py-3 text-sm md:text-base font-bold text-white">Total Revenue</td>
+                          <td className="px-4 py-3 text-right text-sm md:text-base font-bold text-emerald-400">₹{totalSales.toLocaleString("en-IN")}</td>
+                          <td className="px-4 py-3 text-right text-sm md:text-base text-slate-300">
                             Avg: {sales.length > 0 ? (sales.reduce((sum, item) => sum + item.margin, 0) / sales.length).toFixed(1) : 0}%
                           </td>
-                          <td className="px-4 py-3 text-right text-sm font-bold text-emerald-400">₹{totalGrossProfit.toLocaleString("en-IN")}</td>
-                          <td className="px-4 py-3 text-right text-sm text-slate-300">100%</td>
+                          <td className="px-4 py-3 text-right text-sm md:text-base font-bold text-emerald-400">₹{totalGrossProfit.toLocaleString("en-IN")}</td>
+                          <td className="px-4 py-3 text-right text-sm md:text-base text-slate-300">100%</td>
                         </tr>
                       </tbody>
                     </table>
@@ -315,16 +315,16 @@ const HotelCategorySalesPage = () => {
               {Object.keys(expenses).length > 0 && (
                 <div className="bg-white rounded-xl shadow-sm overflow-hidden">
                   <div className="px-5 py-4 bg-rose-50/50">
-                    <h2 className="text-sm font-bold text-slate-800">Expenses Breakdown</h2>
+                    <h2 className="text-sm md:text-base font-bold text-slate-800">Expenses Breakdown</h2>
                   </div>
 
                   <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-slate-100">
                       <thead>
                         <tr className="bg-slate-50">
-                          <th className="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Category</th>
-                          <th className="px-4 py-3 text-right text-xs font-bold text-slate-400 uppercase tracking-wider">Amount</th>
-                          <th className="px-4 py-3 text-right text-xs font-bold text-slate-400 uppercase tracking-wider">Share</th>
+                          <th className="px-4 py-3 text-left text-xs md:text-sm font-bold text-slate-400 uppercase tracking-wider">Category</th>
+                          <th className="px-4 py-3 text-right text-xs md:text-sm font-bold text-slate-400 uppercase tracking-wider">Amount</th>
+                          <th className="px-4 py-3 text-right text-xs md:text-sm font-bold text-slate-400 uppercase tracking-wider">Share</th>
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-slate-100">
@@ -339,11 +339,11 @@ const HotelCategorySalesPage = () => {
                                 <td className="px-4 py-3">
                                   <div className="flex items-center gap-2">
                                     <span className="text-base">{category.icon}</span>
-                                    <span className="text-sm font-medium text-slate-800">{category.label}</span>
+                                    <span className="text-sm md:text-base font-medium text-slate-800">{category.label}</span>
                                   </div>
                                 </td>
                                 <td className="px-4 py-3 text-right">
-                                  <span className="text-sm font-bold text-slate-900">
+                                  <span className="text-sm md:text-base font-bold text-slate-900">
                                     ₹{(amount).toLocaleString("en-IN")}
                                   </span>
                                 </td>
@@ -355,20 +355,20 @@ const HotelCategorySalesPage = () => {
                                         style={{ width: `${percentage}%` }}
                                       ></div>
                                     </div>
-                                    <span className="text-xs font-semibold text-slate-500 min-w-[2.5rem] text-right">{percentage}%</span>
+                                    <span className="text-xs md:text-sm font-semibold text-slate-500 min-w-[2.5rem] text-right">{percentage}%</span>
                                   </div>
                                 </td>
                               </tr>
                             );
                           })}
                         <tr className="bg-slate-800">
-                          <td className="px-4 py-3 text-sm font-bold text-white">Total Expenses</td>
+                          <td className="px-4 py-3 text-sm md:text-base font-bold text-white">Total Expenses</td>
                           <td className="px-4 py-3 text-right">
-                            <span className="text-sm font-bold text-rose-400">
+                            <span className="text-sm md:text-base font-bold text-rose-400">
                               ₹{(totalExpenses).toLocaleString("en-IN")}
                             </span>
                           </td>
-                          <td className="px-4 py-3 text-right text-sm font-bold text-slate-300">100%</td>
+                          <td className="px-4 py-3 text-right text-sm md:text-base font-bold text-slate-300">100%</td>
                         </tr>
                       </tbody>
                     </table>

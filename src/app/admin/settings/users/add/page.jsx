@@ -81,12 +81,12 @@ export default function AddUserPage() {
 
   const renderBusinessSelect = () => (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="block text-sm md:text-base font-semibold text-gray-700 mb-2">
         Assign Business*
       </label>
       <select
         name="hotel_id"
-        className="text-black w-full border border-gray-300 p-4 rounded-lg text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all appearance-none bg-white"
+        className="text-black w-full border border-gray-300 p-4 rounded-lg text-base md:text-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all appearance-none bg-white font-medium"
         value={formData.hotel_id}
         onChange={handleChange}
         required
@@ -114,13 +114,13 @@ export default function AddUserPage() {
       <div className="rounded-xl shadow-lg bg-white">
         {/* Header */}
         <div className="text-center mb-8 pt-4">
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">Add New User</h1>
-          <p className="text-gray-600 text-sm">Fill in the details to create a new user account</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Add New User</h1>
+          <p className="text-gray-600 text-sm md:text-base font-medium">Fill in the details to create a new user account</p>
         </div>
 
         {/* Message Display */}
         {message && (
-          <div className={`mb-6 p-4 rounded-lg text-center font-medium ${
+          <div className={`mb-6 p-4 rounded-lg text-center font-medium text-sm md:text-base ${
             messageType === 'success'
               ? 'bg-green-100 text-green-800 border border-green-200'
               : 'bg-red-100 text-rose-800 border border-red-200'
@@ -134,14 +134,14 @@ export default function AddUserPage() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Name Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm md:text-base font-semibold text-gray-700 mb-2">
                 Full Name *
               </label>
               <input
                 type="text"
                 name="name"
                 placeholder="Enter full name"
-                className="text-black w-full border border-gray-300 p-4 rounded-lg text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                className="text-black w-full border border-gray-300 p-4 rounded-lg text-base md:text-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 value={formData.name}
                 onChange={handleChange}
                 required
@@ -150,14 +150,14 @@ export default function AddUserPage() {
 
             {/* Phone Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm md:text-base font-semibold text-gray-700 mb-2">
                 Phone Number *
               </label>
               <input
                 type="tel"
                 name="phone"
                 placeholder="Enter phone number"
-                className="text-black w-full border border-gray-300 p-4 rounded-lg text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                className="text-black w-full border border-gray-300 p-4 rounded-lg text-base md:text-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 value={formData.phone}
                 onChange={handleChange}
                 required
@@ -166,7 +166,7 @@ export default function AddUserPage() {
 
             {/* Password Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm md:text-base font-semibold text-gray-700 mb-2">
                 Password *
               </label>
               <div className="relative">
@@ -174,7 +174,7 @@ export default function AddUserPage() {
                   type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="Enter password"
-                  className="text-black w-full border border-gray-300 p-4 pr-12 rounded-lg text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  className="text-black w-full border border-gray-300 p-4 pr-12 rounded-lg text-base md:text-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                   value={formData.password}
                   onChange={handleChange}
                   required
@@ -196,7 +196,7 @@ export default function AddUserPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full py-4 px-6 rounded-lg font-semibold text-lg transition-all ${
+              className={`w-full py-4 px-6 rounded-lg font-semibold text-base md:text-lg transition-all ${
                 isLoading
                   ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
                   : 'bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 shadow-lg hover:shadow-xl'

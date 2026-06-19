@@ -78,14 +78,14 @@ export default function SecurityPage() {
           {/* Password Change Section */}
           <div className="bg-white rounded-lg shadow-sm p-4">
             <div className="flex items-center mb-4">
-              <Key className="text-blue-600 mr-3" size={20} />
-              <h2 className="text-lg font-semibold text-gray-800">Change Password</h2>
+              <Key className="text-blue-600 mr-3 animate-pulse" size={20} />
+              <h2 className="text-lg md:text-xl font-semibold text-gray-800">Change Password</h2>
             </div>
             
             <div className="space-y-4">
               {/* Old Password */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm md:text-base font-medium text-gray-700 mb-2">
                   Current Password
                 </label>
                 <div className="relative">
@@ -93,7 +93,7 @@ export default function SecurityPage() {
                     type={showOldPassword ? "text" : "password"}
                     value={oldPassword}
                     onChange={(e) => setOldPassword(e.target.value)}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-10"
+                    className="w-full px-3 py-2 text-sm md:text-base border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-10"
                     placeholder="Enter current password"
                   />
                   <button
@@ -108,7 +108,7 @@ export default function SecurityPage() {
 
               {/* New Password */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm md:text-base font-medium text-gray-700 mb-2">
                   New Password
                 </label>
                 <div className="relative">
@@ -116,7 +116,7 @@ export default function SecurityPage() {
                     type={showNewPassword ? "text" : "password"}
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full text-black px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-10"
+                    className="w-full text-black px-3 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-10"
                     placeholder="Enter new password"
                   />
                   <button
@@ -132,7 +132,7 @@ export default function SecurityPage() {
               <button
                 onClick={handlePasswordChange}
                 disabled={isChangingPassword}
-                className="w-full bg-blue-600 text-white px-4 py-2 text-sm rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                className="w-full bg-blue-600 text-white px-4 py-2 text-sm md:text-base rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
               >
                 {isChangingPassword ? (
                   <>
@@ -174,13 +174,13 @@ export default function SecurityPage() {
           <div className="bg-white rounded-lg shadow-sm p-4">
             <div className="flex items-center mb-4">
               <Database className="text-green-600 mr-3" size={20} />
-              <h2 className="text-lg font-semibold text-gray-800">Data Encryption</h2>
+              <h2 className="text-lg md:text-xl font-semibold text-gray-800">Data Encryption</h2>
             </div>
             
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1 pr-4">
-                <h3 className="font-medium text-gray-800 text-sm">Enable Data Encryption</h3>
-                <p className="text-xs text-gray-600 mt-1">
+                <h3 className="font-medium text-gray-800 text-sm md:text-base">Enable Data Encryption</h3>
+                <p className="text-xs md:text-sm text-gray-600 mt-1">
                   All data stored in encrypted format for maximum security
                 </p>
               </div>
@@ -202,21 +202,21 @@ export default function SecurityPage() {
                   <div className="flex-1">
                     <div className="flex">
                     <CheckCircle className="text-green-600 mr-2 mt-0.5 flex-shrink-0" size={16} />
-                    <h4 className="font-medium text-green-800 mb-2 text-sm">Encryption Active - AES-256</h4>
+                    <h4 className="font-medium text-green-800 mb-2 text-sm md:text-base">Encryption Active - AES-256</h4>
              
                     </div>
-                         <p className="text-xs text-green-700 mb-3">
+                         <p className="text-xs md:text-sm text-green-700 mb-3">
                       Your data is safe and decrypted only with your key
                     </p>
                     
                 <div className="bg-white p-2 rounded border">
-                      <p className="text-xs text-gray-600 mb-1">Original Data:</p>
-                      <div className="text-xs bg-gray-100 p-2 rounded mb-2 text-black break-all">
+                      <p className="text-xs md:text-sm text-gray-600 mb-1">Original Data:</p>
+                      <div className="text-xs md:text-sm bg-gray-100 p-2 rounded mb-2 text-black break-all">
                         {`{hotel: "Hotel", today_sales: "34000"}`}
                       </div>
                       
-                      <p className="text-xs text-gray-600 mb-1">Encrypted (AES-256):</p>
-                      <div className="text-xs bg-gray-100 p-2 rounded text-green-600 break-all">
+                      <p className="text-xs md:text-sm text-gray-600 mb-1">Encrypted (AES-256):</p>
+                      <div className="text-xs md:text-sm bg-gray-100 p-2 rounded text-green-600 break-all">
                         U2FsdGVkX1+vupppZksvRf5pq5g5XjFRIipRkwB0K1Y=
                       </div>
                     </div>
@@ -231,8 +231,8 @@ export default function SecurityPage() {
                 <div className="flex items-start">
                   <AlertTriangle className="text-yellow-600 mr-2 mt-0.5 flex-shrink-0" size={16} />
                   <div>
-                    <h4 className="font-medium text-yellow-800 text-sm">Encryption Disabled</h4>
-                    <p className="text-xs text-yellow-700">
+                    <h4 className="font-medium text-yellow-800 text-sm md:text-base">Encryption Disabled</h4>
+                    <p className="text-xs md:text-sm text-yellow-700">
                       Your data is stored in plain text. Enable encryption for better security.
                     </p>
                   </div>
@@ -245,7 +245,7 @@ export default function SecurityPage() {
           <div className="bg-white rounded-lg shadow-sm p-4">
             <div className="flex items-center mb-4">
               <ShieldAlert className="text-red-600 mr-3" size={20} />
-              <h2 className="text-lg font-semibold text-gray-800">Emergency Controls</h2>
+              <h2 className="text-lg md:text-xl font-semibold text-gray-800">Emergency Controls</h2>
             </div>
             
             <div className="space-y-4">
@@ -253,8 +253,8 @@ export default function SecurityPage() {
                 <div className="flex items-start">
                   <Info className="text-orange-600 mr-2 mt-0.5 flex-shrink-0" size={16} />
                   <div>
-                    <h4 className="font-medium text-orange-800 text-sm">Security Notice</h4>
-                    <p className="text-xs text-orange-700">
+                    <h4 className="font-medium text-orange-800 text-sm md:text-base">Security Notice</h4>
+                    <p className="text-xs md:text-sm text-orange-700">
                       Use these controls only in case of suspected security threats.
                     </p>
                   </div>
@@ -264,7 +264,7 @@ export default function SecurityPage() {
               <div className="space-y-3">
                 <button
                   onClick={handleDDOSProtection}
-                  className="w-full flex items-center justify-center px-4 py-2 bg-orange-100 text-orange-700 border border-orange-300 rounded-lg hover:bg-orange-200 font-medium transition-colors text-sm"
+                  className="w-full flex items-center justify-center px-4 py-2 bg-orange-100 text-orange-700 border border-orange-300 rounded-lg hover:bg-orange-200 font-medium transition-colors text-sm md:text-base"
                 >
                   <Shield className="mr-2" size={16} />
                   Activate DDOS Protection
@@ -272,7 +272,7 @@ export default function SecurityPage() {
 
                 <button
                   onClick={handleHackForceClose}
-                  className="w-full flex items-center justify-center px-4 py-2 bg-red-100 text-red-700 border border-red-300 rounded-lg hover:bg-red-200 font-medium transition-colors text-sm"
+                  className="w-full flex items-center justify-center px-4 py-2 bg-red-100 text-red-700 border border-red-300 rounded-lg hover:bg-red-200 font-medium transition-colors text-sm md:text-base"
                 >
                   <AlertTriangle className="mr-2" size={16} />
                   Emergency Force Close
@@ -286,8 +286,8 @@ export default function SecurityPage() {
             <div className="flex items-center">
               <CheckCircle className="text-green-600 mr-3 flex-shrink-0" size={20} />
               <div>
-                <h3 className="font-semibold text-gray-800 text-sm">Security Status: Protected</h3>
-                <p className="text-xs text-gray-600">
+                <h3 className="font-semibold text-gray-800 text-sm md:text-base">Security Status: Protected</h3>
+                <p className="text-xs md:text-sm text-gray-600">
                   Your account and data are secured with enterprise-grade protection
                 </p>
               </div>

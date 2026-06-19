@@ -139,7 +139,7 @@ export default function AddCategoryPage() {
               <ArrowLeft size={20} className="text-gray-600"  onClick={() => router.back()}  />
             </button>
             <div>
-            <h1 className="text-2xl font-bold text-gray-900" >
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900" >
                 {isEditMode ? 'Edit Category' : 'Add New Category'}
               </h1>
             </div>
@@ -151,7 +151,7 @@ export default function AddCategoryPage() {
           <div className="space-y-6">
             {/* Category Name Field */}
             <div>
-              <label htmlFor="categoryName" className="block text-sm font-semibold text-gray-700 mb-3">
+              <label htmlFor="categoryName" className="block text-sm md:text-base font-semibold text-gray-700 mb-3">
                 Category Name
               </label>
               <div className="relative">
@@ -164,13 +164,13 @@ export default function AddCategoryPage() {
                   value={categoryName}
                   onChange={(e) => setCategoryName(e.target.value)}
                   placeholder="Enter category name..."
-                  className={`text-black w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all ${
+                  className={`text-black w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm md:text-base transition-all ${
                     errors.categoryName ? 'border-red-300 bg-red-50' : 'border-gray-200'
                   }`}
                 />
               </div>
               {errors.categoryName && (
-                <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                <p className="mt-2 text-sm md:text-base text-red-600 flex items-center gap-1">
                   <X size={14} />
                   {errors.categoryName}
                 </p>
@@ -179,7 +179,7 @@ export default function AddCategoryPage() {
 
  {/* Margin Field */}
  <div>
-              <label htmlFor="margin" className="block text-sm font-semibold text-gray-700 mb-3">
+              <label htmlFor="margin" className="block text-sm md:text-base font-semibold text-gray-700 mb-3">
                 Margin (%)
               </label>
               <div className="relative">
@@ -189,7 +189,7 @@ export default function AddCategoryPage() {
                   value={margin}
                   onChange={(e) => setMargin(e.target.value)}
                   placeholder="Enter margin..."
-                  className={`text-black w-full pr-12 pl-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all ${
+                  className={`text-black w-full pr-12 pl-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm md:text-base transition-all ${
                     errors.margin ? 'border-red-300 bg-red-50' : 'border-gray-200'
                   }`}
                   min="0"
@@ -200,7 +200,7 @@ export default function AddCategoryPage() {
                 </span>
               </div>
               {errors.margin && (
-                <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                <p className="mt-2 text-sm md:text-base text-red-600 flex items-center gap-1">
                   <X size={14} />
                   {errors.margin}
                 </p>
@@ -210,7 +210,7 @@ export default function AddCategoryPage() {
 
             {/* Channel Assignment Field */}
             <div>
-              <label htmlFor="channel" className="block text-sm font-semibold text-gray-700 mb-3">
+              <label htmlFor="channel" className="block text-sm md:text-base font-semibold text-gray-700 mb-3">
                 Assign to Channel
               </label>
               <div className="space-y-3">
@@ -235,7 +235,7 @@ export default function AddCategoryPage() {
                       selectedChannel === option.value ? option.color : 'text-gray-600'
                     }`}>
                       {option.icon}
-                      <span className="font-medium">{option.label}</span>
+                      <span className="font-semibold text-sm md:text-base">{option.label}</span>
                     </div>
                     {selectedChannel === option.value && (
                       <div className={`ml-auto w-5 h-5 rounded-full ${option.color.replace('text-', 'bg-')} flex items-center justify-center`}>
@@ -246,7 +246,7 @@ export default function AddCategoryPage() {
                 ))}
               </div>
               {errors.selectedChannel && (
-                <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                <p className="mt-2 text-sm md:text-base text-red-600 flex items-center gap-1">
                   <X size={14} />
                   {errors.selectedChannel}
                 </p>
@@ -256,7 +256,7 @@ export default function AddCategoryPage() {
             {/* Preview Card */}
             {(categoryName.trim() || selectedChannel) && (
               <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
-                <h3 className="text-sm font-semibold text-gray-700 mb-3">Preview</h3>
+                <h3 className="text-sm md:text-base font-semibold text-gray-700 mb-3">Preview</h3>
                 <div className={`bg-white rounded-lg p-3 shadow-sm border flex items-center gap-3 ${
                   selectedChannelConfig ? selectedChannelConfig.border : 'border-gray-200'
                 }`}>
@@ -266,7 +266,7 @@ export default function AddCategoryPage() {
                     <Tag size={16} />
                   </div>
                   <div className="flex-1">
-                    <span className="font-medium text-gray-900">
+                    <span className="font-bold text-gray-900 text-sm md:text-base">
                       {categoryName.trim() || 'Category name...'}
                     </span>
                     {selectedChannelConfig && (
@@ -274,7 +274,7 @@ export default function AddCategoryPage() {
                         <span className={`text-xs ${selectedChannelConfig.color}`}>
                           {selectedChannelConfig.icon}
                         </span>
-                        <span className={`text-xs ${selectedChannelConfig.color}`}>
+                        <span className={`text-xs ${selectedChannelConfig.color} font-medium`}>
                           {selectedChannelConfig.label}
                         </span>
                       </div>
@@ -289,7 +289,7 @@ export default function AddCategoryPage() {
               <button
                 type="button"
                 onClick={handleSubmit}
-                className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 text-sm md:text-base font-semibold"
               >
                 <Save size={18} />
                 {isEditMode ? 'Update Category' : 'Add Category'}

@@ -51,14 +51,14 @@ export default function UsersPage() {
       <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 py-4 shadow-sm">
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-xl font-bold text-gray-900">Users</h2>
-            <p className="text-sm text-gray-500 mt-0.5">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900">Users</h2>
+            <p className="text-sm md:text-base text-gray-500 mt-0.5">
               {users.length} {users.length === 1 ? 'user' : 'users'} total
             </p>
           </div>
           <button
             onClick={handleAddUser}
-            className="flex items-center gap-1.5 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg text-sm font-medium shadow-md hover:shadow-lg active:scale-95 transition-all">
+            className="flex items-center gap-1.5 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg text-sm md:text-base font-semibold shadow-md hover:shadow-lg active:scale-95 transition-all">
             <UserPlus size={18} />
             <span>Add</span>
           </button>
@@ -86,15 +86,15 @@ export default function UsersPage() {
                   {/* Left Side - User Info */}
                   <div className="flex items-center gap-3 flex-1 min-w-0">
                     {/* Avatar */}
-                    <div className="flex-shrink-0 w-11 h-11 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
-                      <span className="text-white font-semibold text-base">
+                    <div className="flex-shrink-0 w-11 h-11 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-inner">
+                      <span className="text-white font-bold text-base md:text-lg">
                         {user.name.charAt(0).toUpperCase()}
                       </span>
                     </div>
 
                     {/* User Details */}
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-gray-900 text-base truncate">
+                      <p className="font-bold text-gray-900 text-base md:text-lg truncate">
                         {user.name}
                       </p>
                       {/* <p className="text-sm text-gray-500 truncate">
@@ -104,8 +104,8 @@ export default function UsersPage() {
 
                             {/* Hotel Name */}
                             <div className="flex items-center gap-1.5 mt-1">
-                            <span  className="text-sm text-gray-500 truncate">{user.phone}</span>
-                        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                            <span  className="text-sm md:text-base text-gray-500 font-medium truncate">{user.phone}</span>
+                        <span className={`text-xs md:text-sm font-bold px-2 py-0.5 rounded-full ${
                           user.hotel?.name 
                             ? 'bg-green-50 text-green-700' 
                             : 'bg-gray-100 text-gray-500'

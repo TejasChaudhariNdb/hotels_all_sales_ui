@@ -665,10 +665,10 @@ const AdminPage = () => {
           {/* Hotel Performance */}
           <div className="lg:col-span-2 bg-white rounded-xl p-4 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-bold text-slate-800">
+              <h2 className="text-sm md:text-base font-bold text-slate-800">
                 Hotel Performance
               </h2>
-              <span className="text-xs px-2.5 py-1 rounded-full bg-slate-100 font-bold text-slate-500">
+              <span className="text-xs md:text-sm px-2.5 py-1 rounded-full bg-slate-100 font-bold text-slate-500">
                 {hotelCategories.length} hotels
               </span>
             </div>
@@ -686,7 +686,7 @@ const AdminPage = () => {
                         <Bed className="w-3.5 h-3.5" />
                       </div>
                       <div
-                        className={`flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-bold ${hotel.trend === "up"
+                        className={`flex items-center gap-1 px-2 py-1 rounded-full text-[11px] md:text-xs font-bold ${hotel.trend === "up"
                           ? "bg-emerald-50 text-emerald-700"
                           : "bg-rose-50 text-rose-700"
                           }`}
@@ -700,10 +700,10 @@ const AdminPage = () => {
                       </div>
                     </div>
 
-                    <h3 className="text-sm font-bold text-slate-800 truncate leading-tight">
+                    <h3 className="text-sm md:text-base font-bold text-slate-800 truncate leading-tight">
                       {hotel?.hotel_name}
                     </h3>
-                    <div className="flex items-center gap-1 text-xs text-slate-400 font-medium mt-0.5 mb-2">
+                    <div className="flex items-center gap-1 text-xs md:text-sm text-slate-400 font-medium mt-0.5 mb-2">
                       <MapPin className="w-3 h-3" />
                       <span>{hotel?.city}</span>
                     </div>
@@ -712,13 +712,13 @@ const AdminPage = () => {
                   <div className="pt-2 mt-1 border-t border-slate-200/60 flex items-center justify-between">
                     <div className="flex gap-3">
                       <div>
-                        <span className="text-[10px] text-slate-400 block leading-tight font-medium">Current</span>
-                        <span className={`font-bold text-sm ${hotel.trend === "up" ? "text-emerald-600" : "text-rose-600"
+                        <span className="text-[10px] md:text-xs text-slate-400 block leading-tight font-medium">Current</span>
+                        <span className={`font-bold text-sm md:text-base ${hotel.trend === "up" ? "text-emerald-600" : "text-rose-600"
                           }`}>{formatINRCurrency(hotel?.total)}</span>
                       </div>
                       <div className="border-l border-slate-200/60 pl-3">
-                        <span className="text-[10px] text-slate-400 block leading-tight font-medium">Prev</span>
-                        <span className="font-semibold text-slate-500 text-xs">{formatINRCurrency(hotel?.previous_total)}</span>
+                        <span className="text-[10px] md:text-xs text-slate-400 block leading-tight font-medium">Prev</span>
+                        <span className="font-semibold text-slate-500 text-xs md:text-sm">{formatINRCurrency(hotel?.previous_total)}</span>
                       </div>
                     </div>
                   </div>
@@ -795,7 +795,7 @@ const AdminPage = () => {
 
             {/* Service Categories Grid */}
             <div className="bg-white rounded-xl p-4 shadow-sm space-y-3">
-              <h2 className="text-sm font-bold text-slate-800">
+              <h2 className="text-sm md:text-base font-bold text-slate-800">
                 Service Categories
               </h2>
               <div className="grid grid-cols-2 gap-2.5">
@@ -804,10 +804,10 @@ const AdminPage = () => {
                     key={service.category_name}
                     className="bg-slate-50 hover:bg-slate-100/70 rounded-xl p-3 flex flex-col justify-between transition-all"
                   >
-                    <span className="text-xs font-semibold text-slate-400 truncate mb-1">
+                    <span className="text-xs md:text-sm font-semibold text-slate-400 truncate mb-1">
                       {service.category_name}
                     </span>
-                    <span className="text-sm font-bold text-slate-800 truncate">
+                    <span className="text-sm md:text-base font-bold text-slate-800 truncate">
                       {formatINRCurrency(service.total)}
                     </span>
                   </div>

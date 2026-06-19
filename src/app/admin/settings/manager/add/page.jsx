@@ -136,11 +136,11 @@ export default function AddManagerPage() {
       <div className="max-w-md mx-auto">
         {/* Header */}
         <div className="text-center mb-8 pt-6">
-          <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+          <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg animate-bounce">
             <User className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Add Manager</h1>
-          <p className="text-gray-600 text-sm">Create and assign business access</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Add Manager</h1>
+          <p className="text-gray-600 text-sm md:text-base font-medium">Create and assign business access</p>
         </div>
 
         {/* Message Alert */}
@@ -155,7 +155,7 @@ export default function AddManagerPage() {
             ) : (
               <AlertCircle className="w-5 h-5 flex-shrink-0" />
             )}
-            <span className="text-sm font-medium">{message}</span>
+            <span className="text-sm md:text-base font-medium">{message}</span>
           </div>
         )}
 
@@ -164,15 +164,15 @@ export default function AddManagerPage() {
           <div className="p-6 space-y-6">
             {/* Name Field */}
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                <User className="w-4 h-4" />
+              <label className="text-sm md:text-base font-semibold text-gray-700 flex items-center gap-2">
+                <User className="w-4 h-4 md:w-5 md:h-5" />
                 Full Name
               </label>
               <input
                 type="text"
                 name="name"
                 placeholder="Enter full name"
-                className="text-black w-full bg-gray-50 border-0 p-4 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all duration-200"
+                className="text-black w-full bg-gray-50 border-0 p-4 rounded-xl text-sm md:text-base focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all duration-200"
                 value={formData.name}
                 onChange={handleChange}
                 required
@@ -181,15 +181,15 @@ export default function AddManagerPage() {
 
             {/* Phone Field */}
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                <Phone className="w-4 h-4" />
+              <label className="text-sm md:text-base font-semibold text-gray-700 flex items-center gap-2">
+                <Phone className="w-4 h-4 md:w-5 md:h-5" />
                 Phone Number
               </label>
               <input
                 type="tel"
                 name="phone"
                 placeholder="Enter phone number"
-                className="text-black w-full bg-gray-50 border-0 p-4 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all duration-200"
+                className="text-black w-full bg-gray-50 border-0 p-4 rounded-xl text-sm md:text-base focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all duration-200"
                 value={formData.phone}
                 onChange={handleChange}
                 required
@@ -198,8 +198,8 @@ export default function AddManagerPage() {
 
             {/* Password Field */}
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                <Lock className="w-4 h-4" />
+              <label className="text-sm md:text-base font-semibold text-gray-700 flex items-center gap-2">
+                <Lock className="w-4 h-4 md:w-5 md:h-5" />
                 Password
               </label>
               <div className="relative">
@@ -207,7 +207,7 @@ export default function AddManagerPage() {
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   placeholder="Enter password"
-                  className="text-black w-full bg-gray-50 border-0 p-4 pr-12 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all duration-200"
+                  className="text-black w-full bg-gray-50 border-0 p-4 pr-12 rounded-xl text-sm md:text-base focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all duration-200"
                   value={formData.password}
                   onChange={handleChange}
                   required
@@ -217,18 +217,18 @@ export default function AddManagerPage() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? <EyeOff className="w-4 h-4 md:w-5 md:h-5" /> : <Eye className="w-4 h-4 md:w-5 md:h-5" />}
                 </button>
               </div>
             </div>
 
             {/* Business Assignment */}
             <div className="space-y-3">
-              <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                <Building2 className="w-4 h-4" />
+              <label className="text-sm md:text-base font-semibold text-gray-700 flex items-center gap-2">
+                <Building2 className="w-4 h-4 md:w-5 md:h-5" />
                 Assign Businesses
                 {formData.hotel_ids.length > 0 && (
-                  <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                  <span className="bg-blue-100 text-blue-800 text-xs md:text-sm px-2 py-1 rounded-full font-bold">
                     {formData.hotel_ids.length} selected
                   </span>
                 )}
@@ -237,7 +237,7 @@ export default function AddManagerPage() {
               {isLoading ? (
                 <div className="bg-gray-50 rounded-xl p-6 text-center">
                   <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-blue-600" />
-                  <p className="text-gray-500 text-sm">Loading businesses...</p>
+                  <p className="text-gray-500 text-sm md:text-base font-medium">Loading businesses...</p>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -248,9 +248,9 @@ export default function AddManagerPage() {
                         onClick={() => toggleCategory(categoryName)}
                         className="w-full p-4 text-left flex items-center justify-between hover:bg-gray-100 transition-colors"
                       >
-                        <span className="font-semibold text-gray-800">{categoryName}</span>
+                        <span className="font-bold text-gray-800 text-sm md:text-base">{categoryName}</span>
                         <div className="flex items-center gap-2">
-                          <span className="text-xs text-gray-500 bg-white px-2 py-1 rounded-full">
+                          <span className="text-xs md:text-sm text-gray-500 bg-white px-2 py-1 rounded-full font-bold">
                             {businesses.length}
                           </span>
                           <div className={`transform transition-transform ${expandedCategories[categoryName] ? 'rotate-180' : ''}`}>
@@ -266,8 +266,8 @@ export default function AddManagerPage() {
                               key={business.id}
                               className={`flex items-center p-3 rounded-lg cursor-pointer transition-all duration-200 ${
                                 formData.hotel_ids.includes(String(business.id))
-                                  ? 'bg-blue-50 border-2 border-blue-200'
-                                  : 'bg-white border-2 border-gray-200 hover:border-gray-300'
+                                  ? 'bg-blue-50 border-2 border-blue-200 shadow-sm'
+                                  : 'bg-white border-2 border-gray-200 hover:border-gray-300 shadow-xs'
                               }`}
                             >
                               <input
@@ -286,8 +286,8 @@ export default function AddManagerPage() {
                                 )}
                               </div>
                               <div className="flex-1">
-                                <p className="font-medium text-gray-900 text-sm">{business.name}</p>
-                                <p className="text-gray-500 text-xs">{business.city}</p>
+                                <p className="font-semibold text-gray-900 text-sm md:text-base">{business.name}</p>
+                                <p className="text-gray-500 text-xs md:text-sm font-medium">{business.city}</p>
                               </div>
                             </label>
                           ))}
@@ -303,7 +303,7 @@ export default function AddManagerPage() {
             <button
               onClick={handleSubmit}
               disabled={isLoading}
-              className={`w-full py-4 px-6 rounded-xl font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 ${
+              className={`w-full py-4 px-6 rounded-xl font-semibold text-sm md:text-base transition-all duration-200 flex items-center justify-center gap-2 ${
                 isLoading
                   ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
                   : 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'

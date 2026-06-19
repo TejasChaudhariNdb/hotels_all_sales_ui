@@ -278,9 +278,9 @@ export default function SalesPage({role,hotel_type}) {
     <div className="w-full max-w-7xl mx-auto p-3 md:p-6 transition-all duration-300">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-        <h1 className="text-lg font-bold text-slate-800 flex items-center tracking-tight">
+        <h1 className="text-lg md:text-xl font-bold text-slate-800 flex items-center tracking-tight">
           <div className="p-1.5 bg-slate-100 rounded-lg mr-2 text-slate-700">
-            <Calendar size={16} />
+            <Calendar size={18} />
           </div>
           <span>{hotel_type === 0 ? "Sales Records" : "Boxes Sales Records"}</span>
         </h1>
@@ -288,9 +288,9 @@ export default function SalesPage({role,hotel_type}) {
           {role === "admin" && <SalesFilter onApplyFilter={handleFilter} hotel_type={hotel_type} />}
           <button
             onClick={exportToCSV}
-            className="bg-slate-800 hover:bg-slate-900 text-white px-3 py-1.5 rounded-lg flex items-center justify-center text-xs font-semibold shadow-sm active:scale-95 transition-all duration-200 h-9"
+            className="bg-slate-800 hover:bg-slate-900 text-white px-3 py-1.5 rounded-lg flex items-center justify-center text-xs md:text-sm font-semibold shadow-sm active:scale-95 transition-all duration-200 h-9"
           >
-            <Download size={13} className="mr-1.5" />
+            <Download size={14} className="mr-1.5" />
             <span>Export CSV</span>
           </button>
 
@@ -495,34 +495,34 @@ export default function SalesPage({role,hotel_type}) {
                     group.is_closed ? 'bg-rose-50/40' : 'bg-slate-50/60'
                   }`}>
                     <div className="flex justify-between items-start gap-2">
-                      <div className="font-bold text-slate-800 text-sm line-clamp-2 leading-snug">
+                      <div className="font-bold text-slate-800 text-sm md:text-base line-clamp-2 leading-snug">
                         {group.hotel.name}
                       </div>
                       <div className="flex flex-col items-end flex-shrink-0">
                         {group.is_closed && (
-                          <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-rose-700 bg-rose-100 rounded-full flex items-center gap-1 mb-1">
+                          <span className="px-2 py-0.5 text-[10px] md:text-xs font-bold uppercase tracking-wider text-rose-700 bg-rose-100 rounded-full flex items-center gap-1 mb-1">
                             <XCircle size={10} />
                             CLOSED
                           </span>
                         )}
-                        <span className={`text-sm font-extrabold ${
+                        <span className={`text-sm md:text-base font-extrabold ${
                           group.is_closed ? 'text-rose-600' : 'text-emerald-600'
                         }`}>
                           {hotel_type === 0
                             ? formatINRCurrency(group.total)
                             : (
-                              <span className="flex items-center gap-1 text-sm font-bold">
+                              <span className="flex items-center gap-1 text-sm md:text-base font-bold">
                                 <Box size={12} className="text-slate-500" /> {parseFloat(group.total)}
                               </span>
                             )}
                         </span>
                         {!group.is_closed && hotel_type === 0 && (
-                          <span className="text-[10px] text-slate-400 font-medium mt-0.5">Total Amount</span>
+                          <span className="text-[10px] md:text-xs text-slate-400 font-medium mt-0.5">Total Amount</span>
                         )}
                       </div>
                     </div>
 
-                    <div className="flex justify-between items-center text-xs font-semibold text-slate-400 mt-0.5">
+                    <div className="flex justify-between items-center text-xs md:text-sm font-semibold text-slate-400 mt-0.5">
                       <span>{group.formattedDate}</span>
                       {role === "admin" && visibleDeleteGroup === `${group.hotel.id}-${group.date}` && (
                         <button
@@ -541,7 +541,7 @@ export default function SalesPage({role,hotel_type}) {
                     {group.is_closed ? (
                       <div className="flex items-center justify-center py-4 text-rose-500">
                         <XCircle size={16} className="mr-2 flex-shrink-0" />
-                        <span className="text-xs font-semibold uppercase tracking-wide">No sales - Closed</span>
+                        <span className="text-xs md:text-sm font-semibold uppercase tracking-wide">No sales - Closed</span>
                       </div>
                     ) : (
                       group.items.map((item, index) => (
@@ -549,10 +549,10 @@ export default function SalesPage({role,hotel_type}) {
                           key={`item-${index}`}
                           className="flex justify-between items-center py-2"
                         >
-                          <span className="text-sm font-normal text-slate-600">
+                          <span className="text-sm md:text-base font-normal text-slate-600">
                             {item.sales_category?.name || "N/A"}
                           </span>
-                          <span className="text-sm font-semibold text-slate-800">
+                          <span className="text-sm md:text-base font-semibold text-slate-800">
                             {hotel_type === 0 ? formatINRCurrency(item.amount) : parseFloat(item.amount)}
                           </span>
                         </div>
@@ -566,10 +566,10 @@ export default function SalesPage({role,hotel_type}) {
 
           {/* Grand Total */}
           <div className="bg-emerald-50 border border-emerald-200 p-4 rounded-xl flex justify-between items-center mt-6">
-            <span className="font-bold text-sm text-emerald-800">
+            <span className="font-bold text-sm md:text-base text-emerald-800">
               Grand Total {hotel_type === 0 ? "Amount" : "Boxes"}
             </span>
-            <span className="font-extrabold text-lg text-emerald-600 tracking-tight">
+            <span className="font-extrabold text-lg md:text-xl text-emerald-600 tracking-tight">
               {hotel_type === 0 ? formatINRCurrency(grandTotal) : parseFloat(grandTotal)}
             </span>
           </div>

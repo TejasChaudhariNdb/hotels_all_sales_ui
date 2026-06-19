@@ -96,7 +96,7 @@ function SettingItem({ icon, title, link, accentClass }) {
         <div className={`p-2 rounded-xl mr-3.5 ${accentClass}`}>
           {icon}
         </div>
-        <span className="text-slate-850 font-bold text-sm tracking-wide">{title}</span>
+        <span className="text-slate-850 font-bold text-sm md:text-base tracking-wide">{title}</span>
       </div>
       <ArrowRight className="text-slate-400" size={16} />
     </Link>

@@ -176,8 +176,8 @@ export default function AdminExpensesDashboard() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Expenses Dashboard</h1>
-            <p className="text-sm text-gray-600">Hotel Expenses Overview</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Expenses Dashboard</h1>
+            <p className="text-sm md:text-base text-gray-600">Hotel Expenses Overview</p>
           </div>
           
           <div className="flex items-center gap-2">
@@ -193,12 +193,12 @@ export default function AdminExpensesDashboard() {
         {/* Month/Year Selector */}
         <div className="bg-white rounded-2xl p-4 shadow-md border border-gray-100 mb-4">
           <div className="flex items-center gap-3">
-            <Calendar className="w-5 h-5 text-blue-500" />
+            <Calendar className="w-5 h-5 text-blue-500 animate-pulse" />
             <div className="flex gap-2 flex-1">
               <select
                 value={selectedMonth}
                 onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-                className="flex-1 bg-gray-50 rounded-xl border-0 px-3 py-2 text-sm font-medium focus:bg-white focus:ring-2 focus:ring-blue-500"
+                className="flex-1 bg-gray-50 rounded-xl border-0 px-3 py-2 text-sm md:text-base font-medium focus:bg-white focus:ring-2 focus:ring-blue-500"
               >
                 {months.map((month, i) => (
                   <option key={i + 1} value={i + 1}>
@@ -209,7 +209,7 @@ export default function AdminExpensesDashboard() {
               <select
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                className="bg-gray-50 rounded-xl border-0 px-3 py-2 text-sm font-medium focus:bg-white focus:ring-2 focus:ring-blue-500"
+                className="bg-gray-50 rounded-xl border-0 px-3 py-2 text-sm md:text-base font-medium focus:bg-white focus:ring-2 focus:ring-blue-500"
               >
                 <option value={2024}>2024</option>
                 <option value={2025}>2025</option>
@@ -223,8 +223,8 @@ export default function AdminExpensesDashboard() {
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 shadow-lg text-white mb-4">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <h2 className="text-lg font-semibold opacity-90">Total Network Expenses</h2>
-              <p className="text-3xl font-bold">₹{(summaryData?.total_network_expenses || 0).toLocaleString("en-IN")}</p>
+              <h2 className="text-lg md:text-xl font-semibold opacity-90">Total Network Expenses</h2>
+              <p className="text-3xl md:text-4xl font-bold">₹{(summaryData?.total_network_expenses || 0).toLocaleString("en-IN")}</p>
             </div>
             <div className="text-right">
               <div className="flex items-center gap-1 justify-end mb-1">
@@ -233,26 +233,26 @@ export default function AdminExpensesDashboard() {
                 ) : overallChange < 0 ? (
                   <TrendingDown className="w-4 h-4" />
                 ) : null}
-                <span className="text-sm font-medium">
+                <span className="text-sm md:text-base font-medium">
                   {overallChange !== 0 ? `${Math.abs(overallChange).toFixed(1)}%` : 'No data'}
                 </span>
               </div>
-              <p className="text-sm opacity-75">{summaryData?.total_hotels || 0} Hotels</p>
+              <p className="text-sm md:text-base opacity-75">{summaryData?.total_hotels || 0} Hotels</p>
             </div>
           </div>
           
           <div className="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-white/20">
             <div className="text-center">
-              <p className="text-2xl font-bold">{summaryData?.total_hotels || 0}</p>
-              <p className="text-xs opacity-75">Active Hotels</p>
+              <p className="text-2xl md:text-3xl font-bold">{summaryData?.total_hotels || 0}</p>
+              <p className="text-xs md:text-sm opacity-75">Active Hotels</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold">₹{((summaryData?.average_per_hotel || 0) / 1000).toFixed(0)}K</p>
-              <p className="text-xs opacity-75">Avg per Hotel</p>
+              <p className="text-2xl md:text-3xl font-bold">₹{((summaryData?.average_per_hotel || 0) / 1000).toFixed(0)}K</p>
+              <p className="text-xs md:text-sm opacity-75">Avg per Hotel</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold">{previousTotal ? (overallChange > 0 ? '+' : '') + overallChange.toFixed(1) + '%' : 'N/A'}</p>
-              <p className="text-xs opacity-75">vs Last Month</p>
+              <p className="text-2xl md:text-3xl font-bold">{previousTotal ? (overallChange > 0 ? '+' : '') + overallChange.toFixed(1) + '%' : 'N/A'}</p>
+              <p className="text-xs md:text-sm opacity-75">vs Last Month</p>
             </div>
           </div>
         </div>
@@ -270,15 +270,15 @@ export default function AdminExpensesDashboard() {
                     <PieChart className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 text-lg"> Breakdown</h3>
-                    <p className="text-sm text-gray-500">All {summaryData?.total_hotels || 0} hotels combined</p>
+                    <h3 className="font-semibold text-gray-900 text-lg md:text-xl"> Breakdown</h3>
+                    <p className="text-sm md:text-base text-gray-500">All {summaryData?.total_hotels || 0} hotels combined</p>
                   </div>
                 </div>
                 
                 <div className="flex items-center gap-2">
                   <div className="text-right mr-2">
-                    <p className="text-lg font-bold text-gray-900">₹{(summaryData?.total_network_expenses || 0).toLocaleString("en-IN")}</p>
-                    <p className="text-xs text-gray-500">Total Network</p>
+                    <p className="text-lg md:text-xl font-bold text-gray-900">₹{(summaryData?.total_network_expenses || 0).toLocaleString("en-IN")}</p>
+                    <p className="text-xs md:text-sm text-gray-500">Total Network</p>
                   </div>
                   
                   {expandedBreakdown ? (
@@ -291,7 +291,7 @@ export default function AdminExpensesDashboard() {
 
               {/* Top 3 Categories Preview */}
               {!expandedBreakdown && (
-                <div className="flex items-center gap-4 text-sm">
+                <div className="flex items-center gap-4 text-sm md:text-base">
                   {expenseCategories
                     .map(cat => ({
                       ...cat,
@@ -443,21 +443,21 @@ export default function AdminExpensesDashboard() {
                         <Building2 className="w-6 h-6 text-white" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900 text-lg">{hotel.name}</h3>
-                        <p className="text-sm text-gray-500">{hotel.location}</p>
+                        <h3 className="font-semibold text-gray-900 text-lg md:text-xl">{hotel.name}</h3>
+                        <p className="text-sm md:text-base text-gray-500">{hotel.location}</p>
                       </div>
                     </div>
                     
                     <div className="flex items-center gap-2">
                       <div className="text-right mr-2">
-                        <p className="text-lg font-bold text-gray-900">₹{hotel.totalExpenses.toLocaleString("en-IN")}</p>
+                        <p className="text-lg md:text-xl font-bold text-gray-900">₹{hotel.totalExpenses.toLocaleString("en-IN")}</p>
                         <div className="flex items-center gap-1 justify-end">
                           {percentageChange > 0 ? (
                             <TrendingUp className="w-3 h-3 text-red-500" />
                           ) : percentageChange < 0 ? (
                             <TrendingDown className="w-3 h-3 text-green-500" />
                           ) : null}
-                          <span className={`text-xs font-medium ${
+                          <span className={`text-xs md:text-sm font-medium ${
                             percentageChange > 0 ? "text-red-600" : 
                             percentageChange < 0 ? "text-green-600" : "text-gray-500"
                           }`}>
@@ -475,7 +475,7 @@ export default function AdminExpensesDashboard() {
                   </div>
 
                   {/* Quick Stats */}
-                  <div className="flex items-center gap-4 text-sm">
+                  <div className="flex items-center gap-4 text-sm md:text-base">
                     <span className="text-gray-600">
                       {months[selectedMonth - 1]} {selectedYear} expenses
                     </span>

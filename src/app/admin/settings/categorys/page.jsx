@@ -91,9 +91,9 @@ export default function CategoryPage() {
         <div className="mb-8">
   <div className="flex justify-between items-center mb-6">
     <div>
-      <h1 className="text-xl font-bold text-gray-900">Sales Categories</h1>
+      <h1 className="text-xl md:text-2xl font-bold text-gray-900">Sales Categories</h1>
     </div>
-    <button  onClick={() => router.push('categorys/add')} className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
+    <button  onClick={() => router.push('categorys/add')} className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 text-sm md:text-base font-semibold">
       <Plus size={18} />
       Add Category
     </button>
@@ -107,8 +107,8 @@ export default function CategoryPage() {
           <Tag className="text-blue-600" size={20} />
         </div>
         <div>
-          <p className="text-sm text-gray-600">Total Categories</p>
-          <p className="text-2xl font-bold text-gray-900">{totalCategories}</p>
+          <p className="text-sm md:text-base text-gray-600">Total Categories</p>
+          <p className="text-2xl md:text-3xl font-bold text-gray-900">{totalCategories}</p>
         </div>
       </div>
     </div>
@@ -118,8 +118,8 @@ export default function CategoryPage() {
           <Store className="text-green-600" size={20} />
         </div>
         <div>
-          <p className="text-sm text-gray-600">Active Channels</p>
-          <p className="text-2xl font-bold text-gray-900">3</p>
+          <p className="text-sm md:text-base text-gray-600">Active Channels</p>
+          <p className="text-2xl md:text-3xl font-bold text-gray-900">3</p>
         </div>
       </div>
     </div>
@@ -135,7 +135,7 @@ export default function CategoryPage() {
               placeholder="Search categories..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm md:text-base transition-all"
             />
           </div>
         </div>
@@ -153,8 +153,8 @@ export default function CategoryPage() {
                       {config.icon}
                     </div>
                     <div>
-                      <h2 className={`text-xl font-bold ${config.text}`}>{group}</h2>
-                      <p className="text-sm text-gray-600">{items.length} categories</p>
+                      <h2 className={`text-xl md:text-2xl font-bold ${config.text}`}>{group}</h2>
+                      <p className="text-sm md:text-base text-gray-600">{items.length} categories</p>
                     </div>
                   </div>
                 </div>
@@ -174,7 +174,7 @@ export default function CategoryPage() {
                             <Tag size={16} />
                           </div>
                           <div className="min-w-0 flex-1">
-                            <h3 className="font-semibold text-gray-900 truncate">{item.name}</h3>
+                            <h3 className="font-semibold text-gray-900 text-sm md:text-base truncate">{item.name}</h3>
                           </div>
                
                      
@@ -182,7 +182,7 @@ export default function CategoryPage() {
                         {/* Action Menu */}
                         <div className='flex items-center '>
                         <div className="">
-                            <h3 className="font-semibold text-md text-gray-600 ">{item.margin}%</h3>
+                            <h3 className="font-semibold text-sm md:text-base text-gray-600 ">{item.margin}%</h3>
                           </div>
                         <div className={`flex items-center gap-1 transition-opacity duration-200 ${hoveredItem === item.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
                  

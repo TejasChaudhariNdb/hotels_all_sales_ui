@@ -250,7 +250,7 @@ export default function CompareHotelsPage() {
                   filteredHotels.map((hotel) => (
                     <button key={hotel.id} onClick={() => toggleHotelSelection(hotel.id)} className={`w-full text-left p-3 rounded-lg border-2 transition-all ${selectedHotels.includes(hotel.id) ? "bg-gradient-to-r from-blue-50 to-purple-50 border-blue-500 shadow-md" : "bg-white border-gray-200 hover:border-blue-300 hover:shadow-sm"}`}>
                       <div className="flex items-center justify-between">
-                        <span className="font-medium text-gray-800">{hotel.name}</span>
+                        <span className="font-medium text-gray-800 text-sm md:text-base">{hotel.name}</span>
                         {selectedHotels.includes(hotel.id) && (
                           <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
                             <span className="text-white text-sm font-bold">✓</span>
@@ -273,12 +273,12 @@ export default function CompareHotelsPage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">From Date</label>
-              <input type="date" value={fromDate} onChange={(e) => setFromDate(e.target.value)} className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" />
+              <label className="block text-sm md:text-base font-medium text-gray-700 mb-2">From Date</label>
+              <input type="date" value={fromDate} onChange={(e) => setFromDate(e.target.value)} className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm md:text-base" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">To Date</label>
-              <input type="date" value={toDate} onChange={(e) => setToDate(e.target.value)} min={fromDate} className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" />
+              <label className="block text-sm md:text-base font-medium text-gray-700 mb-2">To Date</label>
+              <input type="date" value={toDate} onChange={(e) => setToDate(e.target.value)} min={fromDate} className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm md:text-base" />
             </div>
           </div>
         </div>
@@ -370,8 +370,8 @@ export default function CompareHotelsPage() {
                   <div key={hotel.hotel_id} className="border-2 border-gray-200 rounded-xl p-4 hover:border-blue-300 transition-all hover:shadow-md">
                     <div className="flex items-start justify-between mb-3">
                       <div>
-                        <h3 className="font-bold text-lg text-gray-800">{hotel.hotel_name}</h3>
-                        <p className="text-sm text-gray-500">{hotel.hotel_city}</p>
+                        <h3 className="font-bold text-lg md:text-xl text-gray-800">{hotel.hotel_name}</h3>
+                        <p className="text-sm md:text-base text-gray-500">{hotel.hotel_city}</p>
                       </div>
                       {index === 0 && (
                         <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full">
@@ -382,35 +382,35 @@ export default function CompareHotelsPage() {
 
                     <div className="space-y-3">
                       <div className="bg-green-50 rounded-lg p-3 border border-green-200">
-                        <p className="text-xs text-green-700 font-medium mb-1">Total Sales</p>
-                        <p className="text-xl font-bold text-green-800">{formatCurrency(hotel.sales.total)}</p>
+                        <p className="text-xs md:text-sm text-green-700 font-medium mb-1">Total Sales</p>
+                        <p className="text-xl md:text-2xl font-bold text-green-800">{formatCurrency(hotel.sales.total)}</p>
                       </div>
 
                       <div className="bg-red-50 rounded-lg p-3 border border-red-200">
-                        <p className="text-xs text-red-700 font-medium mb-1">Total Expenses</p>
-                        <p className="text-xl font-bold text-red-800">{formatCurrency(hotel.expenses.total)}</p>
+                        <p className="text-xs md:text-sm text-red-700 font-medium mb-1">Total Expenses</p>
+                        <p className="text-xl md:text-2xl font-bold text-red-800">{formatCurrency(hotel.expenses.total)}</p>
                       </div>
 
                       <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
-                        <p className="text-xs text-blue-700 font-medium mb-1">Profit</p>
-                        <p className="text-xl font-bold text-blue-800">{formatCurrency(hotel.profit)}</p>
-                        <p className="text-xs text-blue-600 mt-1">Margin: {hotel.profit_margin.toFixed(2)}%</p>
+                        <p className="text-xs md:text-sm text-blue-700 font-medium mb-1">Profit</p>
+                        <p className="text-xl md:text-2xl font-bold text-blue-800">{formatCurrency(hotel.profit)}</p>
+                        <p className="text-xs md:text-sm text-blue-600 mt-1">Margin: {hotel.profit_margin.toFixed(2)}%</p>
                       </div>
 
                       <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
-                        <p className="text-xs text-gray-700 font-medium mb-2">Sales by Category</p>
+                        <p className="text-xs md:text-sm text-gray-700 font-medium mb-2">Sales by Category</p>
                         <div className="space-y-2">
                           {hotel.sales.by_category.map((cat) => (
                             <div key={cat.category_id} className="flex justify-between items-center">
-                              <span className="text-sm text-gray-600">{cat.category_name}</span>
-                              <span className="text-sm font-semibold text-gray-800">{formatCurrency(cat.amount)}</span>
+                              <span className="text-sm md:text-base text-gray-600">{cat.category_name}</span>
+                              <span className="text-sm md:text-base font-semibold text-gray-800">{formatCurrency(cat.amount)}</span>
                             </div>
                           ))}
                         </div>
                       </div>
 
                       <div className="bg-orange-50 rounded-lg p-3 border border-orange-200">
-                        <p className="text-xs text-orange-700 font-medium mb-2">Expense Breakdown</p>
+                        <p className="text-xs md:text-sm text-orange-700 font-medium mb-2">Expense Breakdown</p>
                         <div className="space-y-1.5">
                           {hotel.expenses.rent > 0 && (
                             <div className="flex justify-between items-center">
@@ -475,8 +475,8 @@ export default function CompareHotelsPage() {
                             {category.category_name[0]}
                           </div>
                           <div className="text-left">
-                            <h3 className="font-bold text-gray-800">{category.category_name}</h3>
-                            <p className="text-xs text-gray-500">Margin: {category.margin}%</p>
+                            <h3 className="font-bold text-gray-800 text-base md:text-lg">{category.category_name}</h3>
+                            <p className="text-xs md:text-sm text-gray-500">Margin: {category.margin}%</p>
                           </div>
                         </div>
                         {isExpanded ? <ChevronUp size={20} className="text-gray-600" /> : <ChevronDown size={20} className="text-gray-600" />}
@@ -489,8 +489,8 @@ export default function CompareHotelsPage() {
                             return (
                               <div key={hotel.hotel_id} className="space-y-2">
                                 <div className="flex justify-between items-center">
-                                  <span className="text-sm font-medium text-gray-700">{hotel.hotel_name}</span>
-                                  <span className="text-sm font-bold text-gray-800">{formatCurrency(hotel.amount)}</span>
+                                  <span className="text-sm md:text-base font-medium text-gray-700">{hotel.hotel_name}</span>
+                                  <span className="text-sm md:text-base font-bold text-gray-800">{formatCurrency(hotel.amount)}</span>
                                 </div>
                                 <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                                   <div className="bg-gradient-to-r from-blue-500 to-purple-600 h-full rounded-full transition-all duration-500 ease-out shadow-sm" style={{ width: `${percentage}%` }}></div>

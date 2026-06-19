@@ -27,11 +27,11 @@ export default function ManagersPage() {
     <div className="space-y-5">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-gray-800">Manage Managers</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-gray-800">Manage Managers</h2>
         <button
           onClick={() => router.push("/admin/settings/manager/add")}
-          className="flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 shadow">
-          <UserPlus size={16} className="mr-1" />
+          className="flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg text-sm md:text-base font-semibold hover:bg-blue-700 shadow transition-all duration-200">
+          <UserPlus size={18} className="mr-1.5" />
           Add Manager
         </button>
       </div>
@@ -41,28 +41,28 @@ export default function ManagersPage() {
         {managers.map((manager) => (
           <div
             key={manager.id}
-            className="bg-white p-4 rounded-xl shadow flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+            className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0 hover:shadow-md transition-all duration-200">
             {/* Left: Manager Info */}
             <div className="flex items-center space-x-3">
-              <UserRound className="text-blue-600" />
+              <UserRound className="text-blue-600" size={20} />
               <div>
-                <p className="font-semibold text-gray-800">{manager.name}</p>
-                <p className="text-sm text-gray-500">{manager.phone}</p>
+                <p className="font-bold text-gray-800 text-base md:text-lg leading-snug">{manager.name}</p>
+                <p className="text-sm md:text-base text-gray-500 font-medium">{manager.phone}</p>
               </div>
             </div>
 
             {/* Right: Assigned Hotels */}
-            <div className="flex flex-wrap gap-1">
+            <div className="flex flex-wrap gap-1.5">
               {manager.managed_hotels?.length > 0 ? (
                 manager.managed_hotels.map((hotel) => (
                   <span
                     key={hotel.id}
-                    className="bg-blue-100 text-blue-700 px-2 py-1 text-xs rounded-lg font-medium">
+                    className="bg-blue-50 border border-blue-100 text-blue-700 px-2.5 py-1 text-xs md:text-sm rounded-lg font-bold">
                     {hotel.name}
                   </span>
                 ))
               ) : (
-                <span className="text-sm text-rose-500 font-medium">No Hotels Assigned</span>
+                <span className="text-sm md:text-base text-rose-500 font-bold">No Hotels Assigned</span>
               )}
             </div>
           </div>
