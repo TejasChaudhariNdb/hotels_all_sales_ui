@@ -84,3 +84,22 @@ body {
 .animate-backdrop-exit {
   animation: backdrop-exit 0.3s ease-out forwards;
 }
+
+/* Hide scrollbar utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Safe area for bottom bar on iOS */
+.safe-area-bottom {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+/* Border left width 3px (not in Tailwind by default) */
+.border-l-3 {
+  border-left-width: 3px;
+}
